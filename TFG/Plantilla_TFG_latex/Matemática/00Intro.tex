@@ -32,19 +32,21 @@ Tenemos pues que el aprendizaje profundo es el paradigma del aprendizaje automá
 
 Su eficiencia, escalabilidad y flexibilidad lo han convertido en la opción por defecto para el entrenamiento basado en gradiente descendente para modelos de aprendizaje profundo, sin embargo no hay que olvidar que no se trata de una tarea sencilla: la obtención de un mínimo global y la verificación, dado un punto, de que es un mínimo global, se trata de un problema NP-Completo generalmente \cite{NPHardProblem}, por lo que se buscan estrategias aproximadas capaces de obtener buenas soluciones en tiempos razonables. Uno de los problemas abiertos en el aprendizaje profundo y en el que influye directamente BP es la reducción computacional del entrenamiento: si se ajustan los pesos en un modelo con un número muy alto de parámetros y usando un conjunto de entrenamiento muy grande (que es una tendencia reciente en aprendizaje profundo), los recursos computacionales pueden resultar insuficientes incluso para las grandes compañías, pudiendo requerir de meses para el  entrenamiento. Por lo que se necesitan algoritmos más escalables y eficientes para afrontarlo \cite{Problem3_accel}.
 
-Por ello resulta esencial, mientras no existan alternativas viables, poder ofrecer mejoras a este algoritmo para mejorar sus cualidades. Atendiendo a la cantidad de uso y su extensión en el campo, una pequeña mejora tendría un alcance enorme. Sin embargo esta línea de investigación no es muy extensa ya que principalmente se buscan alternativas en lugar de mejoras, pudiendo deberse principalmente a que a priori puede parecer una técnica muy enrevesada y compleja. Veremos en el desarrollo de esta parte que esto no es algo cierto, y que los principios en los que se basa son muy simples. Es clave comprender su base teórica, funcionamiento e implementación práctica para poder proponer mejoras. 
+Por ello resulta esencial, mientras no existan alternativas viables, poder ofrecer modificaciones a este algoritmo para mejorar sus cualidades. Atendiendo a la cantidad de uso y su extensión en el campo, una pequeña mejora tendría un alcance enorme. Sin embargo esta línea de investigación no es muy extensa ya que principalmente se buscan alternativas en lugar de mejoras, pudiendo deberse principalmente a que a priori puede parecer una técnica muy enrevesada y compleja. Veremos en el desarrollo de esta parte que esto no es cierto, y que los principios en los que se basa son muy simples. Es clave comprender su base teórica, funcionamiento e implementación práctica para poder proponer mejoras. 
 
 
 \subsection{Objetivos}
 
 El objetivo principal de esta parte es realizar una investigación sobre los algoritmos de descenso de gradiente y \textit{backpropagation}, proporcionando una visión detallada acerca de los mismos y su implementación. Para ello se divide este objetivo en varios:
 
+TODO: REVISAR ESTO
 \begin{enumerate}
     %\item Exposición de la importancia actual e histórica en el campo del aprendizaje automático y aprendizaje profundo, viendo su estrecha relación con el algoritmo de aprendizaje del gradiente descente.
-    
-    \item Definir de manera detallada la base teórica y funcionamiento del algoritmo de descenso de gradiente.
 
-    \item Explorar su implementación a través de BP. Para ello, analizaremos su funcionamiento e implementación.
+    
+    \item Definir de manera detallada la base teórica y funcionamiento del algoritmo de descenso de gradiente atendiendo a elementos clave como su convergencia.
+
+    \item Explorar el uso de BP para el cálculo del gradiente, analizando su implementación a través de la diferenciación automática.
 
     %\item Analizar de modo teórico las principales variantes del algoritmo de descenso de gradiente. 
 

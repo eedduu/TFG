@@ -1,71 +1,101 @@
 
 
 \section{Fundamentos previos}
-A continuación se definirán los conceptos básicos necesarios con los que se trabajará durante el desarrollo de esta parte. Se tratarán los elementos necesarios que se usan en el algoritmo de gradiente descendente y BP. Se presenta únicamente el material estrictamente necesario para comprender el trabajo. Se ha usado para la elaboración de esta sección los apuntes en línea del profesor de la UGR Rafael Payá Albert en su curso de Análisis Matemático I \footnote{\url{https://www.ugr.es/~rpaya/docencia.htm\#Analisis}}.  Salvo otras especificaciones, el material de consulta para el desarrollo de esta parte matemática ha sido el curso en línea de Ciencias de Computación de la universidad Bristish Columbia \footnote{\url{https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/}} y los libros Probabilistic Machine Learning \cite{murphy2022probabilistic} y Deep Learning \cite{GoodFellowBook}
+A continuación se definirán los conceptos básicos necesarios con los que se trabajará durante el desarrollo de esta parte. Se tratarán los elementos necesarios que se usan en el algoritmo de gradiente descendente y BP. Se presenta únicamente el material estrictamente necesario para comprender el trabajo. Se ha usado para la elaboración de esta sección los apuntes en línea del profesor de la UGR Rafael Payá Albert en su curso de Análisis Matemático I \footnote{\url{https://www.ugr.es/~rpaya/docencia.htm\#Analisis}}.  Salvo otras especificaciones, el material de consulta para el desarrollo de esta parte matemática ha sido el curso en línea de Ciencias de Computación de la universidad Bristish Columbia \footnote{\url{https://www.cs.ubc.ca/~schmidtm/Courses/5XX-S22/}} y los libros Probabilistic Machine Learning \cite{murphy2022probabilistic} y Deep Learning \cite{GoodFellowBook}.
 
 
 \subsection{Cálculo diferencial}
 
 A continuación se definirán los principales conceptos que se usarán durante el presente TFG. Los algoritmos de gradiente descendente y BP se basan principalmente en el cálculo diferencial, y el hecho de que no usen herramientas matemáticas demasiado complejas resulta precisamente una de sus virtudes, ya que gracias a la abstracción y a un diseño ingenioso consiguen obtener grandes resultados a partir de operaciones relativamente sencillas. Empezamos con los conceptos más elementales que subyacen durante todo el trabajo.
 
-Tomaremos $X$ e $Y$ como dos espacios normados no triviales cualesquiera. Se fija una función $f:A \rightarrow Y$ donde $\varnothing \neq A\subseteq X$ y un punto $a \in A^{\circ}$
+En lo que sigue se fijan los abiertos $X \subseteq \mathbb{R}^n$, $Y \subseteq \mathbb{R}^m$ y la función $f: X \rightarrow Y$.
+
 
 \begin{definicion}[Función diferenciable]
-    $f$ es diferenciable en el punto $a$ si existe una aplicación lineal y continua $T \in L(X,Y)$ que verifica:
+    $f$ es diferenciable en el punto $a \in X$ si existe una aplicación lineal y continua $T \in L(X,Y)$ que verifica:
 
-    $$\displaystyle \lim_{x \to a} \frac{\left\| f(x)-f(a)-T(x-a)\right\|}{\left\| x-a\right\|}=0$$
+    $$Df(a) = \displaystyle \lim_{x \to a} \frac{\left\| f(x)-f(a)-T(x-a)\right\|}{\left\| x-a\right\|}=0$$
     
     Decimos que $f$ es diferenciable si es diferenciable en todo punto del interior de su dominio.
 \end{definicion}
 
 
+
+
+\begin{definicion}[Derivada parcial en un campo escalar]
+        Sea $f: X \rightarrow \mathbb{R}$. La derivada parcial de $f$ con respecto a la $k$-ésima variable $x_k$ en el punto $a = (a_1, \ldots, a_n)\in X$ se define como
+
+	$$ \frac{\partial f}{\partial x_k}(a) = \underset{h\rightarrow0}{lim}\frac{f(a_1, \ldots, a_{k-1}, a_k + h, a_{k+1}, \ldots, a_n) - f(a_1, \ldots, a_n)}{h}$$
+
+	si existe el límite.
+\end{definicion}
+
+Notamos por $f= \left ( f_1,f_2,\ldots, f_m \right )$ indicando las $m$ componentes de $f$ que es un campo escalar definido en $X$, siendo $f_j=\pi _j \circ f$.  En lo que sigue $x = \left ( x_1, \ldots, x_n  \right )  \in X$
+
+
 \begin{definicion}[Derivada parcial]
-        Sea $f: \Omega \subset \mathbb{R}^n \rightarrow Y \subset \mathbb{R}^M$, con $\Omega$ un abierto, $f=(f_1, f_2, ..., f_M)$, $a \in \Omega$, $k \in I_n$. Entonces $f$ es parcialmente derivable con respecto a la $k$-ésima variable en $a$ si, y sólo si, lo es $f_j \forall j \in I_M$, en tal caso, 
+        Sea $f: X \rightarrow Y$,  $f=(f_1, f_2, \ldots, f_m)$, $k \in I_n$. Entonces $f$ es parcialmente derivable con respecto a la $k$-ésima variable $x_k$ en $a = (a_1, \ldots, a_n)\in X$ si, y sólo si, lo es $f_j \forall j \in I_m$, en tal caso, 
 
-        $$\frac{\partial f}{\partial x_k}(a) = \left ( \frac{\partial f_1}{\partial x_k}(a), ..., \frac{\partial f_M}{\partial x_k}(a) \right ) \in \mathbb{R}^M$$
+        $$\frac{\partial f}{\partial x_k}(a) = \left ( \frac{\partial f_1}{\partial x_k}(a), \ldots, \frac{\partial f_m}{\partial x_k}(a) \right ) \in \mathbb{R}^m$$
 
-        $f$ es parcialmente derivable en $a$ si, y sólo si, lo es respecto de todas sus variables
+        $f$ es parcialmente derivable en $a$ si, y sólo si, lo es respecto de todas sus variables.
 \end{definicion}
 
 
-Definimos ahora los elementos clave del proceso: el vector gradiente y la matriz jacobiana. En el algoritmo de descenso de gradiente, lo que se pretende calcular tal como indica el nombre es el vector gradiente, ya que la función de error de los modelos siempre nos devuelve un escalar, es decir que la dimensión de la imagen es 1, y la dimensión de la entrada será el número de parámetros del modelo (número de elementos que tendrá el vector gradiente). Sin embargo las matrices jacobianas también juegan un papel fundamental ya que para calcular ese vector gradiente, el algoritmo de BP necesita de cálculos intermedios, que son las matrices jacobianas asociadas entradas y salidas de las capas ocultas (que tienen mayor dimensionalidad) con respecto a parte de los parámetros (los parámetros de esa capa). 
+Definimos ahora los elementos clave del proceso: el vector gradiente y la matriz jacobiana. En el algoritmo de descenso de gradiente, lo que se pretende calcular tal como indica el nombre es el vector gradiente, ya que la función de error de los modelos siempre nos devuelve un escalar, es decir que la dimensión de la imagen es 1, y la dimensión de la entrada será el número de parámetros del modelo (número de elementos que tendrá el vector gradiente). Sin embargo las matrices jacobianas también juegan un papel fundamental ya que para calcular ese vector gradiente, el algoritmo de BP necesita de cálculos intermedios, que son las matrices jacobianas asociadas entradas y salidas de las capas ocultas (que tienen mayor dimensionalidad) con respecto a parte de los parámetros (los parámetros de esa capa).
 
 \begin{definicion}[Vector gradiente]
-    Sea $f:\Omega \subset \mathbb{R}^N \rightarrow \mathbb{R}$ un campo escalar, con $\Omega$ un abierto y $a \in \Omega$ . Cuando $f$ es parcialmente derivable en $a$, el gradiente de $f$ en $a$ es el vector $\nabla f(a) \in \mathbb{R}^N$ dado por 
-    $$\nabla f(a) = \left ( \frac{\partial f}{\partial x_1} (a), \frac{\partial f}{\partial x_2} (a), ..., \frac{\partial f}{\partial x_N} (a) \right )$$
+    Sea $f:X \rightarrow \mathbb{R}$ un campo escalar. Cuando $f$ es parcialmente derivable en $x$, el gradiente de $f$ en $x$ es el vector $\nabla f(x) \in X$ dado por 
+    $$\nabla f(x) = \left ( \frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \ldots, \frac{\partial f}{\partial x_n} \right ).$$
 \end{definicion}
 
 
-Fijamos un abierto $\Omega \subset \mathbb{R}^N$
-, y la función $f:\Omega \rightarrow \mathbb{R}^M$. Notamos por $f= \left ( f_1,f_2,..., f_M \right )$ indicando las $M$ componentes de $f$ que son campos escalares definidos en $\Omega$, siendo $f_j=\pi _j \circ f$.
-
 \begin{definicion}[Matriz jacobiana]
-    Si $f$ es diferenciable en $ x \in \Omega$, la matriz jacobiana es la matriz de la aplicación lineal $Df \in L \left ( \mathbb{R}^N, \mathbb{R}^M \right )$ y se escribe como $J_f$. Viene dada por:
+    Si $f$ es diferenciable en $ x \in X$, la matriz jacobiana es la matriz de la aplicación lineal $Df \in L \left ( X, Y \right )$ y se escribe como $J_f$. Viene dada por:
 
     $$J_f(x)= \begin{pmatrix}
- \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \cdots & \frac{\partial f_1}{\partial x_N} \\
- \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} & \cdots & \frac{\partial f_2}{\partial x_N} \\
+ \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \cdots & \frac{\partial f_1}{\partial x_n} \\
+ \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} & \cdots & \frac{\partial f_2}{\partial x_n} \\
  \vdots & \vdots & \ddots & \vdots \\
- \frac{\partial f_M}{\partial x_1} & \frac{\partial f_M}{\partial x_2} & \cdots & \frac{\partial f_M}{\partial x_N} \\
+ \frac{\partial f_m}{\partial x_1} & \frac{\partial f_m}{\partial x_2} & \cdots & \frac{\partial f_m}{\partial x_n} \\
 \end{pmatrix}= \begin{pmatrix}
  \nabla f_1(x)^T\\
  \vdots \\
- \nabla f_M(x)^T \\
+ \nabla f_m(x)^T \\
 \end{pmatrix}=
 \begin{pmatrix}
-     \frac{\partial f}{\partial x_1} \cdots \frac{\partial f}{\partial x_N}
+     \frac{\partial f}{\partial x_1} \cdots \frac{\partial f}{\partial x_n}
 \end{pmatrix}$$
 \end{definicion}
+
+
+
+Si f es de clase $C^2$ (derivable dos veces con sus derivadas continuas) derivamos el gradiente obtenemos una matriz cuadrada simétrica con derivadas parciales de segundo orden, a la que llamamos matriz Hessiana.
+
+\begin{definicion}[Matriz Hessiana]
+	Dado el campo escalar $f: X \rightarrow \mathbb{R}$, definimos la matriz Hessiana en el punto x como
+
+	$$\nabla^2f(x)= \begin{pmatrix}
+		\frac{\partial^2f}{\partial x^{2}_1} & \frac{\partial^2f}{\partial x_1\partial x_2} & \cdots & \frac{\partial^2f}{\partial x_1 \partial x_n}\\
+		\frac{\partial^2f}{\partial x_2 \partial x_1} & \frac{\partial^2f}{\partial x^{2}_2} & \cdots & \frac{\partial^2f}{\partial x_2 \partial x_n}\\
+		\vdots & \vdots & \ddots & \vdots \\
+		\frac{\partial^2f}{\partial x_n \partial x_1} & \frac{\partial^2f}{\partial x_n \partial x_1} & \cdots & \frac{\partial^2f}{\partial x^{2}_n}\\
+	\end{pmatrix}$$
+
+\end{definicion}
+
+Este es un concepto muy importante del cálculo multivariable y la optimización. Cuando hablemos del gradiente descendente, especialmente de la convergencia, usaremos algunas de sus propiedades, como por ejemplo la aproximación cuadrática para desplazamientos pequeños: $f(x + \Delta x) \approx f(x) + \nabla f(x)^T \Delta x + \frac{1}{2} \Delta ^T \nabla^2 f(x) \Delta x$. HAY UN RESULTADO QUE F ES CONVEXA SII LA MATRIZ HESSIANA ES SEMIDEFINIDA POSITIVA PERO NO SE SI PONERLO. ESTO SE APLICA A NIVEL LOCAL TAMBIEN.
+		
 
 
 Se presenta a continuación una de las reglas más útiles para el cálculo de diferenciales, que afirma que la composición de aplicaciones preserva la diferenciabilidad. Será parte clave en el desarrollo próximo ya que a los modelos de aprendizaje automático basados en capas podemos describirlos como una función que se descompone en una función por cada capa, por tanto será una herramienta que usaremos continuamente para calcular estas matrices jacobianas y gradientes.
 
 \begin{teorema}[Regla de la cadena]
-    Sean $X, Y, Z $ espacios normados, $\Omega$ un abierto no vacío de $X$ y $U$ lo es de $Y$, y las funciones $f:\Omega \rightarrow U$ y $g:U \rightarrow Z$. Entonces si $f$ es diferenciable en $a \in \Omega$ y g es diferenciable en $b=f(a)$ se tiene que $f \circ f$ es diferenciable en $a$ con
+    Sea $Z \subseteq \mathbb{R}^p$ un abierto y sean las funciones $f:X \rightarrow Y$ y $g:Y \rightarrow Z$. Entonces si $f$ es diferenciable en $a \in X$ y g es diferenciable en $b=f(a)$ se tiene que $g \circ f$ es diferenciable en $a$ con
 
     $$D(g \circ f)(a) = Dg(b) \circ Df(a) = Dg(f(a)) \circ f(a)$$
 
-    \raggedright{Si $f \in D(\Omega, Y)$ y  $g \in D(U,Z)$, entonces $g \circ f \in D(\Omega, Z)$.}
+    \raggedright{Si $f \in D(X, Y)$ y  $g \in D(Y,Z)$, entonces $g \circ f \in D(X, Z)$.}
     
 \end{teorema}
 
@@ -73,87 +103,22 @@ Se presenta a continuación una de las reglas más útiles para el cálculo de d
 En ocasiones en algunos modelos tenemos que lidiar con funciones que no son diferenciables en un punto, y para poder manejarlas extenderemos el concepto de diferenciabilidad a lo que llamaremos subdiferenciabilidad. Esto se expondrá más adelante ya que son conceptos que no se han explorado a lo largo del grado de matemáticas.
 
 
-
-\begin{comment} %Esto creo que no lo uso
-	\begin{definicion}[Función continuamente diferenciable]
-	    Si una función $f$ parcialmente derivable tiene todas sus derivadas parciales continuas, decimos que la función $f$ es continuamente diferenciable. Decimos que es de clase $C^1$.
-	\end{definicion}
-\end{comment}
-
-
-\begin{comment}
-    
-	
-	\begin{definicion}[Conjunto conexo]
-	    Un espacio métrico $E$ es convexo si no puede ser expresado como unión de dos subconjuntos abiertos, no vacíos y disjuntos. Podemos formularlo de la siguiente manera:
-	
-	    $$U=U^{\circ}, V=V^{\circ}, U \cup V = E, U \cap V = \emptyset \Rightarrow U=\emptyset ó V=\emptyset$$
-	\end{definicion}
-	
-	Caracterizamos de manera sencilla un espacio conexo:
-	
-	\begin{itemize}
-	    \item \textit{Un espacio métrico $E$ es conexo si, y sólo si, para cualesquiera dos puntos $x,y \in E$ existe un conjunto conexo $C \subset E$, tal que $x,y \in C$}
-	\end{itemize}
-	
-	Podemos decir de esta manera que un espacio métrico $E$ es conexo cuando cualquiera dos puntos de $E$ están conectados, es decir, existe un subconjunto conexo de E que los contiene.
-
-\end{comment}
-
-
-
-
-\begin{comment}
-	
-	\begin{definicion}[Función estrictamente convexa]
-	    Sea $E \subset \mathbb{R}^n$ un conjunto convexo no vacío y sea $f:E \rightarrow \mathbb{R}$, $f$ es una función convexa en $E$ si, y solo si:
-	
-	    $$f(tx + (1-t)y) < tf(x) + (1-t) f(y), \quad \forall t \in ]0,1[, \forall x,y \in E, x \neq y$$
-	\end{definicion}
-	
-	\begin{definicion}[Función fuertemente convexa]
-	    Sea $E \subset \mathbb{R}^n$ un conjunto convexo no vacío y sea $f:E \rightarrow \mathbb{R}$, $f$ es una función fuertemente convexa en $E$ con módulo $c>0$ si :
-	
-	    $$f(tx + (1-t)y) \leq tf(x) + (1-t) f(y) - \frac{c}{2}t(1-t)\|x-y\|^2, \quad \forall t \in [0,1], \forall x,y \in E$$
-	\end{definicion}
-\end{comment}
-
-
-\subsection{Lipschitz}
-
-El último concepto, que también resulta de gran importancia en los resultados teóricos sobre la convergencia del gradiente descendente, es el de la condición de lipschitz, en concreto aplicada al gradiente
+El último concepto, que también resulta de gran importancia en los resultados teóricos sobre la convergencia del gradiente descendente, es el de la condición de lipschitz, en concreto aplicada al gradiente. No forma parte del cálculo diferencial ya que la condición de Lipschitz no requiere diferenciabilidad, pero lo usaremos en éste ámbito ya que la condición que nos interesa usar está aplicada al gradiente.
 
 \begin{definicion}[Función Lipschitziana]
-    Si $E$ y $F$ son espacios normados, una función $f:E \rightarrow F$ es lipschitziana si existe una constante $M \in \mathbb{R}_0^+$ que verifica:
-    $$ \| f(x) - f(y) \| \leq M \| x - y \| \qquad \forall x,y \in E$$
+    El campo escalar $f:X \rightarrow \mathbb{R}$ es lipschitziano si existe una constante $M \in \mathbb{R}_0^+$ que verifica:
+    $$ \| f(x) - f(y) \| \leq M \| x - y \| \qquad \forall x,y \in E.$$
 \end{definicion}
 
-Decimos que la función $f$ tiene gradiente lipschitziano si la condición anterior se aplica a su gradiente.
+La definición nos dice de manera intuitiva que el gradiente de la función no puede cambiar a una velocidad arbitraria. Decimos que la función $f$ tiene gradiente lipschitziano si la condición anterior se aplica a su gradiente.
 
-$$\| \nabla f(x) - \nabla f(y) \| \leq M \| x - y \| \qquad \forall x,y \in E $$
+$$\| \nabla f(x) - \nabla f(y) \| \leq M \| x - y \| \qquad \forall x,y \in E .$$
 
 
 La mínima constante $M_0=L$ que verifica las desigualdades anterior es denominada la constante de Lipschitz de $f$ y viene definida por 
 
-$$L=sup \left \{ \frac{\|f(x)-f(y)\|}{\|x - y \|} : x,y \in E, x \neq y \right \}$$
+$$L=sup \left \{ \frac{\|f(x)-f(y)\|}{\|x - y \|} : x,y \in E, x \neq y \right \}.$$
 
-La definición nos dice de manera intuitiva que el gradiente de la función no puede cambiar a una velocidad arbitraria. %Esto es una suposición que podemos realizar de manera general para la función de error de la gran mayoría de modelos de aprendizaje automático. 
 
-Para las funciones de clase $C^2$, es decir las que son diferenciables al menos dos veces con su derivada continua, una equivalencia a que el gradiente de $f$ sea lipschitziano es que $\nabla^2 f(x) \preceq LI \quad \forall x \in E$. Es decir que los valores propios de la matriz Hessiana están mayorados por $L$. Esta equivalencia la usaremos luego en la demostración \ref{proof:gdconvex}
 
-\begin{comment}
-	
-	\subsection{Convergencia}
-	%https://esfm.egormaximenko.com/numerical_methods/convergence_order_es.pdf
-	
-	Sea ${a_n}$ una sucesión que converge a b, con $a_n \neq b \quad \forall n \in \mathbb{N}$.
-	
-	\begin{definicion}[Orden de convergencia]
-	    Sean $\alpha>0$ y $\lambda>0$, si se verifica
-	
-	    $$\lim_{n\rightarrow \infty} \frac{|a_{n+1}-b|}{|a_n - b|^{\alpha}} = \lambda$$
-	
-	    Entonces decimos que la sucesión ${a_n}$ converge a b con orden de convergencia $\alpha$ y constante de error asintótica $\lambda$.
-	\end{definicion}
-
-\end{comment}
+Para las funciones de clase $C^2$, es decir las que son diferenciables al menos dos veces con su derivada continua, una equivalencia a que el gradiente de $f$ sea lipschitziano es que $\nabla^2 f(x) \preceq LI \quad \forall x \in E$, esto lo usaremos luego en la demostración \ref{proof:gdconvex}. En esta expresión $L$ es la constante de Lipschitz para el gradiente de $f$ e $I$ es la matriz identidad. El símbolo $\preceq$ denota una desigualdad matricial en términos de semidefinición positiva, es decir que $LI - \nabla^2f(x)$ es una matriz semidefinida positiva. Equivalentemente para cualquier vector $z$ se tiene $z^T \left ( LI - \nabla^2f(x) \right )z \geq 0$. 
