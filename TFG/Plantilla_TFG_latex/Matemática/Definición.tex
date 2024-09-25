@@ -16,20 +16,20 @@ El algoritmo de BP se implementa en la práctica a través de la diferenciación
 
 En la diferenciación automática existen dos estrategias para calcular un vector gradiente o una matriz jacobiana: diferenciación hacia delante y diferenciación hacia atrás. La diferencia reside  principalmente, en si realizamos multiplicaciones de un vector por un jacobiano (hacia atrás) o de un jacobiano por un vector (hacia delante). La elección dependerá de las dimensiones de la matriz jacobiana que queramos calcular, en otras palabras, debemos comparar la dimensión de la entrada y de la salida del modelo. Si la dimensión de entrada es mayor que la de salida, necesitaremos menos operaciones para calcular la matriz jacobiana si usamos la estrategia de diferenciación hacia atrás y viceversa. 
 
-Debido a la estructura general de una red neuronal donde la dimensión de la entrada es mucho mayor que la de la salida, resulta más eficiente calcular el gradiente con la diferenciación hacia atrás, y esto es lo que entendemos como el algoritmo de BP: la información se propaga hacia atrás en el modelo mientras que se usa la diferenciación hacia atrás con el objetivo de calcular el gradiente del error del modelo con respecto a sus pesos. Si usáramos la diferenciación hacia delante, aunque estuviéramos propagando la información hacia atrás no estaríamos usando el algoritmo de BP, y además sería mucho más ineficiente la computación. Se suele decir de manera general que el algoritmo de BP es una aplicación concreta de la diferenciación automática hecho a medida para el entrenamiento de redes neuronales.
+Debido a la estructura general de una red neuronal donde la dimensión de la entrada es mucho mayor que la de la salida, resulta más eficiente calcular el gradiente con la diferenciación hacia atrás, y esto es lo que entendemos como el algoritmo de BP: la información se propaga hacia atrás en el modelo mientras que se usa la diferenciación hacia atrás con el objetivo de calcular el gradiente del error del modelo con respecto a sus pesos. Si usáramos la diferenciación hacia delante, aunque estuviéramos propagando la información hacia atrás no estaríamos usando el algoritmo de BP, y además el cálculo resultaría mucho más ineficiente. Se suele decir de manera general que el algoritmo de BP es una aplicación concreta de la diferenciación automática hecha a medida para el entrenamiento de redes neuronales.
 
 
-Vamos a explorar el algoritmo de BP de manera progresiva: en primer lugar veremos la diferenciación hacia delante y hacia atrás, viendo por qué es más eficiente usar la segunda y acotando este algoritmo general para llegar al algoritmo de BP, para lo que veremos como calcular la matriz Jacobiana de la salida de un perceptrón multicapa (MLP, por sus siglas en inglés) respecto a la entrada, en una situación que no será de entrenamiento, ya que no habrá parámetros entrenables, pero nos servirá para ilustrar el funcionamiento de BP. Luego veremos como obtenemos el gradiente del error con respecto a los pesos de cada capa usando el algoritmo de BP en un MLP con parámetros entrenables, concretando con ejemplos para las capas más comunmente utilizadas. Finalmente vamos a generalizar este concepto hacia modelos más abstractos usando grafos dirigidos acíclicos. 
+Vamos a explorar el algoritmo de BP de manera progresiva: en primer lugar veremos la diferenciación hacia delante y hacia atrás, viendo por qué es más eficiente usar la segunda y acotando este algoritmo general para llegar al algoritmo de BP, para lo que veremos como calcular la matriz Jacobiana de la salida de un perceptrón multicapa (MLP, por sus siglas en inglés) respecto a la entrada, en una situación que no será de entrenamiento, ya que no habrá parámetros entrenables, pero nos servirá para ilustrar el funcionamiento de BP. Luego veremos como obtenemos el gradiente del error con respecto a los pesos de cada capa usando el algoritmo de BP en un MLP con parámetros entrenables, concretando con ejemplos para las capas más comúnmente utilizadas. Finalmente vamos a generalizar este concepto hacia modelos más abstractos usando grafos dirigidos acíclicos. 
 
 
-Los MLP son un tipo de red neuronal, dividos en capas compuestas de nodos llamados neuronas, donde cada nodo de cada capa está conectado con todos los nodos de la capa siguiente. Son usados principalmente con datasets tabulares, es decir aquellos que sus datos vienen en formato de tabla. Usaremos esta arquitectura para realizar el desarrollo teórico ya que es más sencilla conceptualmente y la notación no resulta tan engorrosa. 
+Los MLP son un tipo de red neuronal, dividos en capas compuestas de nodos llamados neuronas, donde cada nodo de cada capa está conectado con todos los nodos de la capa siguiente. Son usados principalmente con conjuntos de entrenamiento tabulares, es decir aquellos que sus datos tienen formato de tabla. Usaremos esta arquitectura para realizar el desarrollo teórico ya que es más sencilla conceptualmente y facilita la notación. 
 
 \subsection{Diferenciación hacia delante vs hacia atrás en un MLP}
 
 
 Definimos nuestro modelo como $f: \mathbb{R}^n \rightarrow \mathbb{R}^m$, $o=f(x)$ con $x \in \mathbb{R}^n$  y $o \in \mathbb{R}^m$. Asumimos que $f$ es una composición de funciones:
 
-$$f=f_k \circ f_{k-1} \circ \cdots \circ f_2 \circ f_1$$
+$$f=f_k \circ f_{k-1} \circ \cdots \circ f_2 \circ f_1.$$
 
 Donde $k-1$ es el número de capas ocultas del MLP y $k+1$ el total de capas. Cada función $f_i$ representa el cálculo que se realiza en la capa $i$-ésima. Se tiene para $i \in \left \{ 1,\ldots,k \right \}$
 
@@ -43,58 +43,59 @@ Donde la entrada del modelo viene representada en la primera capa, $x=x_1$. Adem
 Podemos ver que la matriz jacobiana de la salida con respecto a la entrada $J_f(x) =  \mathbb{R}^{m\times n}$ puede ser calculada usando la regla de la cadena . Esto nos va a servir para ilustrar las diferencias entre la diferenciación hacia atrás y hacia delante
 
 
-$$J_f(x) = \frac{\partial o}{\partial x} = \frac{\partial o}{\partial x_k} \frac{\partial x_k}{\partial x_{k-1}} \cdots \frac{\partial x_3}{\partial x_2} \frac{\partial x_2}{\partial x_1} =$$
-
-$$\frac{\partial f_k(x_k)}{\partial x_k} \frac{\partial f_{k-1}(x_{k-1})}{\partial x_{k-1}} \cdots \frac{\partial f_2(x_2)}{\partial x_2} \frac{\partial f_1(x_1)}{\partial x_1}=$$
-
-$$= J_{f_k}(x_k) J_{f_{k-1}}(x_{k-1}) \cdots J_{f_2}(x_2) J_{f_1}(x_1)$$
+\begin{align*}
+	J_f(x) &= \frac{\partial o}{\partial x} = \frac{\partial o}{\partial x_k} \frac{\partial x_k}{\partial x_{k-1}} \cdots \frac{\partial x_3}{\partial x_2} \frac{\partial x_2}{\partial x_1} \\	
+	&=\frac{\partial f_k(x_k)}{\partial x_k} \frac{\partial f_{k-1}(x_{k-1})}{\partial x_{k-1}} \cdots \frac{\partial f_2(x_2)}{\partial x_2} \frac{\partial f_1(x_1)}{\partial x_1} \\	
+	&= J_{f_k}(x_k) J_{f_{k-1}}(x_{k-1}) \cdots J_{f_2}(x_2) J_{f_1}(x_1).
+\end{align*}
 
 Se discute ahora como calcular el jacobiano $J_f(x)$ de manera eficiente. Recordamos que 
 
-$$J_f(x_1)=\frac{\partial f(x_1)}{\partial x_1} =
-\begin{pmatrix}
-\frac{\partial f_1}{\partial x_1} & \cdots & \frac{\partial f_1}{\partial x_n} \\
-
-\vdots & \ddots & \vdots \\
-\frac{\partial f_m}{\partial x_1} & \cdots & \frac{\partial f_m}{\partial x_n} 
-\end{pmatrix}
-= 
-\begin{pmatrix}
- \nabla f_1(x)^T\\
- \vdots \\
- \nabla f_m(x)^T \\
-\end{pmatrix}=
-\begin{pmatrix}
-     \frac{\partial f}{\partial x_1} \cdots \frac{\partial f}{\partial x_n}
-\end{pmatrix} \in \mathbb{R}^{m \times n}$$
-
-
-
+\begin{align*}
+	J_f(x_1)&=\frac{\partial f(x_1)}{\partial x_1} =
+	\begin{pmatrix}
+	\frac{\partial f_1}{\partial x_1} & \cdots & \frac{\partial f_1}{\partial x_n} \\	
+	\vdots & \ddots & \vdots \\
+	\frac{\partial f_m}{\partial x_1} & \cdots & \frac{\partial f_m}{\partial x_n} 
+	\end{pmatrix} \\
+	&= 
+	\begin{pmatrix}
+	 \nabla f_1(x)^T\\
+	 \vdots \\
+	 \nabla f_m(x)^T \\
+	\end{pmatrix}=
+	\begin{pmatrix}
+	     \frac{\partial f}{\partial x_1}, \ldots, \frac{\partial f}{\partial x_n}
+	\end{pmatrix} \in \mathbb{R}^{m \times n}.
+\end{align*}
 
 
-Donde $\nabla f_i(x) ^T \in \mathbb{R}^{1 \times n} $ es la fila $i$-ésima de la matriz jacobiana y $\frac{\partial f}{\partial x_j} \in \mathbb{R}^m$ es la columna $j$-ésima, para $i=1,\ldots,m$ y $j=1,\ldots,n$.
+
+
+
+Donde $\nabla f_i(x) ^T \in \mathbb{R}^{1 \times n} $ es la fila $i$-ésima y $\frac{\partial f}{\partial x_j} \in \mathbb{R}^m$ es la columna $j$-ésima de la matriz jacobiana , para $i=1,\ldots,m$ y $j=1,\ldots,n$.
 
 Podemos extraer la fila $i$-ésima del jacobiano usando un producto vector-jacobiano (PVJ) de la forma $e_i^T J_f(x)$, donde $e_i \in \mathbb{R}^m$ es el vector de la base canónica. De manera análoga se puede extraer la columna $j$-ésima de $J_f(x)$ usando un producto jacobiano-vector (PJV) de la forma $J_f(x)e_j$, donde $e_j \in \mathbb{R}^n$. Se tiene entonces que el cálculo de la matriz jacobiana $J_f(x)$ equivale a $n$ PJV o $m$ PVJ. 
 
 
-Para construir el jacobiano a partir de operaciones PJV o PVJ, podemos suponer que el cálculo del gradiente de $f_i(x)$ tiene el mismo coste computacional que el cálculo de la derivada parcial de f con respecto de alguna de las variables $x_j$. Por tanto la forma de cálculo de la matriz jacobiana que sea más eficiente depende de qué valor es mayor: si $n$ o $m$.
+Para construir el jacobiano a partir de operaciones PJV o PVJ, podemos suponer que el cálculo del gradiente de $f_i(x)$ tiene el mismo coste computacional que el cálculo de la derivada parcial de $f$ con respecto de alguna de las variables $x_j$. Por tanto la forma de cálculo más eficiente de la matriz jacobiana depende de qué valor es mayor: si $n$ o $m$.
 
 
 
-Si $n<m$ será más eficiente calcular $J_f(x)$ para cada columna $j\in \left \{1,\ldots,n \right \}$ usando PJV de derecha a izquierda.
+Si $n\leq m$ será más eficiente construir el jacobiano $J_f(x)$ usando PJV de derecha a izquierda.
 
-$$J_f(x)v=J_{f_k}(x_k) \cdots J_{f_2}(x_2) J_{f_1}(x_1) v$$
+$$J_f(x)v=J_{f_k}(x_k) \cdots J_{f_2}(x_2) J_{f_1}(x_1) v.$$
 
-Donde $J_{f_k}(x_k)$ tiene tamaño $m \times m_{k-1}$, $J_{f_i}(x_i)$ tiene tamaño $m_i \times m_{i-1}$ para $i \in {2,\ldots,k-1}$ y $J_{f_1}(x_1)$ tiene tamaño $m_1 \times n$ mientras que el vector columna $v$ será $n \times 1$. Esta multiplicación se puede calcular usando el agoritmo de diferenciación hacia delante, que es un tipo de algoritmo usado en diferenciación automática (ver algoritmo \ref{alg:fowdiff}). Asumiendo que $n=1, m_i=m_j=m$, el coste de computar $J_f(x)$ es $O(n^2)$.
+Donde $J_{f_k}(x_k)$ tiene tamaño $m \times m_{k-1}$, $J_{f_i}(x_i)$ tiene tamaño $m_i \times m_{i-1}$ para $i \in {2,\ldots,k-1}$ y $J_{f_1}(x_1)$ tiene tamaño $m_1 \times n$ mientras que el vector columna $v$ será $n \times 1$. Esta multiplicación se puede calcular usando el agoritmo de diferenciación hacia delante definido en \ref{alg:fowdiff}.
 
 
-Donde los elementos de la matriz fila $v_j, j \in \left \{1,\ldots,n \right \}$ se corresponden con las derivadas parciales de la función del MLP respecto a la entrada de la capa $j$, es decir la columna $j$-ésima de la matriz jacobiana, $v_j=\frac{\partial f}{\partial x_j}$. 
+Donde los elementos $v_j, j \in \left \{1,\ldots,n \right \}$ de la matriz fila $v$ se corresponden con las derivadas parciales de la función del MLP respecto a la entrada de la capa $j$, es decir la columna $j$-ésima de la matriz jacobiana, $v_j=\frac{\partial f}{\partial x_j}$. 
 
-Si $n>m$ es más eficiente calcular $J_f(x)$ para cada fila $i=1,\ldots,m$ usando PVJ de izquierda a derecha. La multiplicación izquierda con un vector fila $u^T$ es 
+Si $n\geq m$ es más eficiente calcular $J_f(x)$ para cada fila $i=1,\ldots,m$ usando PVJ de izquierda a derecha. La multiplicación izquierda con un vector fila $u^T$ es 
 
-$$u^TJ_f(x)=u^TJ_{f_k}(x_k) \cdots J_{f_2}(x_2) J_{f_1}(x_1)$$
+$$u^TJ_f(x)=u^TJ_{f_k}(x_k) \cdots J_{f_2}(x_2) J_{f_1}(x_1).$$
 
-Donde $u^T$ tiene tamaño $1 \times m$,  $J_{f_k}(x_k)$ tiene tamaño $m \times m_{k-1}$, $J_{f_i}(x_i)$ tiene tamaño $m_i \times m_{i-1}$ para $i \in {2,\ldots,k-1}$ y $J_{f_1}(x_1)$ tiene tamaño $m_1 \times n$. Esto puede calcularse usando la diferenciación hacia atrás (ver algoritmo \ref{alg:backdif}). Asumiendo que $m=1, m_i=m_j=n$, el coste de computar $J_f(x)$ es $O(n^2)$.
+Donde $u^T$ tiene tamaño $1 \times m$,  $J_{f_k}(x_k)$ tiene tamaño $m \times m_{k-1}$, $J_{f_i}(x_i)$ tiene tamaño $m_i \times m_{i-1}$ para $i \in {2,\ldots,k-1}$ y $J_{f_1}(x_1)$ tiene tamaño $m_1 \times n$. Esto puede calcularse usando la diferenciación hacia atrás (ver algoritmo \ref{alg:backdif}).
 
  
 \begin{algorithm}[H]
@@ -140,9 +141,9 @@ Donde $u^T$ tiene tamaño $1 \times m$,  $J_{f_k}(x_k)$ tiene tamaño $m \times 
     \end{algorithmic}
 \end{algorithm}
 
-Donde los elementos $u_i^T$ se corresponden con el gradiente de la función $f_i$, $u_i^T=\nabla f_i(x)^T$, es decir la fila $i$-ésima de la matriz jacobiana. Este algoritmo aplicado al cálculo del gradiente del error del modelo con respecto a los pesos, propagando la información hacia atrás y con el objetivo de usar gradiente descendente, es lo que conocemos como BP.
+Donde los elementos $u_i^T$ se corresponden con el gradiente de la función $f_i$, $u_i^T=\nabla f_i(x)^T$, es decir la fila $i$-ésima de la matriz jacobiana. Asumimos que $m=1$ ya que la salida de la función de error del modelo es un escalar, y que $n=m_i$ $i \in \left \{2,\ldots, k-1 \right \}$; entonces el coste de computar el jacobiano usando la diferenciación hacia atrás es $O(n^2)$. Este algoritmo aplicado al cálculo del gradiente del error del modelo con respecto a los pesos, propagando la información hacia atrás y con el objetivo de usar gradiente descendente, es lo que conocemos como BP. 
 
-Con la notación que estamos empleando, cuando $m=1$ el gradiente $\nabla f(x)$ tiene la misma dimensión que $x$. Por tanto es un vector columna mientras que $J_f(x)$ es un vector fila, por lo que técnicamente se tiene que $\nabla f(x)= J_f(x)^T$. Es de vital importancia aclarar esto ya que es el caso en el que nos situamos cuando usamos BP. La dimensión de salida siempre es uno, ya que calculamos la matriz jacobiana de la función de error del modelo con respecto a los pesos, con lo que será un vector gradiente de dimensión igual a la dimensión de los pesos del modelo. La predicción del modelo puede tener dimensión 1 en tareas de regresión, o una dimensión mayor que dos para tareas de clasificación, aunque de manera general no suele ser mayor de 100. La función de error del modelo siempre tendrá como imagen un valor escalar.
+Con la notación que estamos empleando, cuando $m=1$ el gradiente $\nabla f(x)$ tiene la misma dimensión que $x$. Por tanto es un vector columna mientras que $J_f(x)$ es un vector fila, por lo que técnicamente se tiene que $\nabla f(x)= J_f(x)^T$. Es de vital importancia aclarar esto ya que es el caso en el que nos situamos cuando usamos BP. La dimensión de salida siempre es uno, ya que calculamos la matriz jacobiana de la función de error del modelo con respecto a los pesos, con lo que será un vector gradiente de dimensión igual a la dimensión de los pesos del modelo. La predicción del modelo puede tener dimensión 1 en tareas de regresión, o una dimensión mayor para tareas de clasificación, aunque de manera general no suele ser mayor de 100. La función de error del modelo siempre tendrá como imagen un valor real.
 
 
 Acabamos de comprobar que para calcular una matriz jacobiana resulta más eficiente usar diferenciación hacia delante si la dimensión de la entrada es menor que la dimensión de la salida; y si la dimensión de la salida es menor que la dimensión de la entrada es preferible usar diferenciación hacia atrás. Por las características de las redes neuronales y los problemas en los que se aplican, siempre vamos a tener que la dimensión de salida es mucho menor que la dimensión de la entrada, por lo que es mucho más eficiente usar la diferenciación hacia atrás. 
@@ -153,7 +154,7 @@ Acabamos de comprobar que para calcular una matriz jacobiana resulta más eficie
 \subsection{BP para MLP}
 
 
-En la sección anterior hemos visto un modelo que no tenía ningún parámetro entrenable. Ahora usaremos uno que sí los tiene y veremos cómo calcular el gradiente de la función de coste con respecto a esos pesos. Los parámetros son valores reales y tienen la forma $W= W_1 \times W_2 \times \cdots \times W_k \subset \Omega$, y $W_i \in \mathbb{R}^{n_i \times n_{i+1}}$ donde $n_i$ es el número de neuronas de la $i$-ésima capa. El modelo que tendríamos añadiendo los pesos es $f: \mathbb{R}^n \times \Omega \rightarrow \mathbb{R}^m$, $o=f(x,W)$ con $x \in \mathbb{R}^n$  y $o \in \mathbb{R}^m$. Donde las funciones de cada capa son de la forma $f_i(x_i, W_i)= \sigma_i(W_ix_i)=x_{i+1}$ donde $\sigma_i$ es una función de activación generalmente no lineal. Dependiendo del tipo de problema, la función $f_k$ puede ser distinta: en un problema de regresión usamos la identidad, en clasificación usamos la función Softmax.
+En la sección anterior hemos visto un modelo que no tenía ningún parámetro entrenable. Ahora usaremos uno que sí los tiene y veremos cómo calcular el gradiente de la función de coste con respecto a ellos. Los parámetros son valores reales y tienen la forma $W= W_1 \times W_2 \times \cdots \times W_k \subset \Omega$, con $W_i \in \mathbb{R}^{n_i \times n_{i+1}}$ donde $n_i$ es el número de neuronas de la $i$-ésima capa. El modelo que tendríamos añadiendo los pesos es $f: \mathbb{R}^n \times \Omega \rightarrow \mathbb{R}^m$, $o=f(x,W)$ con $x \in \mathbb{R}^n$  y $o \in \mathbb{R}^m$. Donde las funciones de cada capa son de la forma $f_i(x_i, W_i)= \sigma_i(W_ix_i)=x_{i+1}$ donde $\sigma_i$ es una función de activación generalmente no lineal. Dependiendo del tipo de problema, la función $f_k$ puede ser distinta: en un problema de regresión usamos la identidad, en clasificación usamos la función Softmax que convierte el vector de la predicción del modelo en un vector cuyos elementos suman 1 y donde el elemento de la posición $i$-ésima representa la probabilidad de que la entrada pertenezca a esa clase.
 
 
 Ahora vamos a considerar la función de coste del modelo como una capa más, a parte de las funciones de las capas que nos permiten obtener la predicción. Siguiendo con la notación anterior, incluyendo la función de error $\mathcal{L}: \mathbb{R}^n \times \Omega \times \mathbb{R}^m \rightarrow \mathbb{R}$, $E=\mathcal{L}((x,W,y)= C(f(x,W),y)$, con $y \in \mathbb{R}^m$ siendo la etiqueta correcta para la entrada $x$ y $C: \mathbb{R}^m \times \mathbb{R}^m \rightarrow \mathbb{R}$ la función de coste del modelo. Con esto tenemos que $\mathcal{L} = C \circ f$. 
@@ -176,7 +177,7 @@ Ahora vamos a considerar la función de coste del modelo como una capa más, a p
 
 \end{ejemplo}
 
-El objetivo, para poder aplicar el entrenamiento a través del gradiente descendente será calcular el gradiente del error con respecto a los parámetros $\frac{\partial E}{\partial W}$. Buscamos obtener un vector gradiente de la misma dimensión que $W$, pero el cálculo no es directo, calcularemos progresivamente el gradiente de la función de coste con respecto a los pesos de cada capa, desde la capa final hasta la inicial por lo que buscamos calcular $\frac{\partial E}{\partial W_i}, \forall i=1,\ldots,k$.  Para la última capa $\frac{\partial E}{\partial W_k}$ el cálculo es inmediato, mientras que para el resto podemos usar la regla de la cadena para obtener que 
+El objetivo será calcular el gradiente del error con respecto a los parámetros $\frac{\partial E}{\partial W}$  para poder aplicar el entrenamiento a través del gradiente descendente. Buscamos obtener un vector gradiente de la misma dimensión que $W$, pero el cálculo no es directo, calcularemos progresivamente el gradiente de la función de coste con respecto a los pesos de cada capa, desde la capa final hasta la inicial por lo que buscamos calcular $\frac{\partial E}{\partial W_i}, \forall i=1,\ldots,k$.  Para la última capa $\frac{\partial E}{\partial W_k}$ el cálculo es inmediato, mientras que para el resto podemos usar la regla de la cadena para obtener que 
 
 $$\frac{\partial \mathcal{L}}{\partial W_i}=\frac{\partial \mathcal{L}}{\partial x_k} \frac{\partial x_k}{\partial x_{k-1}} \frac{\partial x_{k-1}}{\partial x_{k-2}} \cdots \frac{\partial x_{i+1}}{\partial W_i}$$
 
@@ -225,7 +226,7 @@ $$ \frac{\partial z^{(i)}}{\partial x^{(j)}} =  \left\{\begin{matrix}
 \end{matrix}\right .
 $$
 
-Donde $\sigma'(a) = \frac{d}{da}\sigma(a)$. En otras palabras, el Jacobiano con respecto de la entrada es 
+Donde $\sigma'(a) = \frac{d\sigma}{da}(a)$. En otras palabras, el Jacobiano con respecto de la entrada es 
 
 $$J=\frac{\partial \sigma}{\partial x}= diag(\sigma'(x)).$$
 
@@ -292,7 +293,7 @@ $$\frac{\partial z_i}{\partial x_j} = \frac{\partial}{\partial x_j} \sum_{l=1}^n
 
 ya que $\frac{\partial}{\partial x_j} x_l= \mathbb{I} (l=j)$. Por tanto el Jacobiano con respecto a la entrada será
 
-$$J=\frac{\partial z}{\partial x}=W$$
+$$J=\frac{\partial z}{\partial x}=W.$$
 
 El PVJ entre $u^T \in \mathbb{R}^{1 \times m}$ y $J \in \mathbb{R}^{m \times n}$ es
 
@@ -320,11 +321,11 @@ $$ u^T \frac{\partial z}{\partial W}  = ux^T \in \mathbb{R}^{m \times n}.$$
 
 \subsubsection{Grafos computacionales}
 
-Los MLP son un tipo de Redes Neuronales Profundas donde cada capa se conecta directamente con la siguiente formando una estructura de cadena. Sin embargo las Redes Neuronales Profundas más recientes combinan componentes diferenciables de forma mucho más compleja, creando un grafo computacional de forma similar a como en la programación se combinan funciones simples para hacer otras más complejas. La restricción es que el grafo resultante debe de ser un grafo acíclico dirigido, donde cada nodo es una función subdiferenciable. Un grafo acíclico dirigido es un tipo de grafo donde los cada arista que une dos nodos tiene un sentido específico desde un nodo al otro (dirigido) y en el que no se forman ciclos, es decir, partiendo de un nodo dado no existe una secuencia de aristas dirigidas por la que se pueda volver a él.
+Los MLP son un tipo de Redes Neuronales Profundas donde cada capa se conecta directamente con la siguiente formando una estructura de cadena. Sin embargo las Redes Neuronales Profundas más recientes combinan componentes diferenciables de forma mucho más compleja, creando un grafo computacional de forma similar a como en la programación se combinan funciones simples para hacer otras más complejas. La restricción es que el grafo resultante debe de ser un grafo acíclico dirigido, donde cada nodo es una función subdiferenciable. Un grafo acíclico dirigido es un tipo de grafo donde cada arista que une dos nodos tiene un sentido específico desde un nodo al otro (dirigido) y en el que no se forman ciclos, es decir, partiendo de un nodo dado no existe una secuencia de aristas dirigidas por la que se pueda volver a él.
 
 
 
-Vamos a ver un ejemplo usando la función $f(x_1,x_2)=x_2e^{x_1}\sqrt{x_1+x_2e^{x_1}}$, cuyo grafo se ver reflejado en la figura \ref{fig:def.grafo}.
+Vamos a ver un ejemplo usando la función $f(x_1,x_2)=x_2e^{x_1}\sqrt{x_1+x_2e^{x_1}}$, cuyo grafo se puede ver representado en la figura \ref{fig:def.grafo}.
 
 
 \begin{figure}
@@ -354,14 +355,14 @@ En nuestro ejemplo para el nodo $x_4$:
 $$   \frac{\partial o }{ \partial x_4 }  =  \frac{\partial o}{ \partial x_5} \frac{\partial x_5}{\partial x_4} +\frac{\partial o}{ \partial x_7} \frac{\partial x_7}{\partial x_4} .$$
 
 
-En la práctica el grafo computacional se puede calcular previamente, usando una API que nos permita definir un grafo estático. Alternativamente podemos calcular el grafo en tiempo real, siguiendo la ejecución de la función en un elemento de entrada. Esta segunda opción hace más fácil trabajar con grafos dinámicos cuya forma puede cambiar dependiendo de los valores calculados por la función. Por ejemplo, Tensorflow 1 usaba los grafos estáticos mientras que su versión más reciente TensorFlow 2 y PyTorch usan los grafos en tiempo real. 
+En la práctica el grafo computacional se puede calcular previamente, usando una librería que nos permita definir un grafo estático. Alternativamente podemos calcular el grafo en tiempo real, siguiendo la ejecución de la función en un elemento de entrada. Esta segunda opción hace más fácil trabajar con grafos dinámicos cuya forma puede cambiar dependiendo de los valores calculados por la función. Por ejemplo, Tensorflow 1 usaba los grafos estáticos mientras que su versión más reciente TensorFlow 2 y PyTorch usan los grafos en tiempo real. 
 
 
 
 
 \subsection{Problemas con el cálculo del gradiente}
 
-\subsubsection{Desvanecimiento y explosión del gradiente}
+\subsubsection{Desvanecimiento y explosión del gradiente}\label{sec:desvyexpl}
 
 
 Siguiendo el hilo de la sección \ref{sec:convergencia}, vamos a ver dos problemas que surgen a la hora de entrenar modelos usando gradiente descendente y que lastran la convergencia, pero con la diferencia de que estos están ligados únicamente al algoritmo de BP, es decir, a cómo se calcula el gradiente y no a cómo se usa en la búsqueda de soluciones.

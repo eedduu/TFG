@@ -2405,11 +2405,17 @@
     <bcf:citekey order="26" intorder="1">RobbinSiegmundtoSGD</bcf:citekey>
     <bcf:citekey order="27" intorder="1">dauphin2014SaddlePoints</bcf:citekey>
     <bcf:citekey order="28" intorder="1">AutomaticDiff</bcf:citekey>
-    <bcf:citekey order="29" intorder="1">VanishExplode</bcf:citekey>
-    <bcf:citekey order="30" intorder="1">stabilityProblem2</bcf:citekey>
-    <bcf:citekey order="31" intorder="1">stabilityProblem2</bcf:citekey>
-    <bcf:citekey order="32" intorder="1">heinic</bcf:citekey>
-    <bcf:citekey order="33" intorder="1">murphy2022probabilistic</bcf:citekey>
+    <bcf:citekey order="29" intorder="1">murphy2022probabilistic</bcf:citekey>
+    <bcf:citekey order="30" intorder="1">murphy2022probabilistic</bcf:citekey>
+    <bcf:citekey order="31" intorder="1">VanishExplode</bcf:citekey>
+    <bcf:citekey order="32" intorder="1">stabilityProblem2</bcf:citekey>
+    <bcf:citekey order="33" intorder="1">stabilityProblem2</bcf:citekey>
+    <bcf:citekey order="34" intorder="1">heinic</bcf:citekey>
+    <bcf:citekey order="35" intorder="1">murphy2022probabilistic</bcf:citekey>
+    <bcf:citekey order="36" intorder="1">lenet5</bcf:citekey>
+    <bcf:citekey order="37" intorder="1">ResNets</bcf:citekey>
+    <bcf:citekey order="38" intorder="1">bottleorig</bcf:citekey>
+    <bcf:citekey order="38" intorder="2">bottlegoogle</bcf:citekey>
   </bcf:section>
   <!-- SORTING TEMPLATES -->
   <bcf:sortingtemplate name="anyt">

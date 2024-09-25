@@ -1,19 +1,19 @@
 \section{Experimentación}
 
-Se ha desarrollado una batería de pruebas amplia y diversa que permita una correcta comparación entre el gradiente descendente y las técnicas metaheurísticas atendiendo a los objetivos señalados anteriormente. En la tabla \ref{table:exp} se ofrece un resumen esquemático de las pruebas que se van a realizar. Todas ellas se realizan con los siguientes optimizadores de gradiente descendente: Nesterov Accelerated Gradient (NAG), RMSProp y Adam. Para las metaheurísticas se ha elegido los ya conocidos en la literatura SHADE y SHADE-ILS, y añadiendo una versión híbrida de cada uno con el gradiente descendente. Todas estas elecciones se detallarán a lo largo de esta sección. Para el desarrollo del código se usa el lenguaje Python con las librerías PyTorch y FastAI, entre otras; implementado y ejecutado en Google Colab. El código puede encontrarse en: CODIGO.
+Se ha desarrollado una batería de pruebas amplia y diversa que permita una correcta comparación entre el gradiente descendente y las técnicas metaheurísticas atendiendo a los objetivos señalados anteriormente. En la tabla \ref{table:exp} se ofrece un resumen esquemático de las pruebas que se van a realizar. Todas ellas se realizan con los siguientes optimizadores de gradiente descendente: Nesterov Accelerated Gradient (NAG), RMSProp y Adam. Para las metaheurísticas se ha elegido los ya conocidos en la literatura SHADE y SHADE-ILS, y añadiendo una versión híbrida de cada uno con el gradiente descendente. Todas estas elecciones se detallarán a lo largo de esta sección. Para el desarrollo del código se usa el lenguaje Python con las librerías PyTorch y FastAI, entre otras; implementado y ejecutado en Google Colab. El código puede encontrarse en: https://github.com/eedduu/TFG.
 
-Se debe destacar que se ejecutará el código en Colab con la versión CPU. El ordenador local en el que se realiza este TFG no tiene ni CPU que supere a la ofrecida por Colab ni tarjeta gráfica NVida en la que se pueda aprovechar CUDA. Además el tiempo de GPU ofrecido gratis por colab no es suficiente para la realización de la experimentación y pruebas previas que sean necesarias. Esto no afecta al objetivo, que es establecer una comparación justa entre los algoritmos de aprendizajes usados. Aunque esta opción sea más lenta, permite ofrecer una comparativa equitativa y mucho más cómoda para la ejecución y la implementación, con las pruebas que conllevan, ya que no tiene limitaciones de tiempo. Usando otra configuración se reducirían los tiempos de ejecución, sin embargo lo que nos interesa es la comparación de los tiempos entre algoritmos y no su medida absoluta.
+
 
 
 \begin{table}[]
 \begin{tabular}{|l|cccc|cll|}
 \hline
 \textbf{Familia} & \multicolumn{4}{c|}{MLP}                                                                                                                               & \multicolumn{3}{c|}{ConvNets}                                         \\ \hline
-\textbf{Modelo}  & \multicolumn{4}{c|}{1,2,5 y 11}                                                                                                                        & \multicolumn{3}{c|}{LeNet5 y ResNet-32}                               \\ \hline
-\textbf{Datasets}           & \multicolumn{1}{c|}{ITT} & \multicolumn{1}{c|}{BCW} & \multicolumn{2}{c|}{WQ}              & \multicolumn{1}{c|}{MNIST} & \multicolumn{1}{l|}{F-MNIST} & CIFAR10-G \\ \hline
+\textbf{Modelo}  & \multicolumn{4}{c|}{1,2,5 y 11}                                                                                                                        & \multicolumn{3}{c|}{LeNet5, ResNet-15 y ResNet57}                               \\ \hline
+\textbf{Datasets}           & \multicolumn{1}{c|}{BHP} & \multicolumn{1}{c|}{BCW} & \multicolumn{2}{c|}{WQ}              & \multicolumn{1}{c|}{MNIST} & \multicolumn{1}{l|}{F-MNIST} & CIFAR10-G \\ \hline
 \textbf{Tarea}             & \multicolumn{1}{c|}{R}                        & \multicolumn{1}{c|}{C}            & \multicolumn{1}{c|}{R} & C & \multicolumn{3}{c|}{Clasificación de imágenes}                        \\ \hline
 \end{tabular}
-\caption{Resumen de la experimentación. ITT: Infrared Thermografy Temperature, BCW: Breast Cancer Winsconsin, WQ: Wine Quality. R: regresión, C: clasificación. En el caso de MLP, en la fila modelo se indica el número de capas ocultas.}
+\caption{Resumen de la experimentación. BHP: Boston Housing Price, BCW: Breast Cancer Winsconsin, WQ: Wine Quality. R: regresión, C: clasificación. En el caso de MLP, en la fila modelo se indica el número de capas ocultas.}
 \label{table:exp}
 \end{table}
 
@@ -21,8 +21,9 @@ Se debe destacar que se ejecutará el código en Colab con la versión CPU. El o
 
 Usaremos dos familias de modelos: MLP y ConvNets. Con los primeros usaremos datasets tabulares para clasificación y regresión, y con los segundos datasets de imágenes para la tarea de clasificación. En la siguiente sección se detallan los datasets con sus características.
 
-Para los MLP usaremos 5 modelos, con 1,2,5 y 11 capas ocultas cada uno. El número de neuronas por capa es una potencia de 2 y con estructura piramidal incremental, es decir primero aumentando el número de neuronas por capa y luego disminuyéndolo. Estas son elecciones comunes en la literatura ya que facilitan las operaciones por su estructura (la primera) y el tratamiento de los datos (la segunda). El objetivo es conseguir una variedad experimental que permita medir los efectos de la complejidad del modelo sobre la tarea y el overfitting además de adecuarse a las condiciones del paper de referencia, con modelos desde aproximadamente mil parámetros hasta casi 1.5M, acercándose al modelo más grande presentado en dicho paper. Para la implementación se usan modelos obtenidos de la librería FastAI por simplicidad.
+La implementación de los MLP se ha realizado a través de la librería FastAI por simplicidad ya que ofrece lo necesario para usarlos directamente. La implementación de las ConvNets se ha realizado desde cero, observando la topología de LeNet5 y las ResNets en sus papers originales, ya que en ellas sí que se han introducido ciertos cambios que se comentan más adelante. Estas modificaciones tienen como objetivo una batería experimental más amplia y acorde a las condiciones que buscamos. Todos los modelos han sido entrenados desde cero.
 
+Para los MLP usaremos 5 modelos, con 1,2,5 y 11 capas ocultas cada uno. El número de neuronas por capa es una potencia de 2 y con estructura piramidal incremental, es decir primero aumentando el número de neuronas por capa y luego disminuyéndolo. Estas son elecciones comunes en la literatura ya que facilitan las operaciones por su estructura (la primera) y el tratamiento de los datos (la segunda). El objetivo es conseguir una variedad experimental que permita medir los efectos de la complejidad del modelo sobre la tarea y el overfitting además de adecuarse a las condiciones del paper de referencia, con modelos desde aproximadamente mil parámetros hasta casi 1.5M, acercándose al modelo más grande presentado en dicho paper. 
 \begin{itemize}
 
 	\item{1 capa oculta}: 64 neuronas, 2.238 parámetros
@@ -37,84 +38,141 @@ Para los MLP usaremos 5 modelos, con 1,2,5 y 11 capas ocultas cada uno. El núme
 
 Antes de cada capa linal hay una de BatchNorm1D, ya que es la implementación por defecto de FastAI y mejora el rendimiento en el entrenamiento. Los parámetros asociados a este tipo de capa y a los de la capa de salida van incluidos en el cómputo anterior. Se incluye al final del modelo una capa de SoftMax en caso de que la tarea sea clasificación.
 
-Para los modelos basados en convoluciones usamos el modelo LeNet5 y una ResNet con 32 capas. El objetivo es de nuevo ofrecer una variedad experimental, con el primer modelo teniendo unos 60k parámetros mientras que el segundo tiene 1.5M, imitando de nuevo las condiciones del paper de referencia. Combinamos así un modelo más básico con uno más reciente y de mayor complejidad.
+Para los modelos basados en convoluciones usamos el modelo LeNet5 y dos ResNets, con 15 y 57 capas. El objetivo es de nuevo ofrecer una variedad experimental, con el primer modelo teniendo unos 60k parámetros mientras que el tercero tiene 1.5M REVISAR, imitando de nuevo las condiciones del paper de referencia. Combinamos así un modelo más básico con uno más reciente y de mayor complejidad.
 
 
-LeNet5 es un modelo de sobra conocido presentado por Yann LeCun en REFERENCIA, al que sustituimos las funciones de activación sigmoide (MIRAR ESTO) por funciones de activación ReLU, ya que en la literatura posterior a la presentación del modelo se han demostrado superiores a las sigmoides. También se han sustituido las capas de AveragePool por MaxPool y añadido capas de BatchNorm por los mismos motivos. En la tabla \ref{table:lenet5} se muestra la topología de este modelo, obviando las capas de Flatten y de SoftMax. Tiene un total de AÑADIR PARÁMETROS.
+LeNet5 es un modelo de sobra conocido presentado por Yann LeCun en \cite{lenet5}, al que sustituimos las funciones de activación por ReLU, ya que en la literatura posterior a la presentación del modelo se han demostrado superiores a las sigmoides y la tangente hiperbólica. También se han sustituido las capas de AveragePool por MaxPool y añadido capas de BatchNorm por los mismos motivos. En la tabla \ref{table:lenet5} se muestra la topología de este modelo, obviando las capas de Flatten y de SoftMax. Tiene un total de 62 mil parámetros.
 
 
-% Please add the following required packages to your document preamble:
-% \usepackage{multirow}
+
 \begin{table}[]
-\begin{tabular}{|c|cc|c|cc|}
+\centering
+\begin{tabular}{|c|c|c|c|}
 \hline
-\multirow{2}{*}{\textbf{Capa}} & \multicolumn{2}{c|}{\textbf{Imagen}}      & \multirow{2}{*}{\textbf{Kernel}} & \multicolumn{2}{c|}{\textbf{Canales}}    \\ \cline{5-6} 
-                               & Entrada                    & Salida       &                                  & Entrada                & Salida \\ \hline
-Convolución                    & \multicolumn{1}{c|}{32x32} & 28x28        & 5x5                              & \multicolumn{1}{c|}{1} & 6      \\ \hline
-BatchNorm2D                    & \multicolumn{1}{c|}{28x28} & 28x28        & -                                & \multicolumn{1}{c|}{-} & -      \\ \hline
-ReLU Activation                & \multicolumn{1}{c|}{28x28} & 28x28        & -                                & \multicolumn{1}{c|}{-} & -      \\ \hline
-Max Pool                           & \multicolumn{1}{c|}{28x28} & 14x14        & 2x2, stride 2                              & \multicolumn{1}{c|}{-} & -      \\ \hline
-Convolución                    & \multicolumn{1}{c|}{14x14} & 10x10        & 5x5                              & \multicolumn{1}{c|}{6} & 16     \\ \hline
-BatchNorm2D                    & \multicolumn{1}{c|}{10x10} & 10x10        & -                                & \multicolumn{1}{c|}{-} & -      \\ \hline
-ReLU Activation                & \multicolumn{1}{c|}{10x10} & 10x10        & -                                & \multicolumn{1}{c|}{-} & -      \\ \hline
-Max Pooling                    & \multicolumn{1}{c|}{10x10} & 5x5          & 2x2                              & \multicolumn{1}{c|}{-} & -      \\ \hline
-Fully Connected                & \multicolumn{1}{c|}{400}   & 120          & -                                & \multicolumn{1}{c|}{-} & -      \\ \hline
-BatchNorm1D                    & \multicolumn{1}{c|}{120}   & 120          & -                                & \multicolumn{1}{c|}{-} & -      \\ \hline
-ReLU Activation                & \multicolumn{1}{c|}{120}   & 120          & -                                & \multicolumn{1}{c|}{-} & -      \\ \hline
-Fully Connected                & \multicolumn{1}{c|}{120}   & 84           & -                                & \multicolumn{1}{c|}{-} & -      \\ \hline
-BatchNorm1D                    & \multicolumn{1}{c|}{84}    & 84           & -                                & \multicolumn{1}{c|}{-} & -      \\ \hline
-ReLU Activation                & \multicolumn{1}{c|}{84}    & 84           & -                                & \multicolumn{1}{c|}{-} & -      \\ \hline
-Fully Connected                & \multicolumn{1}{c|}{84}    & num\_classes & -                                & \multicolumn{1}{c|}{-} & -      \\ \hline
+\multirow{2}{*}{\textbf{Capa}} & \multirow{2}{*}{\textbf{Dimensión}} & \multirow{2}{*}{\textbf{Kernel}} & \multirow{2}{*}{\textbf{Canales}} \\
+                               &                                     &                                  &                                   \\ \hline
+Convolución                    & 28x28                               & 5x5                              & 6                                 \\ \hline
+BatchNorm2D                    & 28x28                               & -                                & -                                 \\ \hline
+ReLU                           & 28x28                               & -                                & -                                 \\ \hline
+Max Pool                       & 14x14                               & 2x2, stride 2                    & -                                 \\ \hline
+Convolución                    & 10x10                               & 5x5                              & 16                                \\ \hline
+BatchNorm2D                    & 10x10                               & -                                & -                                 \\ \hline
+ReLU                           & 10x10                               & -                                & -                                 \\ \hline
+Max Pooling                    & 5x5                                 & 2x2                              & -                                 \\ \hline
+Lineal                         & 120                                 & -                                & -                                 \\ \hline
+BatchNorm1D                    & 120                                 & -                                & -                                 \\ \hline
+ReLU                           & 120                                 & -                                & -                                 \\ \hline
+Lineal                         & 84                                  & -                                & -                                 \\ \hline
+BatchNorm1D                    & 84                                  & -                                & -                                 \\ \hline
+ReLU                           & 84                                  & -                                & -                                 \\ \hline
+Lineal                         & num\_classes                        & -                                & -                                 \\ \hline
 \end{tabular}
-
-\caption{Topología de LeNet5 para imágenes 32x32.}
+\caption{Topología de LeNet5 para imágenes 32x32 con un canal de entrada. Las columnas dimensión y canales hacen referencia a la salida de la capa.}
 \label{table:lenet5}
 \end{table}
 
 
-Se ha diseñado el modelo de ResNet con 32 capas con la intención de aproximarse al número de parámetros del modelo más grande del paper de referencia y aprovechar la estructura de esta familia de modelos. Las ResNets se caracterizan por usar bloques convolucionales que agrupan varias capas de convolución donde al final de cada bloque se suma la entrada del mismo, con el objetivo de evitar el problema del desvanecimiento de gradiente (ver sección REF). En un modelo con pocas capas no se aprecia tan bien este efecto.
+Se han diseñado dos modelos de ResNet, uno con 15 capas y otro con 57. A priori puede parecer excesivo 57 capas, pero con la implementación a través de BottleNeckBlocks se aumenta el número de capas considerablemente con un leve incremento del número de parámetros. Sigue además la tendencia en la literatura de aumentar el número de capas antes que el número de filtros. Se han elegido 57 capas con la intención de aproximarse al número de parámetros del modelo más grande del paper de referencia y aprovechar la estructura de esta familia de modelos. Las ResNets\cite{ResNets} se caracterizan por usar bloques convolucionales que agrupan varias capas de convolución donde al final de cada bloque se suma la entrada del mismo, con el objetivo de evitar el problema del desvanecimiento de gradiente (ver sección \ref{sec:desvyexp}). En un modelo con pocas capas no se aprecia tan bien este efecto.
 
-Los bloques convolucionales agrupan 3 capas de convolución con sus respectivas capas BatchNorm, y se usan convoluciones 1x1 para hacer cuello de botella, reduciendo así el número de parámetros sin perder expresividad de la red REFERENCIA. Se sigue el diseño usual, por ejemplo agrupando más bloques convolucionales en mitad de la red y usando solo una capa lineal. El modelo ResNet32 que se implementa tiene un total de PARAMETROS. Su topología se detalla en la tabla \ref{table:resnet32}.
+Los bloques convolucionales agrupan 3 capas de convolución con sus respectivas capas BatchNorm, y se usan convoluciones 1x1 para hacer cuello de botella, reduciendo así el número de parámetros sin perder expresividad de la red \cite{bottleorig, bottlegoogle}. Se sigue el diseño usual, por ejemplo agrupando más bloques convolucionales en mitad de la red y usando solo una capa lineal. El modelo ResNet32 que se implementa tiene un total de 1.3M de parámetros. Su topología se detalla en la tabla \ref{table:resnet32}.
 
 
-
-% Please add the following required packages to your document preamble:
-% \usepackage{multirow}
 \begin{table}[]
-\begin{tabular}{|c|cc|c|cc|}
+\begin{tabular}{|c|c|c|c|}
 \hline
-\multirow{2}{*}{\textbf{Capa}} & \multicolumn{2}{c|}{\textbf{Dimensión}}     & \multirow{2}{*}{\textbf{Kernel/Stride}} & \multicolumn{2}{c|}{\textbf{Canales}} \\ \cline{2-3} \cline{5-6} 
-                               & \multicolumn{1}{c|}{Entrada} & Salida       &                                         & \multicolumn{1}{c|}{Entrada} & Salida \\ \hline
-Convolución                    & \multicolumn{1}{c|}{32x32}   & 26x26        & 7x7                                     & \multicolumn{1}{c|}{1}       & 64     \\ \hline
-BatchNorm2d                    & \multicolumn{1}{c|}{26x26}   & 26x26        & -                                       & \multicolumn{1}{c|}{-}        &   -     \\ \hline
-ReLU                           & \multicolumn{1}{c|}{26x26}   & 26x26        & -                                       & \multicolumn{1}{c|}{-}        &  -      \\ \hline
-MaxPool2d                      & \multicolumn{1}{c|}{26x26}   & 13x13        & 2x2, stride 2, padding 1                & \multicolumn{1}{c|}{-}        &   -     \\ \hline
-BottleneckBlock x3             & \multicolumn{1}{c|}{13x13}   & 13x13        & 1x1, 3x3, 1x1                           & \multicolumn{1}{c|}{64}      & 64     \\ \hline
-BottleneckBlock x4             & \multicolumn{1}{c|}{13x13}   & 7x7          & 1x1, 3x3, 1x1, stride 2                 & \multicolumn{1}{c|}{64}      & 128    \\ \hline
-BottleneckBlock x4             & \multicolumn{1}{c|}{7x7}     & 4x4          & 1x1, 3x3, 1x1, stride 2                 & \multicolumn{1}{c|}{128}     & 256    \\ \hline
-BottleneckBlock x3             & \multicolumn{1}{c|}{4x4}     & 2x2          & 1x1, 3x3, 1x1, stride 2                 & \multicolumn{1}{c|}{256}     & 512    \\ \hline
-AdaptiveAvgPool2d              & \multicolumn{1}{c|}{2x2}     & 512          & -                                       & \multicolumn{1}{c|}{-}        & -       \\ \hline
-BatchNorm1d                    & \multicolumn{1}{c|}{512}     & 512          & -                                       & \multicolumn{1}{c|}{-}        &  -      \\ \hline
-Dropout                        & \multicolumn{1}{c|}{512}     & 512          & -                                       & \multicolumn{1}{c|}{-}        &     -   \\ \hline
-Linear                         & \multicolumn{1}{c|}{512}     & num\_classes & -                                       & \multicolumn{1}{c|}{-}        &   -     \\ \hline
+\multirow{2}{*}{\textbf{Capa}} & \multirow{2}{*}{\textbf{Dimensión}} & \multirow{2}{*}{\textbf{Kernel/Stride}} & \multirow{2}{*}{\textbf{Canales}} \\
+                               &                                     &                                         &                                   \\ \hline
+Convolución                    & 26x26                               & 7x7                                     & 64                                \\ \hline
+BatchNorm2d                    & 26x26                               & -                                       & -                                 \\ \hline
+ReLU                           & 26x26                               & -                                       & -                                 \\ \hline
+MaxPool2d                      & 13x13                               & 2x2, stride 2, padding 1                & -                                 \\ \hline
+BottleneckBlock x1             & 13x13                               & 1x1, 3x3, 1x1                           & 64                                \\ \hline
+BottleneckBlock x1             & 7x7                                 & 1x1, 3x3, 1x1, stride 2                 & 128                               \\ \hline
+BottleneckBlock x1             & 4x4                                 & 1x1, 3x3, 1x1, stride 2                 & 256                               \\ \hline
+BottleneckBlock x1             & 2x2                                 & 1x1, 3x3, 1x1, stride 2                 & 512                               \\ \hline
+AdaptiveAvgPool2d              & 512                                 & -                                       & -                                 \\ \hline
+BatchNorm1d                    & 512                                 & -                                       & -                                 \\ \hline
+Dropout                        & 512                                 & -                                       & -                                 \\ \hline
+Lineal                         & num\_classes                        & -                                       & -                                 \\ \hline
 \end{tabular}
-\caption{Topología de ResNet32 para imágenes 32x32.}
-\label{table:resnet32}
+\caption{Topología de ResNet15 para imágenes 32x32 con un canal de entrada. Las columnas dimensión y canales hacen referencia a la salida de la capa.}
+\label{table:resnet15}
 \end{table}
+
+
+
+\begin{table}[]
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multirow{2}{*}{\textbf{Capa}} & \multirow{2}{*}{\textbf{Dimensión}} & \multirow{2}{*}{\textbf{Kernel/Stride}} & \multirow{2}{*}{\textbf{Canales}} \\
+                               &                                            &                                         &                                          \\ \hline
+Convolución                    & 26x26                                      & 7x7                                     & 64                                       \\ \hline
+BatchNorm2d                    & 26x26                                      & -                                       & -                                        \\ \hline
+ReLU                           & 26x26                                      & -                                       & -                                        \\ \hline
+MaxPool2d                      & 13x13                                      & 2x2, stride 2, padding 1                & -                                        \\ \hline
+BottleneckBlock x3             & 13x13                                      & 1x1, 3x3, 1x1                           & 64                                       \\ \hline
+BottleneckBlock x4             & 7x7                                        & 1x1, 3x3, 1x1, stride 2                 & 128                                      \\ \hline
+BottleneckBlock x4             & 4x4                                        & 1x1, 3x3, 1x1, stride 2                 & 256                                      \\ \hline
+BottleneckBlock x3             & 2x2                                        & 1x1, 3x3, 1x1, stride 2                 & 512                                      \\ \hline
+AdaptiveAvgPool2d              & 512                                        & -                                       & -                                        \\ \hline
+BatchNorm1d                    & 512                                        & -                                       & -                                        \\ \hline
+Dropout                        & 512                                        & -                                       & -                                        \\ \hline
+Lineal                         & num\_classes                               & -                                       & -                                        \\ \hline
+\end{tabular}
+\caption{Topología de ResNet57 para imágenes 32x32 con un canal de entrada. Las columnas dimensión y canales hacen referencia a la salida de la capa.}
+\label{table:resnet57}
+\end{table}
+
 
 
 \subsection{Datasets}
 
+
 \subsubsection{Tabulares}
 
-Wine quality
-https://www.semanticscholar.org/paper/Modeling-wine-preferences-by-data-mining-from-Cortez-Cerdeira/bf15a0ccc14ac1deb5cea570c870389c16be019c
-https://archive.ics.uci.edu/dataset/186/wine+quality
+BCW y WQ para clasificación, BHP y WQ para regresión. El objetivo es comparar también el rendimiento de las metaheurísticas en estas tareas, ya que la gran mayoría de la literatura sobre MH se realiza con ConvNets y por tanto con tareas de clasificación. BCW y BHP son dos dataset pequeños (alrededor de 500 instancias) y más fáciles que WQ, que tiene una cantidad de unas 6000 instancias. Por ello hay una tarea sencilla y una difícil para regresión y clasificación.
+
+Para estos datasets se ha realizado un preprocesado de los datos básico y con decisiones comunes basadas en la literatura. Se han eliminado las variables que tienen menos de un 5 o 10\% (dependiendo de la cantidad de variables del dataset) de correlación con el target. Con las parejas de variables que tienen más de un 90\% de correlación entre sí se elimina una de las dos. Se han eliminado outliers con el método zscore usando un threshold de 3 y se han normalizado los datos de entrada.
+
+El tamaño del batch se ha elegido mediante pruebas experimentales entre los valores 32, 64 y 128. Se divide el conjunto de datos en entrenamiento-validación-test, con un porcentaje 70-10-20.
+
+
 
 \subsubsection{Imágenes}
 
-MNIST y FASHION-MNIST porque son los más comentados en el paper de referencia. el primero muy fácil y el segundo más complicado, por lo que ofrecen una buena visión. CIFAR-10 pq es más difícil.
+Para los datasets de imágenes se han elegido tres de los usados en el paper de DANI. Se han elegido MNIST y FMNIST ya que son los más usados para la comparativa en dicho paper, y CIFAR10 ya que a priori es más difícil que los otros, siendo MNIST el más fácil de los tres. Esto proporciona unas pruebas equilibradas, en el mismo marco que el PAPER y permite una fácil comparación. Al igual que allí, se ha reducido el tamaño de los datasets a 10 mil imágenes para el entrenamiento y 5 mil para el test. El conjunto de test se divide 50-50 para validación y test. Se usan las imágenes con una resolución de 32x32 y un solo canal, adaptando las imágenes a estas dimensiones cuando sea necesario.
+
+
+\subsection{Otras decisiones}
+
+Para la reproducibilidad de la experimentación, se fija la semilla 42 en todos las librerías necesarias. No se usa cross validation debido a que las tecnicas etaheuristicas requieren de mucho más poder de cómputo.
+
+Se ha usado la inicialización de pesos Glorot REF SECCION como en PAPER DANI. Para los optimizadores basados en gradiente descendente se han usado los mismos pesos iniciales, mientras que en las técnicas metaheurísticas se ha usado la misma población inicial, para asegurar la igualdad de condiciones en el entrenamiento debido a la gran sensibilidad de éste a los parámetros iniciales. 
+
+Se fija 20 como número de épocas en todos los entrenamientos ya que es suficiente para la convergencia de los métodos de gradiente descendente. Siguiendo el criterio de PAPER DANI, en las técnicas metaheurísticas una época es algo distinta, siendo en el paper equivalente a $N_eval * N_epochs * N_capas$. En nuestro caso no se ha usado el factor número de capas por diversas razones: no se realiza entrenamiento individualizado por capas, no se dispone de tanto poder de cómputo, modelos con muchas capas. Recalcal que esto hace que se den muchas más evaluaciones del dataset completo en MH (200 veces mas).
+
+Para las tareas de regresión se ha usado el error cuadrático medio como función de coste. Es ampliamente usada en la literatura y aunque es sensible a los outliers, como tenemos preprocesamiento de datos no nos afecta. Se ha usado también la métrica R2 cuadrado para medir la explicación de la varianza con respecto a la media como predicción, para tener un criterio objetivo de comparación ya que en las dos tareas de regresión la escala del objetivo es distinta. Para las tareas de clasificación se ha usado CrossEntropyLoss como función de error y accuracy como métrica, opciones ampliamente usadas en la literatura. En los datasets tabulares se ha usado BalancedAccuracy en lugar de Accuracy, ya que las clases no están balanceadas, y se conoce que en estos casos accuracy no es una métrica representativa, de hecho se hace especial mención a esto en PAPER DANI. En los datasets de imágenes las clases están perfectamente balanceadas por lo que se usa accuracy, aunque en este caso su versión balanceada coincidiría con la normal.
+
 
 \subsection{Optimizadores}
 
+Existen tres familias de optimizadores del gradiente descendente principales: las que usan el momento, las que autoajustan el learning rate y las que combinan estas dos estrategias. Para la experimentación se elige un optmizador de cada familia con la intención de ver si existe alguna diferencia en el entrenamiento del gradiente descendente debido a éstos. El criterio para la elección del optimizador de cada familia ha sido el número de citas en el paper de presentación y su extensión de uso, analizando cómo de frecuente es su uso en la literatura y su implementación por defecto en las principales librerías. Respectivamente se han elegido: NAG, RMSProp y Adam.
+
+Se ha usado la implementación de estos optimizadores de PyTorch, usandose en el entrenamiento a través de la librería FastAI. Se usa en el entrenamiento la política de ciclos de Leslie, que proporciona una velocidad de convergencia mucho mayor variando el learning rate de forma cíclica. Para elegir el valor máximo del learning rate se usa un buscador de learning rate, que aporta unos resultados muy buenos a un coste bajo. Cabe destacar que la importancia del learning rate es sensiblemente menor en los optimizadores de RMSProp y Adam, ya que de manera automática ajustan estos valores a lo largo del entrenamiento. 
+
+Para los hiperparámetros de dichos optimizadores se han usado los valores por defecto de la librería PyTorch. En primer lugar, la intención con la experimentación es establecer una comparativa en igualdad de condiciones sobre el entrenamiento de modelos, y no obtener el máximo rendimiento de cada uno. En segundo lugar estos valores por defecto están basados en los propuestos en los respectivos papers originales y ajustados a través de numerosas pruebas experimentales, de manera que proporcionen los mejores resultados posibles de manera general basandose en la propia implementación de PyTorch. 
+
+
 \subsection{Metaheurísticas}
+
+Para una correcta comparación con el paper de referencia, que usa el algoritmo SHADE-ILS, se eligen 4 algoritmos metaheurísticos entorno a éste. En primer lugar usamos SHADE-ILS, en su versión completa (entrenando todos los parámetros a la vez). Usamos también el algoritmo de SHADE, sin búsqueda local, para usar un algoritmo puramente metaheurístico que no sea memético. Luego estas dos versiones anteriores las hibridamos con el gradiente descendente, para tener algoritmos meméticos que usen información específica del problema. 
+
+El algoritmo de SHADE se implementa a través de la librería pyade-master REF, y se le han realizado modificaciones para mantener los parámetros adaptativos del algoritmo SHADE entre ejecuciones distintas y adaptar las estructuras de datos a las del resto del código. A partir de dicho algoritmo se implementan manualmente el resto. Para el algoritmo SHADE-ILS, que combina dos tipos de búsqueda local en su paper original, con una aplicación general, se ha decidido mantener sólo la búsqueda local a través de L-BFGS, ya que al hacer uso del gradiente se maneja información más específica del problema. Esto se realiza a través de la librería scipy.
+
+Se mantiene la misma división de los datos que en el uso de optimizadores. Se ejecutan los algoritmos evaluando el error sobre el conjunto de entrenamiento y guardando en cada epoch el mejor individuo de la población junto a su error en el entrenamiento, para luego evaluarlos sobre el conjunto de validación y observar qué modelo generaliza mejor a priori, igual que hacemos en el entrenamiento de modelos con gradiente descendente. Luego evaluamos el modelo sobre el conjunto de test, calculando las métricas asociadas a cada tarea.
+
+Como en el paper de referencia no aparecen los hiperparámetros asociados a estos algoritmos, se decide usar el mismo criterio que con los optimizadores y usar los hiperparámetros por defecto de la implementación de la librería pyade-master, que además son valores comúnes en la literatura. 
+
+
+
+

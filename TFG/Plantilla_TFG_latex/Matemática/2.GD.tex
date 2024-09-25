@@ -1,8 +1,8 @@
 \section{Gradiente Descendente}
 
-Se trata de un algoritmo de aprendizaje iterativo clásico, basado en el método de optimización para funciones lineales de Cauchy. Haskell Curry lo estudió por primera vez para optimización no lineal en 1944 \cite{Curry1944GDNoLin}, siendo ampliamente usado a partir de las décadas de los 1950-1960. Actualmente se trata de la estrategia de entrenamiento de modelos más ampliamente usada, especialmente en los modelos de aprendizaje profundo, siendo la estrategia que mejores resultados consigue en cuanto a capacidad de generalización de los modelos y eficiencia computacional gracias a su aplicación a través del algoritmo de BP. Sin embargo a nivel práctico no se usa en su versión original, sino que a lo largo del tiempo han ido surgiendo numerosas modificaciones con el objetivo de mejorar el algoritmo en diversos ámbitos: aumento de la estabilidad y la velocidad de convergencia, reducción computacional del entrenamiento, capacidad de evitar mínimos locales, etc. Estos métodos modificados del original se conocen como optimizadores. La literatura en este sentido es extensa, y aunque es bastante claro que el gradiente descendente sigue siendo la mejor estrategia de optimización de parámetros de un modelo de forma general, la elección del algoritmo de optimización concreto y de su ajuste depende del problema concreto que estemos tratando y generalmente se realiza de manera experimental. 
+Se trata de un algoritmo de aprendizaje iterativo clásico, basado en el método de optimización para funciones lineales de Cauchy. Haskell Curry lo estudió por primera vez para optimización no lineal en 1944 \cite{Curry1944GDNoLin}, siendo ampliamente usado a partir de las décadas de 1950-1960. Actualmente se trata de la estrategia de entrenamiento de modelos más ampliamente usada, especialmente en los modelos de aprendizaje profundo, siendo la estrategia que mejores resultados consigue en cuanto a capacidad de generalización de los modelos y eficiencia computacional gracias a su aplicación a través del algoritmo de BP. Sin embargo a nivel práctico no se usa en su versión original, sino que a lo largo del tiempo han ido surgiendo numerosas modificaciones con el objetivo de mejorar el algoritmo en diversos ámbitos: aumento de la estabilidad y la velocidad de convergencia, reducción computacional del entrenamiento, capacidad de evitar mínimos locales, etc. Estos métodos modificados del original se conocen como optimizadores. La literatura en este sentido es extensa, es claro que el gradiente descendente sigue siendo la mejor estrategia de optimización de parámetros de un modelo de forma general \cite[MHtrainingClase], aunque la elección del algoritmo de optimización concreto y de su ajuste depende del problema concreto que estemos tratando y generalmente se realiza de manera experimental. 
 
-Debemos ver que el entrenamiento de los modelos, en su gran mayoría, está intrínsecamente ligado a la optimización, específicamente a la minimización de la función de coste $C$. Este no es un problema sencillo, y como se ha mencionado antes se trata de un problema NP-Completo, por tanto de existir algoritmos exactos estos requieren demasiado coste computacional como para utilizarlos en la práctica, por lo que se buscan estrategias aproximadas como el descenso de gradiente para obtener buenas soluciones en un tiempo asequible. 
+Debemos ver que el entrenamiento de los modelos, está intrínsecamente ligado a la optimización, en concreto a la minimización de la función de coste $C$. Este no es un problema sencillo, y como se ha mencionado antes se trata de un problema NP-Completo, por tanto de existir algoritmos exactos estos requieren demasiado coste computacional como para utilizarlos en la práctica, por lo que se buscan estrategias aproximadas como el descenso de gradiente para obtener buenas soluciones en un tiempo asequible. 
 
 Otros factores a tener en cuenta son la necesidad de escapar de óptimos locales, aún no conociendo de manera explícita la función de error; y la generalización: no es  importante únicamente obtener un error bajo en el entrenamiento sino que se mantenga cuando usamos datos de entrada nuevos, ya que nuestro objetivo es ser capaces de encontrar patrones que podamos aplicar en situaciones nuevas y no ajustar el modelo a unos datos dados.
 
@@ -10,7 +10,7 @@ Otros factores a tener en cuenta son la necesidad de escapar de óptimos locales
 
 Procedemos a describir el método original de descenso de gradiente, propuesto en 1847 por Augustin-Louis Cauchy \cite{CauchyGD}. Es una versión más primitiva y limitada que sus desarrollos posteriores pero que nos permite obtener de forma más sencilla una visión de su funcionamiento. 
 
-Fijamos $f:\mathbb{R}^n \rightarrow \mathbb{R}$ una función continua que no toma valores negativos. Las notamos por $x= \left ( x_1,\ldots,x_n \right ) \in \mathbb{R}^n$. Si queremos encontrar los valores de $x_1,\ldots,x_N$ que verifican $f(x_1,\ldots,x_n)=0$, que suponemos que existen, bastará con hacer decrecer indefinidamente los valores de la función $f$ hasta que sean muy cercanos a $0$. 
+Fijamos $f:\mathbb{R}^n \rightarrow \mathbb{R^{+}_0}$ una función continua que no toma valores negativos. Sea $x= \left ( x_1,\ldots,x_n \right ) \in \mathbb{R}^n$. Si queremos encontrar los valores de $x_1,\ldots,x_n$ que verifican $f(x)=0$, que suponemos que existen, bastará con hacer decrecer indefinidamente los valores de la función $f$ hasta que sean muy cercanos a $0$. 
 
 Fijamos ahora unos valores concretos $x_0 \in \mathbb{R}^n$, $u=f(x_0)$,\\ $Du= \left ( D_{x_1}u, D_{x_2}u, \ldots, D_{x_n}u \right )$ y $\epsilon >0$ con $\epsilon \in \mathbb{R}^n$. Si tomamos $x_0'=x_0+\epsilon$ tendremos:
 $$f(x_0')= f(x_0 + \epsilon) = u + \epsilon Du$$
@@ -28,13 +28,13 @@ Por tanto hemos obtenido un decremento en el valor de la función $f$ modificand
 
 En el caso del aprendizaje de modelos la función que debemos minimizar es la función de coste $C$, que efectivamente es continua por ser composición de funciones continuas, como se verá más adelante. Esta función no toma valores negativos. Como no podemos realizar un cálculo continuo para comprobar con qué valores de $\eta$ la función decrece, lo hacemos de manera iterativa, y a este $\eta$ lo llamamos ratio de aprendizaje o más comúnmente \textit{learning rate}. 
 
-En el proceso de entrenamiento de un modelo lo que hacemos es aplicar la idea anterior de manera iterativa en lugar de encontrar un $\eta$ que minimice en un paso, para ir moviéndonos a puntos de menor valor de la función de coste. Si $C(W)$ es la función de coste del modelo y $W$ representa los parámetros del modelo, entonces la regla de actualización iterativa del descenso del gradiente es la siguiente:
+Si $C(W)$ es la función de coste del modelo y $W$ representa los parámetros del modelo, entonces la regla de actualización iterativa del descenso del gradiente es la siguiente:
 
 \begin{equation}\label{eq:GD}
 W_{t+1}=W_t - \eta \nabla C(W)
 \end{equation}
 
-En su descripción original, el gradiente se calcula usando todos los datos de entrenamiento, pero en versiones posteriores se propone dividir el conjunto de entrenamiento en varios subconjuntos disjuntos, denominados lotes. Cada vez que se calcula el gradiente se actualizan los pesos, y denominamos a esto una iteración. Cada vez que se usan todos los datos de entrenamiento para calcular el gradiente, ya sea tras una sola iteración usando todo el conjunto de entrenamiento o varias si dividimos en lotes, lo denominamos época.
+En su descripción original, el gradiente se calcula usando todos los datos de entrenamiento, pero en versiones posteriores se propone dividir el conjunto de entrenamiento en varios subconjuntos disjuntos, denominados lotes. Cada vez que se calcula el gradiente se actualizan los pesos del modelo, y denominamos a esto una iteración. Cada vez que se usan todos los datos de entrenamiento para calcular el gradiente, ya sea tras una sola iteración usando todo el conjunto de entrenamiento o varias si dividimos en lotes, lo denominamos época.
 
 
 
@@ -47,10 +47,10 @@ En base a los lotes en que dividamos el conjunto de entrenamiento tenemos varios
 
     \item \textbf{Stochastic Gradient Descent} (SGD): Actualiza los pesos calculando el gradiente con sólo un elemento del conjunto de entrenamiento. Cada época tiene tantas iteraciones como número de elementos haya en el conjunto de entrenamiento. Esta estrategia introduce ruido en el entrenamiento ya que el gradiente se calcula de una manera aproximada, aunque esto tiene un efecto positivo ya que al provocar más irregularidad en la trayectoria de convergencia es más probable poder escapar mínimos locales. Además es más eficiente computacionalmente que el anterior y converge más rápido en la práctica.
 
-    \item \textbf{Mini-Batch Gradient Descent} (MBGD): Se divide el conjunto de entrenamiento en M lotes de tamaño fijo, y se calcula el gradiente con cada lote, por lo que habrá M iteraciones en cada época. Se consigue una aproximación del gradiente con menos error al usar más datos para su cálculo y además se siguen manteniendo las propiedades que veíamos en la anterior estrategia. Es más eficiente que la anterior al conllevar menos actualizaciones de pesos. Es prácticamente la única estrategia utilizada en la realidad ya que ofrece la mayor eficiencia computacional, estabilidad y rapidez en la convergencia.
+    \item \textbf{Mini-Batch Gradient Descent} (MBGD): Se divide el conjunto de entrenamiento en $M$ lotes disjuntos de tamaño fijo, y se calcula el gradiente con cada lote, por lo que habrá $M$ iteraciones en cada época. Se consigue una aproximación del gradiente con menos error al usar más datos para su cálculo y además se siguen manteniendo las propiedades que veíamos en la anterior estrategia. Es más eficiente que la anterior al conllevar menos actualizaciones de pesos. Es prácticamente la única estrategia utilizada en la realidad ya que ofrece la mayor eficiencia computacional, estabilidad y rapidez en la convergencia.
 \end{itemize}
 
-Aunque la política para computar el gradiente sea distinta en estos 3 tipos, los englobaremos dentro de lo que denominaremos el algoritmo de gradiente descendente original, ya que como veremos más adelante, existen varias modificaciones del algoritmo que aportan mejoras a través de modificar la regla de actualización de los pesos y no solo la cantidad de datos con la que se aproxima el gradiente.
+Aunque la política para computar el gradiente sea distinta en estos 3 tipos, los englobaremos dentro de lo que denominaremos el algoritmo de gradiente descendente original, ya que existen varias modificaciones del algoritmo que aportan mejoras a través de modificar la regla de actualización de los pesos y no solo la cantidad de datos con la que se aproxima el gradiente.
 
 \subsubsection{\textit{Learning rate}}
 
@@ -67,7 +67,7 @@ En cuanto a la selección de los hiperparámetros, no se enfoca como un problema
     \label{fig:lr}
 \end{figure}
 
-Una táctica habitual es usar una política de \textit{learning rate} que decrezca conforme avanza el entrenamiento, de manera que el algoritmo avance con pasos más grandes cuando aún está lejos del óptimo, con un objetivo explorador, y con pasos más pequeños cuando se va acercando, con un objetivo explotador, procurando una convergencia más estable. \cite{GoodFellowBook}. Otro enfoque común es también tener un vector de \textit{learning rate} en lugar de un solo escalar, teniendo un valor para cada peso del modelo. 
+Una táctica habitual es usar una política de \textit{learning rate} que decrezca conforme avanza el entrenamiento, de manera que el algoritmo avance con pasos más grandes cuando aún está lejos de un óptimo, con un objetivo explorador, y con pasos más pequeños cuando se va acercando, con un objetivo explotador, procurando una convergencia más estable. \cite{GoodFellowBook}. Otro enfoque común es tener un vector de \textit{learning rate} en lugar de un solo escalar, teniendo un valor para cada peso del modelo. 
 
 
 
@@ -81,14 +81,14 @@ Las funciones de coste son diferenciables de manera general, y la más común pa
 
 \begin{itemize}
 
-    \item \textbf{ECM:} $\frac{1}{N} \sum_{i=1}^N \left (y_i - \hat{y} \right ) ^2$ 
+    \item \textbf{ECM:} $\frac{1}{N} \sum_{i=1}^N \left (y_i - \hat{y_i} \right ) ^2$ 
 
-    \item \textbf{EAM:} $\frac{1}{N} \sum_{i=1}^N \lvert y_i - \hat{y} \rvert$ 	
+    \item \textbf{EAM:} $\frac{1}{N} \sum_{i=1}^N \lvert y_i - \hat{y_i} \rvert$ 	
 
-    \item \textbf{\textit{CrossEntropyLoss}:} $  - \sum_c \hat{y_c} log(\frac{e^{y_c}}{\sum_{c'=1}^C e^{y_{c'}}})$
+    \item \textbf{\textit{CrossEntropyLoss}:} $  - \sum_c \hat{y_{i,c}} log(\frac{e^{y_{i,c}}}{\sum_{c'=1}^C e^{y_{i,c'}}})$
 \end{itemize}
 
- Donde $N$ es el número de datos, $\hat{y}_i$ es el valor real del dato $i$, que en ECM será un escalar, y en clasificación binaria será 0 ó 1; $y_c$ es el valor predicho por el modelo, $\hat{y}_{c}$ es la etiqueta real de la clase $c$, que valdrá 1 en caso de que el dato pertenece a la clase $c$ y 0 en caso contrario; y $y_{c}$ es el predicho por el modelo. 
+En regresión $\hat{y}_i$ es el valor real  e $y_i$ es el predicho por el modelo del dato $i$ que será un real en ambos casos. En clasificación $\hat{y}_{c}$ es la etiqueta real de la clase $c$, que valdrá 1 en caso de que el dato pertenece a la clase $c$ y 0 en caso contrario, e $y_c \in [0,1]$ representa la probabilidad predicha por el modelo de que el dato $i$ pertenezca a la clase $c$. Finalmente $N$ es el número de datos y $C$ el número de clases. 
 
 
 Hasta el año 2010, las funciones de activación más comunes para las capas ocultas eran la función sigmoide y la tangente hiperbólica. Estas funciones son diferenciables por lo que su uso no suponía ningún problema en la aplicación del descenso de gradiente. Sobre ese año se empezó a popularizar la función de activación ReLU (Rectified Linear Unit), gracias a su simplicidad, reducción de coste computacional y su aparición en modelos ganadores de competiciones de ImageNet como AlexNet en 2012. Desde entonces esta función, junto a algunas de sus variantes que aparecen en la figura \ref{fig:3.ReLU} son ampliamente usadas y con buenos resultados. Sin embargo salta a la vista que esta función no es diferenciable.
@@ -106,7 +106,7 @@ Hasta el año 2010, las funciones de activación más comunes para las capas ocu
 Vamos a presentar entonces el concepto de subgradiente junto con algunas de sus propiedades, obtenidas de \cite{convexSubgrad}, para ver que será una extensión del gradiente que nos permitirá usar el método de gradiente descendente con funciones que no sean diferenciables en algunos puntos pero que sí sean subdiferenciables.
 
 \begin{definicion}[Subgradiente]
-     Sea $A \subset \mathbb{R}^n$ y $f:A \rightarrow \mathbb{R}$, $g \in \mathbb{R}^n$ es un subgradiente de $f$ en $a \in A$ si $\forall y \in U_a$ entorno de $a$ se tiene:
+     Sea $A \subset \mathbb{R}^n$ y $f:A \rightarrow \mathbb{R}$, $g \in \mathbb{R}^n$ es un subgradiente de $f$ en $a \in A$ si existe un entorno de $a$ $U_a$ tal que $\forall y \in U_a$ se tiene:
 
     $$f(a)-f(y) \leq g^T(a-y)$$
     El conjunto de los subgradientes de $f$ en x se denota por $\partial f(a)$. Si existe el subgradiente de $f$ en a, decimos que $f$ es subdiferenciable en $a$.
@@ -164,29 +164,29 @@ Necesitamos también un comportamiento similar al de las funciones diferenciable
 \end{enumerate}
 
 
-Tenemos que comprobar que el subgradiente extiende al gradiente, es decir, que cuando existe gradiente entonces existe un único subgradiente y coincide con él. Además hay funciones que no son diferenciables pero sí subdiferenciables. Esto último se hace evidente con el ejemplo anterior de la función ReLU. Vamos a demostrar por tanto que si $f: X \subseteq \mathbb{R}^n \rightarrow \mathbb{R}^m$ es diferenciable en el punto $x\in X$ entonces  $\partial f(x)= \left \{ \nabla f(x) \right \}$.
+Tenemos que comprobar que el subgradiente extiende al gradiente, es decir, que cuando existe gradiente entonces existe un único subgradiente y coincide con él. Además hay funciones que no son diferenciables pero sí subdiferenciables. Esto último se hace evidente con el ejemplo \ref{ej:RELUsub} de la función ReLU. Vamos a demostrar por tanto que si $f: X \subseteq \mathbb{R}^n \rightarrow \mathbb{R}^m$ es diferenciable en el punto $x\in X$ entonces  $\partial f(x)= \left \{ \nabla f(x) \right \}$.
 
 Como $f$ es diferenciable en $x$, existe un entorno $U_x$ de $x$ donde el gradiente satiface 
 
-$$  f(y) = f(x) + \nabla f(x)^T(y-x) + o(\|y-x \|) \forall y \in U_x.$$
+$$  f(y) = f(x) + \nabla f(x)^T(y-x) + o(\|y-x \|) \quad \forall y \in U_x .$$
 
 Por tanto tenemos
 
-$$ f(y) \geq f(x) + \nabla f(x)^T(y-x), \forall y \in U_x.$$
+$$ f(y) \geq f(x) + \nabla f(x)^T(y-x) \quad \forall y \in U_x.$$
 
-Es decir que el gradiente de $f$ en $x$ es también un subgradiente de $f$ en $x$. Tenemos que $\nabla f(x) \in \partial f(x)$, nos queda demostrar que es único. Para ello vamos a suponer que existe otro subgradiente de $f$ en $x$, $g \in \partial f(x)$. Sea $y=x+tw$, definimos la función
+Es decir que el gradiente de $f$ en $x$ es también un subgradiente de $f$ en $x$. Tenemos que $\nabla f(x) \in \partial f(x)$, nos queda demostrar que es único. Para ello vamos a suponer que existe otro subgradiente de $f$ en $x$, $g \in \partial f(x)$. Sea $u=x+tw$, definimos la función
 
-$$\phi(t)=f(y)-f(x)- g^T(y-x) = f(x+tw) -f(x) - g^T(tw) \geq 0$$
+$$\phi(t)=f(u)-f(x)- g^T(u-x) = f(x+tw) -f(x) - g^T(tw) \geq 0$$
 
-donde se ha usado que $g \in \partial f(x)$. Derivamos la función para obtener $\phi'(t) = \nabla f(x)^Tw - g^Tw$. Vemos que para $t=0$ se tiene que $\phi(0)=0$, con lo que hay un mínimo en ese punto. Tenemos por tanto que $\phi'(0)=0$ o equivalentemente $\nabla f(x)^Tw=g^Tw$. Como $w$ es arbitrario, concluimos que $g=\nabla f(x)$. Como el gradiente es un subgradiente, y todo subgradiente coincide con él, se tiene que es único, $\partial f(x) = \left \{ \nabla f(x) \right \}$. 
+donde se ha usado que $g \in \partial f(x)$ para ver que es no negativa. Derivamos la función para obtener $\phi'(t) = \nabla f(x)^Tw - g^Tw$. Vemos que para $t=0$ se tiene que $\phi(0)=0$, con lo que hay un mínimo en ese punto. Tenemos por tanto que $\phi'(0)=0$ o equivalentemente $\nabla f(x)^Tw=g^Tw$. Como $w$ es arbitrario, concluimos que $g=\nabla f(x)$. Como el gradiente es un subgradiente, y todo subgradiente coincide con él, se tiene que es el único subgradiente de $f$ en $x$, $\partial f(x) = \left \{ \nabla f(x) \right \}$. 
 
 
 
-Vamos ahora a presentar una proposición que relaciona los subgradientes con las funciones convexas, las cuales están muy ligadas a la convergencia del gradiente descendnte. Para ello primero vamos a definir lo que es un conjunto convexo, ya que resulta elemental tanto en esta sección como en la siguiente y usaremos este concepto para desarrollar otros a partir de él.
+Para presentar una proposición que relaciona los subgradientes con las funciones convexas, las cuales están muy ligadas a la convergencia del gradiente descendente, primero vamos a definir lo que es un conjunto convexo.
 
 
 \begin{definicion}[Conjunto convexo]
-    Un subconjunto $E$ de un espacio vectorial $X$ es convexo cuando, para cualesquiera dos puntos de $E$, el segmento que los une está contenido en $E$:
+    Un subconjunto $E \subseteq \mathbb{R}^n$ es convexo cuando, para cualesquiera dos puntos de $E$, el segmento que los une está contenido en $E$:
 
     $$x,y \in E \Rightarrow \left \{ (1-t)x + ty : t\in [0,1] \right \} \subset E.$$
 \end{definicion}
@@ -197,30 +197,32 @@ Vamos ahora a presentar una proposición que relaciona los subgradientes con las
 \begin{definicion}[Función convexa]
     Sea $E \subset \mathbb{R}^n$ un conjunto convexo no vacío y sea $f:E \rightarrow \mathbb{R}$, $f$ es una función convexa en $E$ si, y solo si:
 
-    $$f(tx + (1-t)y) \leq tf(x) + (1-t) f(y), \quad \forall t \in [0,1], \forall x,y \in E.$$
+    $$f( (1-t)y + tx) \leq (1-t) f(y) + tf(x), \quad \forall t \in [0,1], \forall x,y \in E.$$
 \end{definicion}
 
 \begin{proposicion}[Existencia de subgradientes]
 \label{prop:subgrad}
-    Sea $A \subset \mathbb{R}^n$ un conjunto convexo y $f:A \rightarrow \mathbb{R}$. Si $\forall a \in A, \partial f(a) \neq \emptyset$ entonces $f$ es una función convexa. Recíprocamente, si $f$ es convexa  entonces se tiene que $\forall x \in int(A)$ $\partial f(x) \neq \emptyset$.
+    Sea $E \subset \mathbb{R}^n$ un conjunto convexo y $f:E \rightarrow \mathbb{R}$. Si $\forall x \in E, \partial f(x) \neq \emptyset$ entonces $f$ es una función convexa. Recíprocamente, si $f$ es convexa  entonces se tiene que $\forall x \in int(E)$ $\partial f(x) \neq \emptyset$.
 \end{proposicion}
 
-Para demostrar esta proposición, primero vamos a necesitar de un teorema, en el ámbito de la convexidad:
+Esta proposición nos asegura que la familia de las funciones ReLU, que son convexas, siempre tienen subgradiente en su interior. Para demostrarla, primero vamos a necesitar de un teorema, en el ámbito de la convexidad:
 
 \begin{teorema}[Teorema del Hiperplano de apoyo]
-    Sea $X \subset \mathbb{R}^n$ un conjunto convexo y $x_0$ un puntro de la frontera de $X$. Entonces, $\exists w \in \mathbb{R}^n, w \neq 0$ tal que
-    $$\forall x \in X, \quad w^Tx \geq w^T x_0$$
+    Sea $E \subset \mathbb{R}^n$ un conjunto convexo y $x_0 \in Fr(E)$ un puntro de la frontera de $E$. Entonces, $\exists w \in \mathbb{R}^n, w \neq 0$ tal que
+    $$\forall x \in E, \quad w^Tx \geq w^T x_0$$
 \end{teorema}
 
 \textbf{\textit{Demostración de la proposición 3.1.}}
-Para la primera implicación, queremos probar que 
-$$f((1-t)x+ty) \leq (1-x)f(x)+tf(y) \quad \forall x,y \in X, t \in [0,1],$$
-es decir, que $f$ es convexa. Partiendo de que $\forall z \in X,  \partial f(z) \neq \emptyset $, tomando cualquier $g \in \partial(z),$ $z \in X$ tenemos por la definición de subgradiente:
+Para la primera implicación, queremos probar que si para todo punto $x \in E$ existe al menos un subgradiente de $f(x)$ entonces se verifica
+$$f((1-t)x+ty) \leq (1-x)f(x)+tf(y) \quad \forall x,y \in E, t \in [0,1],$$
+es decir, que $f$ es convexa. Tomamos $g \in \partial(z),$ $z \in E$ ya que $\forall z \in E,  \partial f(z) \neq \emptyset $ , y tenemos por la definición de subgradiente:
 
-$$f(z) - f(x) \leq g^T(z-x),$$
-$$f(z) - f(y) \leq g^T(z-y),$$
+\begin{align}
+	f(z) - f(x) \leq g^T(z-x), \notag \\
+	f(z) - f(y) \leq g^T(z-y), \label{eq:des2}
+\end{align}
 
-para $x,y \in X$. Tomamos $z=(1-t)x + ty$ y sustituimos:
+para $x,y \in E$. Tomamos $z=(1-t)x + ty$ y sustituimos:
 
 \begin{align}	
 	f((1-t)x + ty) - f(x) &\leq g^T(((1-t)x + ty)-x), \notag \\
@@ -230,7 +232,7 @@ para $x,y \in X$. Tomamos $z=(1-t)x + ty$ y sustituimos:
 \end{align}
 
 
-Desarrollando en la otra desigualdad de manera análoga obtenemos
+Desarrollando en \ref{eq:des2} de manera análoga obtenemos
 
 \begin{equation}\label{proof1:f(y)}
     f((1-t)x + ty) + (1-t)g^T(y-x)) \leq f(y).
@@ -245,19 +247,19 @@ Ahora multiplicamos la desigualdad \ref{proof1:f(x)} por $(1-t)$ y la \ref{proof
 	&= f((1-t)x+ty)
 \end{align*}
 
-donde se ha usado que $g^T(x-y) + g^T(y-x)=0$. Entonces tenemos que $(1-t)f(x) + tf(y) \geq f((1-t)x + ty), $ $ \forall x,y \in X, $ $ t \in [0,1]$. Por tanto $f$ es convexa, como queríamos probar.
+donde se ha usado que $g^T(x-y) + g^T(y-x)=0$. Entonces tenemos que $(1-t)f(x) + tf(y) \geq f((1-t)x + ty), $ $ \forall x,y \in E, $ $ t \in [0,1]$. Por tanto $f$ es convexa, como queríamos probar.
 
-Ahora vamos a probar que $f$ tiene algún subgradiente en $int(X)$. Definimos el epigrafo de una función $f$ como $epi(f)=\left \{ (x,t) \in X \times \mathbb{R} : t \geq f(x) \right \}$. Es obvio que f es convexa si y sólo si su epigrafo es un conjunto convexo. Vamos a aprovechar esta propidad y vamos a construir un subgradiente usando un hiperplano de apoyo al epigrafo de la función. Sea $x \in X$, claramente $(x, f(x)) \in \partial epi(f)$, y $epi(f)$ es un conjunto convexo por ser $f$ convexa. Entonces usando el Teorema del Hiperplano de Apoyo, existe $(a,b) \in \mathbb{R}^n \times \mathbb{R}$ tal que
+Ahora vamos a probar que $f$ tiene algún subgradiente en $int(E)$ si es convexa. Definimos el epigrafo de una función $f$ como $epi(f)=\left \{ (x,t) \in E \times \mathbb{R} : t \geq f(x) \right \}$. Es obvio que f es convexa si y sólo si su epigrafo es un conjunto convexo. Vamos a aprovechar esta propidad y vamos a construir un subgradiente usando un hiperplano de apoyo al epigrafo de la función. Sea $x \in E$, claramente $(x, f(x)) \in Fr(epi(f))$, y $epi(f)$ es un conjunto convexo por ser $f$ convexa. Entonces usando el Teorema del Hiperplano de Apoyo, existe $(a,b) \in \mathbb{R}^n \times \mathbb{R}$ tal que
 
 \begin{equation}\label{proof1:epi}
-    a^Tx + bf(x) \geq a^Ty + bt, \forall (y,t) \in epi(f).
+    a^Tx + bf(x) \geq a^Ty + bt, \quad \forall (y,t) \in epi(f).
 \end{equation}
 
 Reordenando tenemos
 
 $$b(f(x)-t) \geq a^Ty - a^Tx.$$
 
-Como $t \in [f(x), + \infty [$, para que se mantenga la igualdad incluso cuando $t \rightarrow \infty$, debe ocurrir que $b\leq 0$. Ahora vamos a asumir que $x \in int(X)$. Entonces tomamos $\epsilon > 0$, verificando que $y=x+\epsilon a \in X$, lo que implica que $b\neq 0$, ya que si $b=0$ entonces necesariamente $a=0$. Reescribiendo \ref{proof1:epi} con $t=f(y)$ obtenemos
+Como $t \in [f(x), + \infty [$, para que se mantenga la igualdad incluso cuando $t \rightarrow \infty$, debe ocurrir que $b\leq 0$. Ahora vamos a asumir que $x \in int(E)$. Entonces tomamos $\epsilon > 0$, verificando que $y=x+\epsilon a \in E$, lo que implica que $b\neq 0$, ya que si $b=0$ entonces necesariamente $a=0$. Reescribiendo \ref{proof1:epi} con $t=f(y)$ obtenemos
 
 $$f(x) - f(y) \leq \frac{1}{|b|} a^T (x-y).$$
 
@@ -265,7 +267,7 @@ Por tanto $\frac{a}{|b|} \in \partial f(x)$, lo que demuestra la otra parte de l
 
 \begin{comment}
 	
-	Para la última parte, sea $f$ una función convexa y diferenciable. Entonces por definición de convexidad para $t \in [0,1]$ y $x,y \in X$ tenemos
+	Para la última parte, sea $f$ una función convexa y diferenciable. Entonces por definición de convexidad para $t \in [0,1]$ y $x,y \in E$ tenemos
 	
 	$$tf(y) + (1-t)f(x) \geq f((1-t)x + ty).$$
 	
@@ -293,7 +295,7 @@ Por tanto $\frac{a}{|b|} \in \partial f(x)$, lo que demuestra la otra parte de l
 
 
 
-Tenemos entonces que el subgradiente es una extensión del gradiente en aquellos puntos que no son diferenciables. Por ello podríamos decir que existe el método de descenso de subgradiente, que permite usar funciones que no son diferenciables en todos los puntos, y que se usa de manera implícita en el momento en el que en un modelo se usan funciones ReLU, por ejemplo. Conviene destacar esta diferencia para no perder la rigurosidad, aunque solo sea una formalidad, ya que realmente no se hacen diferencias entre uno y otro método, así que nos seguiremos refiriendo al método de descenso de gradiente aunque estemos trabajando con subgradientes.
+Tenemos entonces que el subgradiente es una extensión del gradiente en aquellos puntos que no son diferenciables. Por ello podríamos decir que existe el método de descenso de subgradiente, que permite usar funciones que no son diferenciables en todos los puntos, y que se usa de manera implícita en el momento en el que en un modelo se usan funciones de la familia ReLU. Conviene destacar esta diferencia para no perder la rigurosidad, aunque solo sea una formalidad, ya que realmente no se hacen diferencias entre uno y otro método, así que nos seguiremos refiriendo al método de descenso de gradiente aunque estemos trabajando con subgradientes. En la práctica simplemente se elige un valor predeterminado para la derivada en el punto que estas funciones no son diferenciables.
 
 \begin{ejemplo}[Subgradiente de la función ReLU]\label{ej:RELUsub}
      La función ReLU es continua en todo el dominio y diferenciable en $]-\infty,0[ \cup ]0,\infty[$. Su subgradiente es el siguiente:
@@ -305,18 +307,16 @@ c \in [0,1] \quad si \quad x=0\\
 \end{matrix}\right.$$
 \end{ejemplo}
 
- En \cite{ReLuat0} se analiza la elección del valor que toma el subgradiente en el punto $x=0$ y se ve su influencia, que no es poca, en la ejecución del algoritmo, y se concluye que el valor 0 es el que ofrece mejor robustez de manera general.
+En \cite{ReLuat0} se analiza la elección del valor que toma el subgradiente en el punto $x=0$ y se ve su influencia, que no es poca, en la ejecución del algoritmo, y se concluye que el valor 0 es el que ofrece mejor robustez de manera general.
 
 
 
 
 \subsection{Convergencia} \label{sec:convergencia}
 
-La convergencia es un factor crucial en el algoritmo de gradiente descendente. Al tratarse de un algoritmo de optimización iterativo, iremos buscando el mínimo global de la función de coste en varios pasos, o en su defecto un mínimo local que nos ofrezca una solución subóptima. El algoritmo se mueve hacia puntos de menor gradiente por lo que en caso de converger lo hará a puntos donde el gradiente sea 0. Un factor clave para la convergencia será el hecho de que la función de pérdida sea o no una función convexa.
+La convergencia es un factor crucial en el algoritmo de gradiente descendente. Al tratarse de un algoritmo de optimización iterativo, iremos buscando el mínimo global de la función de coste en varios pasos, o en su defecto un mínimo local que nos ofrezca una solución subóptima. El algoritmo se mueve hacia puntos de menor gradiente por lo que en caso de converger lo hará a puntos donde sea 0. Un factor clave para la convergencia será el hecho de que la función de pérdida sea o no una función convexa.
 
-
-En caso de que la función de coste sea convexa sólo existirá un mínimo y será global, por lo que no tenemos que preocuparnos de si el algoritmo se queda estancado en un mínimo local, ya que si converge tenemos la solución óptima. Además en este caso el análisis de la convergencia resulta mucho más sencillo, y por eso encontramos más resultados teóricos y más fuertes que en el caso contrario. Desgraciadamente la situación normal es que la función de coste no sea convexa, y de hecho comprobar que una función sea convexa se trata de un problema NP-Hard \cite{Ahmadi_2011_NP_Convex}, por lo que en la práctia normalmente no realizamos el análisis teórico de la función y la convergencia previo al entrenamiento del modelo. En caso que no sea convexa, podemos converger hacia un punto crítico que no sea un mínimo global, con lo cual el algoritmo parará y puede que hallamos llegado a una solución que aunque sea subóptima no sea lo suficientemente buena.
-
+En caso de que lo sea sólo existirá un punto crítico\footnote{Si existiera una región donde la función fuera constante, cada punto de la región sería un punto crítico pero esto sería extraordinariamente extraño} y será un mínimo global, por lo que no tenemos que preocuparnos de si el algoritmo se queda estancado en un mínimo local, ya que si converge tendremos la solución óptima. Además en este caso el análisis de la convergencia resulta mucho más sencillo, y por eso encontramos más resultados teóricos y más fuertes que en el caso contrario. Desgraciadamente la situación normal es que la función de coste no sea convexa, y de hecho comprobar que una función sea convexa se trata de un problema NP-Hard \cite{Ahmadi_2011_NP_Convex}, por lo que en la práctia normalmente no realizamos el análisis teórico de la función y la convergencia previo al entrenamiento del modelo. En caso que no sea convexa, podemos converger hacia un punto crítico que no sea un mínimo global, con lo cual el algoritmo parará y puede que hallamos llegado a una solución que aunque sea subóptima no sea lo suficientemente buena.
 
 
 \subsubsection{Resultados teóricos para la convergencia del gradiente descendente}
@@ -378,7 +378,7 @@ En el caso que la función de coste sea convexa tenemos un caso más sencillo de
 
 En el teorema anterior $x \in \mathbb{R}^n$ contiene los pesos del modelo, y suponemos que el conjunto de datos con el que entrenamos es constante, por lo tanto el error del modelo, $f(x)$, sólo dependerá de los parámetros $x$.
 
-Como $\nabla f$ es Lipschitz continuo con constante $L$ entonces $\nabla ^2 f(x) \preceq LI$, donde $I$ es la matriz identidad. Equivalentemente esto significa que $\nabla ^2 f(x) -LI$ es una matriz semidefinida negativa. Ahora hacemos un desarrollo cuadrático de $f$ alrededor de $f(x)$ para obtener:
+Como el gradiente $\nabla f$ es Lipschitz continuo con constante $L$ entonces $\nabla ^2 f(x) \preceq LI$. Esto equivale a que $ \textstyle LI- \nabla^2f(x) $ sea una matriz semidefinida positiva, por lo que $\nabla ^2 f(x) -LI$ es una matriz semidefinida negativa. Ahora hacemos un desarrollo cuadrático de $f$ alrededor de $f(x)$ para obtener:
 
 \begin{align*}
     f(y) &\leq f(x) + \nabla f(x)^T (y-x) +\frac{1}{2}\nabla^2 f(x) \|y-x\|^2_2  \\
@@ -396,7 +396,7 @@ Consideramos ahora $y$ como la actualización de los pesos del gradiente descend
     &= f(x) - (1- \frac{1}{2}L \eta) \eta \| \nabla f(x) \|^2_2
 \end{align*}
 
-Usamos $\eta \leq \frac{1}{L}$ para ver que $-(1-\frac{1}{2}L \eta)= \frac{1}{2} L \eta - 1 \leq \frac{1}{2} L (\frac{1}{L}) - 1 = \frac{1}{2} - 1 = -\frac{1}{2}$, y sustituyendo esta expresión en la desigualdad anterior obtenemos 
+Usamos $\eta \leq \frac{1}{L}$ para ver que $-(1-\frac{1}{2}L \eta)= \frac{1}{2} L \eta - 1 \leq \frac{1}{2} L (\frac{1}{L}) - 1 = -\frac{1}{2}$, y sustituyendo esta expresión en la desigualdad anterior obtenemos 
 
 \begin{equation}\label{eq:gdproof1}
 	f(x^+) \leq f(x) - \frac{1}{2} \eta \| \nabla f(x) \|^2_2 
@@ -450,7 +450,7 @@ Podemos obtener un resultado mucho más práctico, ya que es para SGD y MBGD y a
 
 
 \begin{proposicion}[Convergencia para SGD]\label{prop:convsgd}
-    Sea ${x_k}$ la secuencia generada por el algoritmo de SGD o MBGD, sea $f$ la función de coste del modelo y sea $\eta_k$ el valor del \textit{learning rate} en la iteración $k$. Si la sucesión ${\eta_k}$ satisface $\sum_{k=1}^\infty \eta_k = \infty$ y también $\sum_{k=1}^\infty \eta_k ^2 < \infty$  entonces $\lim_{k\rightarrow\infty} \| \nabla f(x_k) \| =0$. Es decir, el algoritmo converge hacia un punto crítico de la función.% \cite{GoodFellowBook}.
+    Sea ${x_k}$ la secuencia generada por el algoritmo de SGD o MBGD, sea $f$ la función de coste del modelo y sea $\eta_k$ el valor del \textit{learning rate} en la iteración $k$. Si la sucesión ${\eta_k}$ satisface $\sum^\infty_{k=1} \eta_k = \infty$ y también $\sum_{k=1}^\infty \eta_k ^2 < \infty$  entonces $\lim_{k\rightarrow\infty} \| \nabla f(x_k) \| =0$. Es decir, el algoritmo converge hacia un punto crítico de la función.% \cite{GoodFellowBook}.
 \end{proposicion}
 
 Aunque la complejidad de la demostración se escapa al alcance de este TFG, en la página 33 de \cite{RobbinSiegmund} podemos encontrar el enunciado y demostración del teorema de Robbins-Siegmund. En \cite{RobbinSiegmundtoSGD} podemos observar su uso para la demostracion de la convergencia de SGD. Hay que remarcar que, aunque la demostración de la convergencia se realiza en supuesto de función convexa a un mínimo global, se puede tomar una restricción local de la función de manera que esta sea convexa y se alcance un punto crítico.
@@ -460,7 +460,7 @@ Aunque la complejidad de la demostración se escapa al alcance de este TFG, en l
 \subsubsection{Problemas en la convergencia}
 
 
-En el teorema \ref{proof:gdconvex} tenemos asegurada la convergencia a un mínimo aunque con unos requisitos que no se suelen encontrar en la práctica. En la proposición \ref{prop:convsgd} por el contrario solo nos garantizamos llegar a un punto crítico, ni siquiera a un mínimo local. Encontramos aquí el mayor problema del algoritmo del gradiente descendente: la convergencia prematura en puntos con gradiente muy cercano a cero. 
+En el teorema \ref{proof:gdconvex} tenemos asegurada la convergencia a un mínimo aunque con unos requisitos que no se suelen encontrar en la práctica. En la proposición \ref{prop:convsgd} por el contrario solo nos garantizamos llegar a un punto crítico, ni siquiera a un mínimo local. Encontramos aquí el mayor problema para la convergencia del algoritmo del gradiente descendente: la convergencia prematura en puntos con gradiente muy cercano a cero. 
 
 Cuando el algoritmo se aproxima a un punto crítico, la magnitud del gradiente se aproxima a cero, y teniendo en cuenta la regla de actualización de los pesos, $W_{t+1}=W_t - \eta \nabla C(W)$, tenemos por tanto que $W_{t+1} - W_t \approx 0$. Es decir que las modificaciones de los pesos con las actualizaciones serán prácticamente nulas, haciendo que el algoritmo se pare o que progrese de manera muy lenta cerca de estos puntos, lo que en un primer momento podría aparentar una falsa convergencia en regiones planas por ejemplo. 
 
@@ -468,7 +468,7 @@ Los puntos críticos más comunes son los puntos de silla, que definimos como un
 
 En espacios de alta dimensionalidad, que son comunes en las redes neuronales, la probabilidad de encontrar puntos de silla es mucho mayor que la de encontrar máximos y minímos locales. Para una función $f:\mathbb{R}^n \rightarrow \mathbb{R}$, el número de puntos de silla normalmente crece exponencialmente con respecto a la dimensión $n$. Esto se debe a que la probabilidad de encontrar valores propios de ambos signos en la matriz Hessiana aumenta con la dimensionalidad del espacio de parámetros \cite{dauphin2014SaddlePoints}. 
 
-La manera de solventarl estos problemas es utilizar modificaciones en el algoritmo de gradiente descendente que proporcionan mejores propiedades a su comportamiento, ya que las estrategias de SGD y MBGD ofrecen una pequeña pero insuficiente solución a este problema. Al calcular el gradiente mediante una aproximación con un subconjunto de los datos, se introduce un ruido $\epsilon$ en su cálculo con lo que $W_{t+1} - W_t \approx \epsilon$, que puede servir para conseguir escapar de ese punto de silla. Estas modificaciones se denominan optimizadores y a diferencia de las versiones vistas en la sección \ref{sec:estrategias}, que variaban solo en la cantidad de datos usados para calcular el gradiente, estos optimizadores cambian la regla de actualización de los pesos añadiendo nuevos cálculos, hiperparámetros y estrategias para conseguir que el algoritmo mejore en estabilidad, robustez y velocidad de convergencia.
+La manera de solventar estos problemas es utilizar modificaciones en el algoritmo de gradiente descendente que proporcionan mejores propiedades a su convergencia, ya que las estrategias de SGD y MBGD ofrecen una pequeña pero insuficiente solución a este problema. Al calcular el gradiente mediante una aproximación con un subconjunto de los datos, se introduce un ruido $\epsilon$ en su cálculo con lo que $W_{t+1} - W_t \approx \epsilon$, que puede servir para conseguir escapar de ese punto de silla. Estas modificaciones se denominan optimizadores y a diferencia de las versiones vistas en la sección \ref{sec:estrategias}, que variaban solo en la cantidad de datos usados para calcular el gradiente, estos optimizadores cambian la regla de actualización de los pesos añadiendo nuevos cálculos, hiperparámetros y estrategias para conseguir que el algoritmo mejore en estabilidad, robustez y velocidad de convergencia.
 
 
 Existen otros problemas como la explosión o el desvanecimiento del gradiente, pero están ligados a BP como herramienta para calcularlo, por lo que se abordarán en la sección siguiente junto a la inicialización de pesos del modelo, que es la manera principal de superar estos problemas.

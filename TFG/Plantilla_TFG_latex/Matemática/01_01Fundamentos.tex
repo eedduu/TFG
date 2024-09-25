@@ -6,7 +6,7 @@ A continuación se definirán los conceptos básicos necesarios con los que se t
 
 \subsection{Cálculo diferencial}
 
-A continuación se definirán los principales conceptos que se usarán durante el presente TFG. Los algoritmos de gradiente descendente y BP se basan principalmente en el cálculo diferencial, y el hecho de que no usen herramientas matemáticas demasiado complejas resulta precisamente una de sus virtudes, ya que gracias a la abstracción y a un diseño ingenioso consiguen obtener grandes resultados a partir de operaciones relativamente sencillas. Empezamos con los conceptos más elementales que subyacen durante todo el trabajo.
+Los algoritmos de gradiente descendente y BP se basan principalmente en el cálculo diferencial, y el hecho de que no usen herramientas matemáticas demasiado complejas resulta precisamente una de sus virtudes, ya que gracias a la abstracción y a un diseño ingenioso consiguen obtener grandes resultados a partir de operaciones relativamente sencillas. Empezamos con los conceptos más elementales que subyacen durante todo el trabajo.
 
 En lo que sigue se fijan los abiertos $X \subseteq \mathbb{R}^n$, $Y \subseteq \mathbb{R}^m$ y la función $f: X \rightarrow Y$.
 
@@ -23,7 +23,9 @@ En lo que sigue se fijan los abiertos $X \subseteq \mathbb{R}^n$, $Y \subseteq \
 
 
 \begin{definicion}[Derivada parcial en un campo escalar]
-        Sea $f: X \rightarrow \mathbb{R}$. La derivada parcial de $f$ con respecto a la $k$-ésima variable $x_k$ en el punto $a = (a_1, \ldots, a_n)\in X$ se define como
+           
+
+	Sea $f: X \rightarrow \mathbb{R}$. La derivada parcial de $f$ con respecto a la $k$-ésima variable $x_k$ en el punto $a = (a_1, \ldots, a_n)\in X$ se define como
 
 	$$ \frac{\partial f}{\partial x_k}(a) = \underset{h\rightarrow0}{lim}\frac{f(a_1, \ldots, a_{k-1}, a_k + h, a_{k+1}, \ldots, a_n) - f(a_1, \ldots, a_n)}{h}$$
 
@@ -34,7 +36,7 @@ Notamos por $f= \left ( f_1,f_2,\ldots, f_m \right )$ indicando las $m$ componen
 
 
 \begin{definicion}[Derivada parcial]
-        Sea $f: X \rightarrow Y$,  $f=(f_1, f_2, \ldots, f_m)$, $k \in I_n$. Entonces $f$ es parcialmente derivable con respecto a la $k$-ésima variable $x_k$ en $a = (a_1, \ldots, a_n)\in X$ si, y sólo si, lo es $f_j \forall j \in I_m$, en tal caso, 
+        Sea $f: X \rightarrow Y$,  $f=(f_1, f_2, \ldots, f_m)$, $k \in I_n$. Entonces $f$ es parcialmente derivable con respecto a la $k$-ésima variable $x_k$ en $a = (a_1, \ldots, a_n)\in X$ si, y sólo si, lo es $f_j \textrm{ } \forall j \in I_m$, en tal caso, 
 
         $$\frac{\partial f}{\partial x_k}(a) = \left ( \frac{\partial f_1}{\partial x_k}(a), \ldots, \frac{\partial f_m}{\partial x_k}(a) \right ) \in \mathbb{R}^m$$
 
@@ -42,49 +44,53 @@ Notamos por $f= \left ( f_1,f_2,\ldots, f_m \right )$ indicando las $m$ componen
 \end{definicion}
 
 
-Definimos ahora los elementos clave del proceso: el vector gradiente y la matriz jacobiana. En el algoritmo de descenso de gradiente, lo que se pretende calcular tal como indica el nombre es el vector gradiente, ya que la función de error de los modelos siempre nos devuelve un escalar, es decir que la dimensión de la imagen es 1, y la dimensión de la entrada será el número de parámetros del modelo (número de elementos que tendrá el vector gradiente). Sin embargo las matrices jacobianas también juegan un papel fundamental ya que para calcular ese vector gradiente, el algoritmo de BP necesita de cálculos intermedios, que son las matrices jacobianas asociadas entradas y salidas de las capas ocultas (que tienen mayor dimensionalidad) con respecto a parte de los parámetros (los parámetros de esa capa).
+Definimos ahora los elementos clave del algoritmo de entrenamiento: el vector gradiente y la matriz jacobiana. En el algoritmo de descenso de gradiente, lo que se pretende calcular tal como indica el nombre es el vector gradiente, ya que la función de error de los modelos siempre nos devuelve un escalar, es decir que la dimensión de la imagen es 1, y la dimensión de la entrada será el número de parámetros del modelo (número de elementos que tendrá el vector gradiente). Sin embargo las matrices jacobianas también juegan un papel fundamental ya que para calcular ese vector gradiente, el algoritmo de BP necesita de cálculos intermedios, que son las matrices jacobianas asociadas a la salida de las capas ocultas (que tienen mayor dimensionalidad) bien con respecto a los parámetros de la capa o bien con respecto al error de la predicción del modelo.
 
 \begin{definicion}[Vector gradiente]
     Sea $f:X \rightarrow \mathbb{R}$ un campo escalar. Cuando $f$ es parcialmente derivable en $x$, el gradiente de $f$ en $x$ es el vector $\nabla f(x) \in X$ dado por 
-    $$\nabla f(x) = \left ( \frac{\partial f}{\partial x_1}, \frac{\partial f}{\partial x_2}, \ldots, \frac{\partial f}{\partial x_n} \right ).$$
+    $$\nabla f(x) = \left ( \frac{\partial f}{\partial x_1}(x), \frac{\partial f}{\partial x_2}(x), \ldots, \frac{\partial f}{\partial x_n}(x) \right ).$$
 \end{definicion}
 
 
 \begin{definicion}[Matriz jacobiana]
     Si $f$ es diferenciable en $ x \in X$, la matriz jacobiana es la matriz de la aplicación lineal $Df \in L \left ( X, Y \right )$ y se escribe como $J_f$. Viene dada por:
 
-    $$J_f(x)= \begin{pmatrix}
- \frac{\partial f_1}{\partial x_1} & \frac{\partial f_1}{\partial x_2} & \cdots & \frac{\partial f_1}{\partial x_n} \\
- \frac{\partial f_2}{\partial x_1} & \frac{\partial f_2}{\partial x_2} & \cdots & \frac{\partial f_2}{\partial x_n} \\
- \vdots & \vdots & \ddots & \vdots \\
- \frac{\partial f_m}{\partial x_1} & \frac{\partial f_m}{\partial x_2} & \cdots & \frac{\partial f_m}{\partial x_n} \\
-\end{pmatrix}= \begin{pmatrix}
- \nabla f_1(x)^T\\
- \vdots \\
- \nabla f_m(x)^T \\
-\end{pmatrix}=
-\begin{pmatrix}
-     \frac{\partial f}{\partial x_1} \cdots \frac{\partial f}{\partial x_n}
-\end{pmatrix}$$
+ \begin{align*}
+	J_f(x)&= \begin{pmatrix}
+	 \frac{\partial f_1}{\partial x_1(x)} & \frac{\partial f_1}{\partial x_2}(x) & \cdots & \frac{\partial f_1}{\partial x_n}(x) \\
+	 \frac{\partial f_2}{\partial x_1}(x) & \frac{\partial f_2}{\partial x_2}(x) & \cdots & \frac{\partial f_2}{\partial x_n}(x) \\
+	 \vdots & \vdots & \ddots & \vdots \\
+	 \frac{\partial f_m}{\partial x_1}(x) & \frac{\partial f_m}{\partial x_2}(x) & \cdots & \frac{\partial f_m}{\partial x_n}(x) \\
+	\end{pmatrix} \\	
+	&= \begin{pmatrix}
+	 \nabla f_1(x)^T\\
+	 \vdots \\
+	 \nabla f_m(x)^T \\
+	\end{pmatrix}=
+	\begin{pmatrix}
+	     \frac{\partial f}{\partial x_1}(x), \ldots, \frac{\partial f}{\partial x_n}(x)
+	\end{pmatrix}
+\end{align*}
+
 \end{definicion}
 
 
 
-Si f es de clase $C^2$ (derivable dos veces con sus derivadas continuas) derivamos el gradiente obtenemos una matriz cuadrada simétrica con derivadas parciales de segundo orden, a la que llamamos matriz Hessiana.
+Si f es de clase $C^2$ (derivable dos veces con sus derivadas continuas) y derivamos el gradiente obtenemos una matriz cuadrada simétrica con derivadas parciales de segundo orden, a la que llamamos matriz Hessiana.
 
 \begin{definicion}[Matriz Hessiana]
 	Dado el campo escalar $f: X \rightarrow \mathbb{R}$, definimos la matriz Hessiana en el punto x como
 
 	$$\nabla^2f(x)= \begin{pmatrix}
-		\frac{\partial^2f}{\partial x^{2}_1} & \frac{\partial^2f}{\partial x_1\partial x_2} & \cdots & \frac{\partial^2f}{\partial x_1 \partial x_n}\\
-		\frac{\partial^2f}{\partial x_2 \partial x_1} & \frac{\partial^2f}{\partial x^{2}_2} & \cdots & \frac{\partial^2f}{\partial x_2 \partial x_n}\\
+		\frac{\partial^2f}{\partial x^{2}_1}(x) & \frac{\partial^2f}{\partial x_1\partial x_2}(x) & \cdots & \frac{\partial^2f}{\partial x_1 \partial x_n}(x)\\
+		\frac{\partial^2f}{\partial x_2 \partial x_1}(x) & \frac{\partial^2f}{\partial x^{2}_2}(x) & \cdots & \frac{\partial^2f}{\partial x_2 \partial x_n}(x)\\
 		\vdots & \vdots & \ddots & \vdots \\
-		\frac{\partial^2f}{\partial x_n \partial x_1} & \frac{\partial^2f}{\partial x_n \partial x_1} & \cdots & \frac{\partial^2f}{\partial x^{2}_n}\\
+		\frac{\partial^2f}{\partial x_n \partial x_1}(x) & \frac{\partial^2f}{\partial x_n \partial x_1}(x) & \cdots & \frac{\partial^2f}{\partial x^{2}_n}(x)\\
 	\end{pmatrix}$$
 
 \end{definicion}
 
-Este es un concepto muy importante del cálculo multivariable y la optimización. Cuando hablemos del gradiente descendente, especialmente de la convergencia, usaremos algunas de sus propiedades, como por ejemplo la aproximación cuadrática para desplazamientos pequeños: $f(x + \Delta x) \approx f(x) + \nabla f(x)^T \Delta x + \frac{1}{2} \Delta ^T \nabla^2 f(x) \Delta x$. HAY UN RESULTADO QUE F ES CONVEXA SII LA MATRIZ HESSIANA ES SEMIDEFINIDA POSITIVA PERO NO SE SI PONERLO. ESTO SE APLICA A NIVEL LOCAL TAMBIEN.
+Este es un concepto muy importante del cálculo multivariable y la optimización. Cuando hablemos del gradiente descendente, especialmente de la convergencia, usaremos algunas de sus propiedades, como por ejemplo la aproximación cuadrática para desplazamientos pequeños: $f(x + \Delta x) \approx f(x) + \nabla f(x)^T \Delta x + \frac{1}{2} \Delta x^T \nabla^2 f(x) \Delta x$. %HAY UN RESULTADO QUE F ES CONVEXA SII LA MATRIZ HESSIANA ES SEMIDEFINIDA POSITIVA PERO NO SE SI PONERLO. ESTO SE APLICA A NIVEL LOCAL TAMBIEN.
 		
 
 
@@ -107,18 +113,18 @@ El último concepto, que también resulta de gran importancia en los resultados 
 
 \begin{definicion}[Función Lipschitziana]
     El campo escalar $f:X \rightarrow \mathbb{R}$ es lipschitziano si existe una constante $M \in \mathbb{R}_0^+$ que verifica:
-    $$ \| f(x) - f(y) \| \leq M \| x - y \| \qquad \forall x,y \in E.$$
+    $$ \| f(x) - f(y) \| \leq M \| x - y \| \qquad \forall x,y \in X.$$
 \end{definicion}
 
-La definición nos dice de manera intuitiva que el gradiente de la función no puede cambiar a una velocidad arbitraria. Decimos que la función $f$ tiene gradiente lipschitziano si la condición anterior se aplica a su gradiente.
+La definición nos dice de manera intuitiva que el gradiente de la función no puede cambiar a una velocidad arbitraria. Decimos que la función $f$ tiene gradiente lipschitziano si la condición anterior se aplica a su gradiente, es decir:
 
-$$\| \nabla f(x) - \nabla f(y) \| \leq M \| x - y \| \qquad \forall x,y \in E .$$
+$$\| \nabla f(x) - \nabla f(y) \| \leq M \| x - y \| \qquad \forall x,y \in X .$$
 
 
 La mínima constante $M_0=L$ que verifica las desigualdades anterior es denominada la constante de Lipschitz de $f$ y viene definida por 
 
-$$L=sup \left \{ \frac{\|f(x)-f(y)\|}{\|x - y \|} : x,y \in E, x \neq y \right \}.$$
+$$L=sup \left \{ \frac{\|f(x)-f(y)\|}{\|x - y \|} : x,y \in X, x \neq y \right \}.$$
 
 
 
-Para las funciones de clase $C^2$, es decir las que son diferenciables al menos dos veces con su derivada continua, una equivalencia a que el gradiente de $f$ sea lipschitziano es que $\nabla^2 f(x) \preceq LI \quad \forall x \in E$, esto lo usaremos luego en la demostración \ref{proof:gdconvex}. En esta expresión $L$ es la constante de Lipschitz para el gradiente de $f$ e $I$ es la matriz identidad. El símbolo $\preceq$ denota una desigualdad matricial en términos de semidefinición positiva, es decir que $LI - \nabla^2f(x)$ es una matriz semidefinida positiva. Equivalentemente para cualquier vector $z$ se tiene $z^T \left ( LI - \nabla^2f(x) \right )z \geq 0$. 
+Para las funciones de clase $C^2$, es decir las que son diferenciables al menos dos veces con su derivada continua, una equivalencia a que el gradiente de $f$ sea lipschitziano es que $\nabla^2 f(x) \preceq LI \quad \forall x \in X$, esto lo usaremos luego en la demostración \ref{proof:gdconvex}. En esta expresión $L$ es la constante de Lipschitz para el gradiente de $f$ e $I$ es la matriz identidad. El símbolo $\preceq$ denota una desigualdad matricial en términos de semidefinición positiva, es decir que $LI - \nabla^2f(x)$ es una matriz semidefinida positiva. Equivalentemente para cualquier vector $z$ se tiene $z^T \left ( LI - \nabla^2f(x) \right )z \geq 0$. 
