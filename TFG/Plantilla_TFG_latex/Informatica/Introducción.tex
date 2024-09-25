@@ -1,16 +1,16 @@
 \section{Introducción}
 
-Las redes neuronales profundas han revolucionado el campo de la inteligencia artificial, permitiendo avances significativos en varios campos como el procesamiento del lenguaje natural, reconocimiento de voz o visión por computador. Su capacidad para extraer patrones y representaciones complejas de grandes datasets y a un coste computacional muy eficiente en comparación con otras técnicas las han convertido en piedra angular de los sistemas modernos de aprendizaje automático. En el campo de la visión por computador, las Convolutional Neural Networks (ConvNets) se han erigido como la familia de modelos que consigue un rendimiento del estado del arte REFERENCIA.
+Las redes neuronales profundas han revolucionado el campo de la inteligencia artificial, permitiendo avances significativos en varios campos como el procesamiento del lenguaje natural, reconocimiento de voz o visión por computador. Su capacidad para extraer patrones y representaciones complejas de grandes datasets y a un coste computacional muy eficiente en comparación con otras técnicas las han convertido en piedra angular de los sistemas modernos de aprendizaje automático. En el campo de la visión por computador, las Convolutional Neural Networks (ConvNets) se han erigido como la familia de modelos que consigue un rendimiento del estado del arte \cite{GoodFellowBook}.
 
-Las ConvNets son un tipo de red neuronal para procesar datos en forma de grid. Se caracterizan porque tienen al menos una capa donde usan la operación de convolución en lugar de una matriz general de multiplicación. La convolución es un tipo de operación lineal que permite capturar representaciones espaciales aplicando un filtro a la entrada, detectando primero características de bajo nivel como bordes y texturas y aumentando el nivel de complejidad de la representación en las capas sucesivas. REFERENCIA
+Las ConvNets son un tipo de red neuronal para procesar datos en forma de grid. Se caracterizan porque tienen al menos una capa donde usan la operación de convolución en lugar de una matriz general de multiplicación. La convolución es un tipo de operación lineal que permite capturar representaciones espaciales aplicando un filtro a la entrada, detectando primero características de bajo nivel como bordes y texturas y aumentando el nivel de complejidad de la representación en las capas sucesivas \cite{GoodFellowBook}.
 
-Las ResNets son una subfamilia de ConvNets que atajan el problema del desvanecimiento y explosión de gradiente. Cuantas más capas tiene una red neuronal profunda más probable es que sufra este problema, ya que se arrastran más operaciones. Las ResNet crean bloques residuales donde se crea un atajo entre el inicio y el final del bloque en el que se suma la identidad al final del bloque, provocando que el gradiente pueda fluir de manera más efectiva durante el proceso de BP.
+Las ResNets son una subfamilia de ConvNets que atajan el problema del desvanecimiento y explosión de gradiente (ver sección \ref{sec:desvyexpl}). Cuantas más capas tiene una red neuronal profunda más probable es que sufra este problema, ya que se arrastran más operaciones. Las ResNet crean bloques residuales donde se crea un atajo entre el inicio y el final del bloque en el que se suma la identidad al final del bloque, provocando que el gradiente pueda fluir de manera más efectiva durante el proceso de BP \cite{ResNets}.
 
 El gradiente descendente es un algoritmo de aprendizaje que nos permite entrenar este tipo de modelos de forma eficiente, robusta, y con mucho rigor teórico. Sin embargo como ya se ha comentado en la parte anterior tiene algunas limitaciones, y estas se ven incrementadas cuantas más capas y más parámetros tiene el modelo que entrenamos. A parte de desarrollar mejoras en él con los optimizadores, se buscan nuevos algoritmos de aprendizaje que permitan evitar los problemas que presenta el gradiente descendente.
 
-Una de estas aproximaciones son las técnicas metaheuristicas: estrategias de optimización basadas normalmente en componentes bio-inspirados y que son flexibles y adaptables a gran variedad de problemas. Ofrecen una solución cercana a la óptima en un tiempo razonable en muchos problemas cuya solución óptima es computacionalmente inalcanzable, como en problemas NP-Hard. Son técnicas iterativas que no ofrecen una garantía teórica de hallar una buena solución, pero a través de restricciones en el algoritmo se espera que lo haga.
+Una de estas aproximaciones son las técnicas metaheuristicas: estrategias de optimización basadas normalmente en componentes bio-inspirados y que son flexibles y adaptables a gran variedad de problemas. Ofrecen una solución cercana a la óptima en un tiempo razonable en muchos problemas cuya solución óptima es computacionalmente inalcanzable, como en problemas NP-Hard. Son técnicas iterativas que no ofrecen una garantía teórica de hallar una buena solución, pero a través de restricciones en el algoritmo se espera que lo haga \cite{MHtrainingClase}.
 
-Los más conocidos son los algoritmos evolutivos inspirados en la evolución genética. En ellos se genera una población aleatoria e iterativamente se realizan los procesos de: seleccionar los mejores individuos, recombinarlos entre ellos, mutarlos para obtener más diversidad genética, y reemplazamiento de los nuevos indiviudos en la población. Se pueden introducir modificaciones como criterios elitistas, en los que por ejemplo reemplazaríamos la población antigua sólo si fuera peor que la nueva. Los algoritmos evolutivos basados en Differential Evolution (DE) se especializan en optimización con parámetros reales y enfatizan la mutación, utilizando el operador de cruce a posteriori de ella. Son los que mejores resultado ofrecen actualmente.
+Los más conocidos son los algoritmos evolutivos inspirados en la evolución genética. En ellos se genera una población aleatoria e iterativamente se realizan los procesos de: seleccionar los mejores individuos, recombinarlos entre ellos, mutarlos para obtener más diversidad genética, y reemplazar los nuevos individuos en la población. Se pueden introducir modificaciones como criterios elitistas, en los que por ejemplo reemplazaríamos la población antigua sólo si fuera peor que la nueva. Los algoritmos evolutivos basados en Differential Evolution (DE) se especializan en optimización con parámetros reales y enfatizan la mutación, utilizando el operador de cruce a posteriori de ella. Alcanzan el rendimiento de estado del arte en optimización continua \cite{MHoverview}.
 
 Los algoritmos meméticos son una hibridación de las técnicas metaheurísticas con algoritmos de búsqueda local, que añaden el uso de información específica del problema. Combinan así la capacidad exploradora del espacio de soluciones que tienen los algoritmos evolutivos con la capacidad explotadora de la búsqueda local. El optimizador local se considera una etapa más dentro del proceso evolutivo y debe incluirse en él.
 
@@ -20,29 +20,29 @@ Los algoritmos meméticos son una hibridación de las técnicas metaheurísticas
 
 El ajuste de pesos de un modelo es una de las partes más importantes en su desarrollo y por eso necesitamos de técnicas que nos ofrezcan cada vez mejores resultados a la vez que mayor eficiencia. No se trata de un problema sencillo ya que el número de parámetros de los modelos, es decir la dimensión del problema de optimización, tiene una tendencia que va rápidamente en aumento. Aunque el gradiente descente sea una estrategia muy buena hemos visto sus limitaciones, que nos incitan a intentar encontrar otras estrategias de aprendizaje. Las metaheurísticas toman cada vez un papel más protagonista en la optimización de problemas complejos y de grandes dimensiones a un bajo coste, lo que las sitúa como un posible candidato a sustituirlo.
 
-Para la realización del presente TFG nos basaremos en el reciente paper de Daniel Molina y Francisco Herrera REF donde se analiza el papel que juegan actualmente las metaheurísticas tanto en el en entrenamiento de los modelos, como en la selección de los hiperparámetros y de la topología de la red. Nos centraremos únicamente en el primer caso. En él se realiza también un experimento práctico comparativo entre Adam, un optimizador basado en el gradiente descendente, y diferentes versiones de SHADE-ILS, una técnica metaheurística basada en DE que hace uso de búsqueda local (técnica memética) que ofrece los mejores resultados actualmente en el entrenamiento de modelos.
+Para la realización del presente TFG nos basaremos en el reciente paper de Daniel Molina y Francisco Herrera \cite{MHtrainingClase} donde se analiza el papel que juegan actualmente las metaheurísticas tanto en el en entrenamiento de los modelos, como en la selección de los hiperparámetros y de la topología de la red. Nos centraremos únicamente en el primer caso. En él se realiza también un experimento práctico comparativo entre Adam, un optimizador basado en el gradiente descendente, y diferentes versiones de SHADE-ILS, una técnica metaheurística basada en DE que hace uso de búsqueda local (técnica memética) que ofrece los mejores resultados actualmente en el entrenamiento de modelos.
 
-En dicha publicación se realiza una revisión de la literatura en lo referente a las técnicas metaheurísticas para el entrenamiento de modelos, analizando los resultados de los paper más recientes y criticando de manera general la falta de rigor metodológico en la mayoría de ellos, ya que no resulta fácil realizar una comparación totalmente objetiva entre dos ténicas tan distintas como el gradiente descendente y los algoritmos bio-inspirados. Algunas de las principales carencias en la literatura que se intentarán abordar en este TFG son las siguientes:
+En dicha publicación se realiza una revisión de la literatura en lo referente a las técnicas metaheurísticas para el entrenamiento de modelos, analizando los resultados de los paper más recientes y criticando de manera general la falta de rigor metodológico en la mayoría de ellos, ya que no resulta fácil realizar una comparación totalmente objetiva entre dos ténicas tan distintas como el gradiente descendente y los algoritmos bio-inspirados. Algunas de las principales carencias en la literatura mencionadas en dicho paper son las siguientes:
 
 \begin{itemize}
 
-\item De manera general no se suelen comparar las técnicas metaheurísticas con los métodos clásicos del gradiente descendente, sino que se comparan entre sí.
+\item De manera general no se suelen comparar las técnicas metaheurísticas con los métodos clásicos del gradiente descendente, sino que se comparan con otras técnicas metaheurísticas.
 
-\item Falta de homogeneidad en los datasets usados, lo que no permite una comparación objetiva entre papers
+\item Falta de homogeneidad en los datasets usados, lo que no permite una comparación objetiva entre diferentes experimentos.
 
 \item Modelos no realistas que usan unos pocos de miles de parámetros.
 
-\item La gran mayoría de hibridaciones entre técnicas metaheurísticas y gradiente descendente son probadas con ConvNets
+\item La gran mayoría de hibridaciones entre técnicas metaheurísticas y gradiente descendente son probadas con ConvNets.
 
 \end{itemize}
 
-Por ello, aunque la literatura sea extensa y de manera general se evidencie la superioridad del gradiente descendente, se hace necesario tanto la realización de experimentos con las mismas condiciones que en otros papers como la repetición de los mismos para obtener esa independencia, objetividad y rigor metodológico que son necesarias en el campo. Vamos a reproducir el experimento en modelos MLP y ConvNets de diferente número de parámetros (desde 2 mil hasta 1 millón), usando técnicas clásicas y metaheurísticas reconocidas por su buen funcionamiento y además probando hibridaciones entre ellas. Se intentará reproducir en la medida de lo posible las condiciones de experimentación del paper de referencia haciendo uso de algunos datasets que se proponen en la publicación y usando las mismas técnicas de entrenamiento, llegando a añadir alguna más.
+Por ello, aunque la literatura sea extensa y de manera general se evidencie la superioridad del gradiente descendente, se hace necesario tanto la realización de experimentos con las mismas condiciones que en otros papers como la repetición de los mismos para obtener esa independencia, objetividad y rigor metodológico que son necesarias en el campo. Vamos a reproducir el experimento en modelos MLP y ConvNets de diferente número de parámetros (desde 2 mil hasta 1.4M), usando técnicas clásicas y metaheurísticas reconocidas por su buen funcionamiento y además probando hibridaciones entre ellas. Se intentará reproducir en la medida de lo posible las condiciones de experimentación del paper de referencia haciendo uso de algunos datasets que se proponen en la publicación y usando las mismas técnicas de entrenamiento, llegando a añadir alguna más.
 
 
 
 \subsection{Objetivos}
 
-El objetivo principal de este TFG es realizar una comparación experimental de las técnicas de entrenamiento de modelos clásicas basadas en gradiente descendente y las nuevas basadas en metaheurísticas, proponiendo hibridaciones para las más consolidadas. Para ello dividimos en los siguientes objetivos secundarios:
+El objetivo principal de este TFG es realizar una comparación experimental de las técnicas de entrenamiento de modelos clásicas basadas en gradiente descendente y las nuevas basadas en metaheurísticas, proponiendo hibridaciones para las más consolidadas. Con las primeras usaremos los optimizadores Nesterov Accelerated Gradient (NAG), RMSProp y Adam. Usaremos SHADE y SHADE-ILS, además de versiones hibridadas con gradiente descendente para las metaheurísticas. Para ello dividimos en los siguientes objetivos secundarios:
 
 
 \begin{enumerate}
@@ -53,6 +53,17 @@ El objetivo principal de este TFG es realizar una comparación experimental de l
 
 \item Hibridación de técnicas metaheurísticas usadas con gradiente descendente, con sus pruebas correspondientes.
 
-\item Análisis de resultados, en comparación con los resultados del paper cuando corresponda.
+\item{Análisis de resultados de las técnicas clásicas con las metaheurísticas, en comparación con los resultados del paper cuando corresponda, e intentando responder a las cuestiones siguiente:
+	\begin{itemize}
+		\item ¿Qué técnica generaliza mejor?
+		
+		\item ¿Qué técnica tarda menos?
+		
+		\item ¿Cuál tiene mejores propiedades (estabilidad, rapidez...) en su convergencia?
+	\end{itemize}
+	
+	Se responderán a ests cuestiones observando si se encuentran diferencias en base a: tipo de tarea (clasificación/regresión), tamaño y complejidad del dataset, número de parámetros del modelo, familia de modelos.
+	
+	}
 
 \end{enumerate}
