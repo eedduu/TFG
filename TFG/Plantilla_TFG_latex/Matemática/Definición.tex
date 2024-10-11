@@ -14,12 +14,12 @@ Para calcular el gradiente de la función de coste respecto a los pesos del mode
 
 El algoritmo de BP se implementa en la práctica a través de la diferenciación automática \cite{AutomaticDiff}, que es un algoritmo más general para calcular derivadas y que engloba a BP. Se fundamenta en descomponer las funciones en una secuencia de operaciones fundamentales para calcular sus derivadas a través de la regla de la cadena, haciendo este cómputo muy eficiente. Por ello se distingue de la diferenciación simbólica, que manipula las expresiones matemáticas para encontrar derivadas, y de la diferenciación numérica, que calcula las derivadas a través de aproximaciones con diferencias finitas. Esta es la implementación que se usa en las librerías de aprendizaje automático más usadas, como TensorFlow 2 y PyTorch.
 
-En la diferenciación automática existen dos estrategias para calcular un vector gradiente o una matriz jacobiana: diferenciación hacia delante y diferenciación hacia atrás. La diferencia reside  principalmente, en si realizamos multiplicaciones de un vector por un jacobiano (hacia atrás) o de un jacobiano por un vector (hacia delante). La elección dependerá de las dimensiones de la matriz jacobiana que queramos calcular, en otras palabras, debemos comparar la dimensión de la entrada y de la salida del modelo. Si la dimensión de entrada es mayor que la de salida, necesitaremos menos operaciones para calcular la matriz jacobiana si usamos la estrategia de diferenciación hacia atrás y viceversa. 
+En la diferenciación automática existen dos estrategias para calcular un vector gradiente o una matriz jacobiana: diferenciación hacia delante y diferenciación hacia atrás. Su distinción reside  principalmente en si realizamos multiplicaciones de un vector por un jacobiano (hacia atrás) o de un jacobiano por un vector (hacia delante). La elección dependerá de las dimensiones de la matriz jacobiana que queramos calcular, en otras palabras, debemos comparar la dimensión de la entrada y de la salida del modelo. Si la dimensión de entrada es mayor que la de salida, necesitaremos menos operaciones para calcular la matriz jacobiana si usamos la estrategia de diferenciación hacia atrás y viceversa. 
 
 Debido a la estructura general de una red neuronal donde la dimensión de la entrada es mucho mayor que la de la salida, resulta más eficiente calcular el gradiente con la diferenciación hacia atrás, y esto es lo que entendemos como el algoritmo de BP: la información se propaga hacia atrás en el modelo mientras que se usa la diferenciación hacia atrás con el objetivo de calcular el gradiente del error del modelo con respecto a sus pesos. Si usáramos la diferenciación hacia delante, aunque estuviéramos propagando la información hacia atrás no estaríamos usando el algoritmo de BP, y además el cálculo resultaría mucho más ineficiente. Se suele decir de manera general que el algoritmo de BP es una aplicación concreta de la diferenciación automática hecha a medida para el entrenamiento de redes neuronales.
 
 
-Vamos a explorar el algoritmo de BP de manera progresiva: en primer lugar veremos la diferenciación hacia delante y hacia atrás, viendo por qué es más eficiente usar la segunda y acotando este algoritmo general para llegar al algoritmo de BP, para lo que veremos como calcular la matriz Jacobiana de la salida de un perceptrón multicapa (MLP, por sus siglas en inglés) respecto a la entrada, en una situación que no será de entrenamiento, ya que no habrá parámetros entrenables, pero nos servirá para ilustrar el funcionamiento de BP. Luego veremos como obtenemos el gradiente del error con respecto a los pesos de cada capa usando el algoritmo de BP en un MLP con parámetros entrenables, concretando con ejemplos para las capas más comúnmente utilizadas. Finalmente vamos a generalizar este concepto hacia modelos más abstractos usando grafos dirigidos acíclicos. 
+Vamos a explorar el algoritmo de BP de manera progresiva: en primer lugar veremos la diferenciación hacia delante y hacia atrás, viendo por qué es más eficiente usar la segunda y acotando este algoritmo general para llegar al algoritmo de BP, para lo que veremos como calcular la matriz Jacobiana de la salida de un perceptrón multicapa (MLP, por sus siglas en inglés) respecto a la entrada, en una situación que no será de entrenamiento, ya que no habrá parámetros entrenables, pero nos servirá para ilustrar el funcionamiento de BP. Luego veremos cómo obtenemos el gradiente del error con respecto a los pesos de cada capa usando el algoritmo de BP en un MLP con parámetros entrenables, concretando con ejemplos para las capas más comúnmente utilizadas. Finalmente vamos a generalizar este concepto hacia modelos más abstractos usando grafos dirigidos acíclicos. 
 
 
 Los MLP son un tipo de red neuronal, dividos en capas compuestas de nodos llamados neuronas, donde cada nodo de cada capa está conectado con todos los nodos de la capa siguiente. Son usados principalmente con conjuntos de entrenamiento tabulares, es decir aquellos que sus datos tienen formato de tabla. Usaremos esta arquitectura para realizar el desarrollo teórico ya que es más sencilla conceptualmente y facilita la notación. 
@@ -40,7 +40,7 @@ $$f_i(x_i)=x_{i+1}$$
 
 Donde la entrada del modelo viene representada en la primera capa, $x=x_1$. Además se tiene que $m_1=n, m_{k+1}=m, x_{k+1}=o$. Para obtener la predicción del modelo, $o=f(x)=f_k(x_k)$, necesitamos calcular el resultado de todas las capas intermedias $x_{i+1}=f_i(x_i)$. 
 
-Podemos ver que la matriz jacobiana de la salida con respecto a la entrada $J_f(x) =  \mathbb{R}^{m\times n}$ puede ser calculada usando la regla de la cadena . Esto nos va a servir para ilustrar las diferencias entre la diferenciación hacia atrás y hacia delante
+Podemos ver que la matriz jacobiana de la salida con respecto a la entrada $J_f(x) \in  \mathbb{R}^{m\times n}$ puede ser calculada usando la regla de la cadena . Esto nos va a servir para ilustrar las diferencias entre la diferenciación hacia atrás y hacia delante
 
 
 \begin{align*}
@@ -88,16 +88,6 @@ $$J_f(x)v=J_{f_k}(x_k) \cdots J_{f_2}(x_2) J_{f_1}(x_1) v.$$
 
 Donde $J_{f_k}(x_k)$ tiene tamaño $m \times m_{k-1}$, $J_{f_i}(x_i)$ tiene tamaño $m_i \times m_{i-1}$ para $i \in {2,\ldots,k-1}$ y $J_{f_1}(x_1)$ tiene tamaño $m_1 \times n$ mientras que el vector columna $v$ será $n \times 1$. Esta multiplicación se puede calcular usando el agoritmo de diferenciación hacia delante definido en \ref{alg:fowdiff}.
 
-
-Donde los elementos $v_j, j \in \left \{1,\ldots,n \right \}$ de la matriz fila $v$ se corresponden con las derivadas parciales de la función del MLP respecto a la entrada de la capa $j$, es decir la columna $j$-ésima de la matriz jacobiana, $v_j=\frac{\partial f}{\partial x_j}$. 
-
-Si $n\geq m$ es más eficiente calcular $J_f(x)$ para cada fila $i=1,\ldots,m$ usando PVJ de izquierda a derecha. La multiplicación izquierda con un vector fila $u^T$ es 
-
-$$u^TJ_f(x)=u^TJ_{f_k}(x_k) \cdots J_{f_2}(x_2) J_{f_1}(x_1).$$
-
-Donde $u^T$ tiene tamaño $1 \times m$,  $J_{f_k}(x_k)$ tiene tamaño $m \times m_{k-1}$, $J_{f_i}(x_i)$ tiene tamaño $m_i \times m_{i-1}$ para $i \in {2,\ldots,k-1}$ y $J_{f_1}(x_1)$ tiene tamaño $m_1 \times n$. Esto puede calcularse usando la diferenciación hacia atrás (ver algoritmo \ref{alg:backdif}).
-
- 
 \begin{algorithm}[H]
 \caption{Diferenciación hacia delante}
 \label{alg:fowdiff}
@@ -118,6 +108,16 @@ Donde $u^T$ tiene tamaño $1 \times m$,  $J_{f_k}(x_k)$ tiene tamaño $m \times 
         
     \end{algorithmic}
 \end{algorithm}
+
+Donde los elementos $v_j, j \in \left \{1,\ldots,n \right \}$ de la matriz fila $v$ se corresponden con las derivadas parciales de la función del MLP respecto a la entrada de la capa $j$, es decir la columna $j$-ésima de la matriz jacobiana, $v_j=\frac{\partial f}{\partial x_j}$. 
+
+Si $n\geq m$ es más eficiente calcular $J_f(x)$ para cada fila $i=1,\ldots,m$ usando PVJ de izquierda a derecha. La multiplicación izquierda con un vector fila $u^T$ es 
+
+$$u^TJ_f(x)=u^TJ_{f_k}(x_k) \cdots J_{f_2}(x_2) J_{f_1}(x_1).$$
+
+Donde $u^T$ tiene tamaño $1 \times m$,  $J_{f_k}(x_k)$ tiene tamaño $m \times m_{k-1}$, $J_{f_i}(x_i)$ tiene tamaño $m_i \times m_{i-1}$ para $i \in {2,\ldots,k-1}$ y $J_{f_1}(x_1)$ tiene tamaño $m_1 \times n$. Esto puede calcularse usando la diferenciación hacia atrás (ver algoritmo \ref{alg:backdif}).
+
+ 
 
 
 \begin{algorithm}
@@ -154,15 +154,15 @@ Acabamos de comprobar que para calcular una matriz jacobiana resulta más eficie
 \subsection{BP para MLP}
 
 
-En la sección anterior hemos visto un modelo que no tenía ningún parámetro entrenable. Ahora usaremos uno que sí los tiene y veremos cómo calcular el gradiente de la función de coste con respecto a ellos. Los parámetros son valores reales y tienen la forma $W= W_1 \times W_2 \times \cdots \times W_k \subset \Omega$, con $W_i \in \mathbb{R}^{n_i \times n_{i+1}}$ donde $n_i$ es el número de neuronas de la $i$-ésima capa. El modelo que tendríamos añadiendo los pesos es $f: \mathbb{R}^n \times \Omega \rightarrow \mathbb{R}^m$, $o=f(x,W)$ con $x \in \mathbb{R}^n$  y $o \in \mathbb{R}^m$. Donde las funciones de cada capa son de la forma $f_i(x_i, W_i)= \sigma_i(W_ix_i)=x_{i+1}$ donde $\sigma_i$ es una función de activación generalmente no lineal. Dependiendo del tipo de problema, la función $f_k$ puede ser distinta: en un problema de regresión usamos la identidad, en clasificación usamos la función Softmax que convierte el vector de la predicción del modelo en un vector cuyos elementos suman 1 y donde el elemento de la posición $i$-ésima representa la probabilidad de que la entrada pertenezca a esa clase.
+En la sección anterior hemos visto un modelo que no tenía ningún parámetro entrenable. Ahora usaremos uno que sí los tiene y veremos cómo calcular el gradiente de la función de coste con respecto a ellos. Los parámetros son valores reales y tienen la forma $W= W_1 \times W_2 \times \cdots \times W_k \subset \Omega$, con $W_i \in \mathbb{R}^{n_i \times n_{i+1}}$ donde $n_i$ es el número de neuronas de la $i$-ésima capa. El modelo que tendríamos añadiendo los pesos es $f: \mathbb{R}^n \times \Omega \rightarrow \mathbb{R}^m$, $o=f(x,W)$ con $x \in \mathbb{R}^n$  y $o \in \mathbb{R}^m$. Donde las funciones de cada capa son de la forma $f_i(x_i, W_i)= \sigma_i(W_ix_i)=x_{i+1}$ donde $\sigma_i$ es una función de activación generalmente no lineal. Dependiendo del tipo de problema, la función $f_k$ puede ser distinta: en un problema de regresión usamos la identidad, en clasificación usamos la función \textit{Softmax} que convierte el vector de la predicción del modelo en uno cuyos elementos suman 1 y donde el elemento de la posición $i$-ésima representa la probabilidad de que la entrada pertenezca a la clase $i$.
 
 
-Ahora vamos a considerar la función de coste del modelo como una capa más, a parte de las funciones de las capas que nos permiten obtener la predicción. Siguiendo con la notación anterior, incluyendo la función de error $\mathcal{L}: \mathbb{R}^n \times \Omega \times \mathbb{R}^m \rightarrow \mathbb{R}$, $E=\mathcal{L}((x,W,y)= C(f(x,W),y)$, con $y \in \mathbb{R}^m$ siendo la etiqueta correcta para la entrada $x$ y $C: \mathbb{R}^m \times \mathbb{R}^m \rightarrow \mathbb{R}$ la función de coste del modelo. Con esto tenemos que $\mathcal{L} = C \circ f$. 
+Ahora vamos a considerar la función de coste del modelo como una capa más, a parte de las funciones de las capas ocultas que nos permiten obtener la predicción. Siguiendo con la notación anterior, incluyendo la función de error $\mathcal{L}: \mathbb{R}^n \times \Omega \times \mathbb{R}^m \rightarrow \mathbb{R}$, $E=\mathcal{L}((x,W,y)= C(f(x,W),y)$, con $y \in \mathbb{R}^m$ siendo la etiqueta correcta para la entrada $x$ y $C: \mathbb{R}^m \times \mathbb{R}^m \rightarrow \mathbb{R}$ la función de coste del modelo. Con esto tenemos que $\mathcal{L} = C \circ f$. 
 
 %TODO: revisar porque no he metido los bias a la hora de operar con los pesos del modelo.
 
 \begin{ejemplo}
-    Suponemos un MLP con dos capas ocultas, la salida escalar (problema de regresión) y una función de pérdida $C(f(x,W),y)=\frac{1}{2} \| f(x,W) - y\|^2$. Entonces tenemos $\mathcal{L}:\mathbb{R}^n \rightarrow \mathbb{R}$ y cada capa tiene equación
+    Suponemos un MLP con dos capas ocultas, la salida escalar (problema de regresión) y una función de pérdida $C(f(x,W),y)=\frac{1}{2} \| f(x,W) - y\|^2$. Entonces tenemos $\mathcal{L}:\mathbb{R}^n \rightarrow \mathbb{R}$ y cada capa tiene ecuación
 
     
     
@@ -230,7 +230,7 @@ Donde $\sigma'(a) = \frac{d\sigma}{da}(a)$. En otras palabras, el Jacobiano con 
 
 $$J=\frac{\partial \sigma}{\partial x}= diag(\sigma'(x)).$$
 
-Si tomamos como ejemplo la función ReLU, para un vector arbitratio $u$, podemos calcular su PVJ $u^TJ$ a través de la multiplicación  de elementos de la diagonal de $J$ con el vector $u$. 
+Si tomamos como ejemplo la función \textit{ReLU}, para un vector arbitratio $u$, podemos calcular su PVJ $u^TJ$ a través de la multiplicación  de elementos de la diagonal de $J$ con el vector $u$. 
 
 
 $$\sigma(a) = ReLU(a)= max(a,0),$$
@@ -242,7 +242,7 @@ $$\sigma'(a)=
 \end{matrix}\right.
 $$
 
-Como hemos visto en la sección \ref{sec:subgrad} la función ReLU no es diferenciable en el punto 0, pero sí que admite subderivada en todo su dominio, y en el punto $a=0$ es cualquier valor entre $[0,1]$, y usualmente en la práctica se toma el valor 0. Por tanto
+Como hemos visto en la sección \ref{sec:subgrad} la función \textit{ReLU} no es diferenciable en el punto 0, pero sí que admite subderivada en todo su dominio, y en el punto $a=0$ es cualquier valor entre $[0,1]$, y usualmente en la práctica se toma el valor 0. Por tanto
 
 $$ReLU'(a)= \left\{\begin{matrix}
 
@@ -255,14 +255,14 @@ $$J=\frac{\partial \sigma}{\partial x}= diag(ReLU'(x)).$$
 
 \subsubsection{Capa Cross Entropy}
 
-Consideramos ahora la capa cuya función es la función de coste, en concreto con una medición del error usando Cross-Entropy Loss donde tenemos $C$ clases, que toma las predicciones $x$ y las etiquetas $y$ como entrada y devuelve un escalar. Recordamos que en esta capa la matriz Jacobiana es un vector fila, identificado con el gradiente, ya que la salida es un escalar.
+Consideramos ahora la capa cuya función es la función de coste, en concreto con una medición del error usando \textit{Cross-Entropy Loss} donde tenemos $C$ clases, que toma las predicciones $x$ y las etiquetas $y$ como entrada y devuelve un escalar. Recordamos que en esta capa la matriz Jacobiana es un vector fila, identificado con el gradiente, ya que la salida es un escalar.
 
 \begin{align*}
 	z&=f(x)=CrossEntropy(x,y) \\
 	&= - \sum_c y_c log(softmax(x)_c) = - \sum_c y_c log(p_c)\\
 \end{align*}
 
-donde $p_c=softmax(x)_c= \frac{e^{x_c}}{\sum_{c'=1}^C e^{x_{c'}}}$ son las probabilidades de las clases predichas, e $y$ es la etiqueta correcta con codificación one-hot encoded vector, es decir un vector de C elementos que representa la clase real a la que pertenece; si ese elemento pertenece a la clase $k$, todos las posiciones del vector $y$ serán 0 a excepción de la posición $k$, que será 1. El Jacobiano con respecto a la entrada es
+donde $p_c=softmax(x)_c= \frac{e^{x_c}}{\sum_{c'=1}^C e^{x_{c'}}}$ son las probabilidades de las clases predichas, e $y$ es la etiqueta correcta con codificación \textit{one-hot encoded vector}, es decir un vector de C elementos que representa la clase real a la que pertenece; si ese elemento pertenece a la clase $k$, todos las posiciones del vector $y$ serán 0 a excepción de la posición $k$, que será 1. El Jacobiano con respecto a la entrada es
 
 $$J= \frac{\partial z}{\partial x}= (p-y)^T \in \mathbb{R}^{1\times C}.$$
 
@@ -331,7 +331,7 @@ Vamos a ver un ejemplo usando la función $f(x_1,x_2)=x_2e^{x_1}\sqrt{x_1+x_2e^{
 \begin{figure}
     \centering
     \includegraphics[width=1.0\linewidth]{Plantilla_TFG_latex/imagenes/Mat/Definicion/graf.png}
-    \caption{Representación del grafodirigido acíclico (imagen obtenida de \cite{murphy2022probabilistic})}
+    \caption{Representación del grafo dirigido acíclico (imagen obtenida de \cite{murphy2022probabilistic})}
     \label{fig:def.grafo}
 \end{figure}
 
@@ -348,7 +348,7 @@ x_7=&f_7(x_4,x_6)=x_4x_6 .
 
 Ahora no tenemos una estructura de cadena y puede que necesitemos sumar los gradientes a través de diferentes caminos, como es el caso del nodo $x_4$ que influye en $x_5$ y $x_7$. Para asegurar un funcionamiento correcto basta con nombrar los nodos en orden topológico (los padres antes que los hijos) y luego hacer la computación en orden topológico inverso. En general usamos
 
-$$ \frac{\partial o }{ \partial x_j } = \sum_{k \in Hijos(j)} \frac{\partial o}{ \partial x_k} \frac{\partial x_k}{\partial x_j} $$
+$$ \frac{\partial o }{ \partial x_j } = \sum_{k \in Hijos(j)} \frac{\partial o}{ \partial x_k} \frac{\partial x_k}{\partial x_j}.$$
 
 En nuestro ejemplo para el nodo $x_4$:
 
@@ -365,7 +365,7 @@ En la práctica el grafo computacional se puede calcular previamente, usando una
 \subsubsection{Desvanecimiento y explosión del gradiente}\label{sec:desvyexpl}
 
 
-Siguiendo el hilo de la sección \ref{sec:convergencia}, vamos a ver dos problemas que surgen a la hora de entrenar modelos usando gradiente descendente y que lastran la convergencia, pero con la diferencia de que estos están ligados únicamente al algoritmo de BP, es decir, a cómo se calcula el gradiente y no a cómo se usa en la búsqueda de soluciones.
+Siguiendo el hilo de la sección \ref{sec:convergencia}, vamos a ver dos problemas que surgen a la hora de entrenar modelos usando gradiente descendente y que pueden impedir la convergencia, pero con la diferencia de que estos están ligados únicamente al algoritmo de BP, es decir, a cómo se calcula el gradiente y no a cómo se usa en la búsqueda de soluciones.
 
 Cuando entrenamos modelos muy profundos (con muchas capas ocultas), los gradientes tienen tendencia bien a volverse muy pequeños (desvanecimiento del gradiente) o bien a volverse muy grandes (explosión del gradiente) ya que la señal de error es pasada a través de una serie de capas que o lo amplifican o lo mitigan. Esto provoca que o bien se deje de actualizar el peso del cual se desvanece su gradiente o que el gradiente diverja en el otro caso \cite{VanishExplode}. Para ver el problema con detalle, consideramos el gradiente de la función de pérdida con respecto a un nodo en la capa $l$:
 
@@ -379,29 +379,29 @@ El problema de la explosión del gradiente se puede resolver de manera rápida y
 
 $$g' = min(1, \frac{c}{\|g\|}g)$$
 
-De esta manera la norma de $g'$ nunca puede ser mayor que c, pero el vector apunta siempre en la misma dirección que el gradiente.
+De esta manera la norma de $g'$ nunca puede ser mayor que $c$, pero el vector apunta siempre en la misma dirección que el gradiente.
 
 También existen otras soluciones que además son aplicables al problema del desvanecimiento de gradiente, que no se soluciona de manera tan sencilla:
 
 \begin{itemize}
     \item Adaptar las funciones de activación para prevenir que el gradiente se vuelva muy grande o muy pequeño.
 
-    \item Modificar la arquitectura para estandarizar las funciones de activación en cada capa, para que la distribución de las activaciones sobre el conjunto de datos permanezca constante durante el entrenamiento.
+    \item Modificar la arquitectura del modelo para estandarizar las funciones de activación en cada capa, para que la distribución de las activaciones sobre el conjunto de datos permanezca constante durante el entrenamiento.
 
     \item Elegir cuidadosamente los valores iniciales de los pesos del modelo.
    
 \end{itemize}
 
-En la siguiente sección veremos detenidamente el último punto, ya que es la práctica más estandarizada. 
+En la siguiente sección veremos detenidamente el último punto, ya que es la práctica más estandarizada. Existen además familias concretas de modelo que mitigan específicamente estos efectos con su arquitectura como son las ResNets, de las cuales hablaremos en la siguiente parte.
 
 
-\subsubsection{Inicialización de los pesos}
+\subsubsection{Inicialización de los pesos}\label{sec:inipesos}
 
 La manera en la que inicializamos los pesos es una decisión importante a la hora de determinar cómo converge (y si lo hace) un modelo. La convergencia o no, su velocidad y la solución a la que se converge en el entrenamiento de un modelo mediante el algoritmo de gradiente descendente es muy sensible al punto inicial desde el que comenzamos la búsqueda de una solución. Hay que remarcar que esto sucede cuando la función de error no es convexa, pero como es el caso mayoritario, lo asumimos de manera general.  
 
 Basándonos en \cite{stabilityProblem2}, donde se observa que muestrear parámetros de una distribución normal con varianza fija puede resultar en el problema de la explosión de gradiente, vamos a ver por qué ocurre esto y, a través de añadir restricciones para evitarlo vamos a llegar a las heurísticas de inicialización de pesos más comunes.
 
-Consideramos el pase hacia delante en una neurona lineal sin capa de activación dada por $o_i = \sum_{j=1}^{n_{in}} w_{ij}x_j$ . Suponemos $w_{ij} \sim \mathcal{N}(0, \sigma^2)$, y $\mathbb{E}[x_j]=0$ y $\mathbb{V}[x_j]=\gamma^2$, donde asumimos $x_j$ independiente de $w_{ij}$, y $n_{in}$ es el número de conexiones de entrada que recibe la neurona. La media y la varianza de la salida vienen dadas por
+Consideramos el pase hacia delante en una neurona lineal sin capa de activación dada por $o_i = \sum_{j=1}^{n_{in}} w_{ij}x_j$ . Suponemos $w_{ij} \sim \mathcal{N}(0, \sigma^2)$, con $\mathbb{E}[x_j]=0$ y $\mathbb{V}[x_j]=\gamma^2$, donde asumimos $x_j$ independiente de $w_{ij}$, y $n_{in}$ es el número de conexiones de entrada que recibe la neurona. La media y la varianza de la salida vienen dadas por
 
 $$\mathbb{E}[o_i]= \sum_{j=1}^{n_{in}} \mathbb{E}[w_{ij} x_j] = \sum_{j=1}^{n_{in}} \mathbb{E}[w_{ij}] \mathbb{E}[x_j]=0$$
 
@@ -417,4 +417,4 @@ Esta se conoce como inicialización de Xavier o inicialización de Glorot \cite{
 Cabe resaltar que no ha sido necesario usar una distribución Gaussiana. De hecho, las derivaciones de arriba funcionan en términos de la media y la varianza, y no hemos hecho suposiciones sobre si era Gaussiana. 
 
 
-Aunque hemos supuesto que se trataba de una neurona lineal sin función de activación que añada una componente no lineal, se conoce de manera empírica que estas técnicas son extensibles a unidades no lineales. La inicialización que usemos dependerá mayoritariamente de la función de activación que usemos. Se conoce que para funciones de activación ReLU funciona mejor la inicialización de He, para las funciones SELU se recomienda la inicialización de LeCun y para las funciones lineales, logística, tangente hiperbólica y softmax se recomienda el uso de la inicialización de Glorot \cite{murphy2022probabilistic}.
+Aunque hemos supuesto que se trataba de una neurona lineal sin función de activación que añada una componente no lineal, se conoce de manera empírica que estas técnicas son extensibles a unidades no lineales. La inicialización que elijamos dependerá mayoritariamente de la función de activación que usemos. Se conoce que para funciones de activación \textit{ReLU} funciona mejor la inicialización de He, para las funciones \textit{SELU} se recomienda la inicialización de LeCun y para las funciones lineales, logística, tangente hiperbólica y \textit{Softmax} se recomienda el uso de la inicialización de Glorot \cite{murphy2022probabilistic}.

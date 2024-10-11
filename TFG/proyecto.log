@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.9)  25 SEP 2024 17:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.9.9)  10 OCT 2024 20:30
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -478,37 +478,74 @@ Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
 \multirow@dima=\skip80
 \bigstrutjot=\dimen156
 )
+(c:/texlive/2024/texmf-dist/tex/latex/subfig/subfig.sty
+Package: subfig 2005/06/28 ver: 1.3 subfig package
+
+(c:/texlive/2024/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2023/08/05 v3.6o Customizing captions (AR)
+
+(c:/texlive/2024/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
+\caption@tempdima=\dimen157
+\captionmargin=\dimen158
+\caption@leftmargin=\dimen159
+\caption@rightmargin=\dimen160
+\caption@width=\dimen161
+\caption@indent=\dimen162
+\caption@parindent=\dimen163
+\caption@hangindent=\dimen164
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count429
+\c@continuedfloat=\count430
+Package caption Info: float package is loaded.
+Package caption Info: listings package is loaded.
+)
+\c@KVtest=\count431
+\sf@farskip=\skip81
+\sf@captopadj=\dimen165
+\sf@capskip=\skip82
+\sf@nearskip=\skip83
+\c@subfigure=\count432
+\c@subfigure@save=\count433
+\c@lofdepth=\count434
+\c@subtable=\count435
+\c@subtable@save=\count436
+\c@lotdepth=\count437
+\sf@top=\skip84
+\sf@bottom=\skip85
+)
+(c:/texlive/2024/texmf-dist/tex/latex/tools/verbatim.sty
+Package: verbatim 2024-01-22 v1.5x LaTeX2e package for verbatim enhancements
+\every@verbatim=\toks30
+\verbatim@line=\toks31
+\verbatim@in@stream=\read4
+)
 (c:/texlive/2024/texmf-dist/tex/latex/tools/dcolumn.sty
 Package: dcolumn 2023/07/08 v1.06 decimal alignment package (DPC)
 
 (c:/texlive/2024/texmf-dist/tex/latex/tools/array.sty
 Package: array 2024/06/14 v2.6d Tabular extension package (FMi)
-\col@sep=\dimen157
+\col@sep=\dimen166
 \ar@mcellbox=\box59
-\extrarowheight=\dimen158
-\NC@list=\toks30
-\extratabsurround=\skip81
-\backup@length=\skip82
+\extrarowheight=\dimen167
+\NC@list=\toks32
+\extratabsurround=\skip86
+\backup@length=\skip87
 \ar@cellbox=\box60
 ))
-(c:/texlive/2024/texmf-dist/tex/latex/tools/verbatim.sty
-Package: verbatim 2024-01-22 v1.5x LaTeX2e package for verbatim enhancements
-\every@verbatim=\toks31
-\verbatim@line=\toks32
-\verbatim@in@stream=\read4
-)
 (c:/texlive/2024/texmf-dist/tex/latex/fancyhdr/fancyhdr.sty
 Package: fancyhdr 2024/07/23 v4.3.1 Extensive control of page headers and foote
 rs
-\f@nch@headwidth=\skip83
-\f@nch@O@elh=\skip84
-\f@nch@O@erh=\skip85
-\f@nch@O@olh=\skip86
-\f@nch@O@orh=\skip87
-\f@nch@O@elf=\skip88
-\f@nch@O@erf=\skip89
-\f@nch@O@olf=\skip90
-\f@nch@O@orf=\skip91
+\f@nch@headwidth=\skip88
+\f@nch@O@elh=\skip89
+\f@nch@O@erh=\skip90
+\f@nch@O@olh=\skip91
+\f@nch@O@orh=\skip92
+\f@nch@O@elf=\skip93
+\f@nch@O@erf=\skip94
+\f@nch@O@olf=\skip95
+\f@nch@O@orf=\skip96
 )
 (c:/texlive/2024/texmf-dist/tex/latex/graphics/graphicx.sty
 Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
@@ -527,8 +564,8 @@ Package graphics Info: Driver file: pdftex.def on input line 106.
 (c:/texlive/2024/texmf-dist/tex/latex/graphics-def/pdftex.def
 File: pdftex.def 2024/04/13 v1.2c Graphics/color driver for pdftex
 ))
-\Gin@req@height=\dimen159
-\Gin@req@width=\dimen160
+\Gin@req@height=\dimen168
+\Gin@req@width=\dimen169
 )
 (c:/texlive/2024/texmf-dist/tex/latex/tools/afterpage.sty
 Package: afterpage 2023/07/04 v1.08 After-Page Package (DPC)
@@ -538,21 +575,21 @@ Package: afterpage 2023/07/04 v1.08 After-Page Package (DPC)
 )
 (c:/texlive/2024/texmf-dist/tex/latex/tools/longtable.sty
 Package: longtable 2024-04-26 v4.20 Multi-page Table package (DPC)
-\LTleft=\skip92
-\LTright=\skip93
-\LTpre=\skip94
-\LTpost=\skip95
-\LTchunksize=\count429
-\LTcapwidth=\dimen161
+\LTleft=\skip97
+\LTright=\skip98
+\LTpre=\skip99
+\LTpost=\skip100
+\LTchunksize=\count438
+\LTcapwidth=\dimen170
 \LT@head=\box63
 \LT@firsthead=\box64
 \LT@foot=\box65
 \LT@lastfoot=\box66
 \LT@gbox=\box67
-\LT@cols=\count430
-\LT@rows=\count431
-\c@LT@tables=\count432
-\c@LT@chunks=\count433
+\LT@cols=\count439
+\LT@rows=\count440
+\c@LT@tables=\count441
+\c@LT@chunks=\count442
 \LT@p@ftn=\toks34
 )
 (c:/texlive/2024/texmf-dist/tex/latex/hyperref/hyperref.sty
@@ -576,15 +613,15 @@ Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 (c:/texlive/2024/texmf-dist/tex/generic/gettitlestring/gettitlestring.sty
 Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-\c@section@level=\count434
+\c@section@level=\count443
 )
 (c:/texlive/2024/texmf-dist/tex/generic/stringenc/stringenc.sty
 Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 )
 )
-\@linkdim=\dimen162
-\Hy@linkcounter=\count435
-\Hy@pagecounter=\count436
+\@linkdim=\dimen171
+\Hy@linkcounter=\count444
+\Hy@pagecounter=\count445
 
 (c:/texlive/2024/texmf-dist/tex/latex/hyperref/pd1enc.def
 File: pd1enc.def 2024-07-10 v7.01j Hyperref: PDFDocEncoding definition (HO)
@@ -594,7 +631,7 @@ Now handling font encoding PD1 ...
 (c:/texlive/2024/texmf-dist/tex/generic/intcalc/intcalc.sty
 Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
 )
-\Hy@SavedSpaceFactor=\count437
+\Hy@SavedSpaceFactor=\count446
 
 (c:/texlive/2024/texmf-dist/tex/latex/hyperref/puenc.def
 File: puenc.def 2024-07-10 v7.01j Hyperref: PDF Unicode definition (HO)
@@ -613,9 +650,9 @@ Package hyperref Info: Plain pages OFF on input line 4172.
 Package hyperref Info: Backreferencing OFF on input line 4177.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4424.
-\c@Hy@tempcnt=\count438
+\c@Hy@tempcnt=\count447
 LaTeX Info: Redefining \url on input line 4763.
-\XeTeXLinkMargin=\dimen163
+\XeTeXLinkMargin=\dimen172
 (c:/texlive/2024/texmf-dist/tex/generic/bitset/bitset.sty
 Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 
@@ -623,9 +660,9 @@ Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
 Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
 )
 ))
-\Fld@menulength=\count439
-\Field@Width=\dimen164
-\Fld@charsize=\dimen165
+\Fld@menulength=\count448
+\Field@Width=\dimen173
+\Fld@charsize=\dimen174
 Package hyperref Info: Hyper figures OFF on input line 6042.
 Package hyperref Info: Link nesting OFF on input line 6047.
 Package hyperref Info: Hyper index ON on input line 6050.
@@ -638,9 +675,9 @@ Package hyperref Info: PDF/A mode OFF on input line 6072.
 Package: atbegshi-ltx 2021/01/10 v1.0c Emulation of the original atbegshi
 package with kernel methods
 )
-\Hy@abspage=\count440
-\c@Item=\count441
-\c@Hfootnote=\count442
+\Hy@abspage=\count449
+\c@Item=\count450
+\c@Hfootnote=\count451
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
 
@@ -652,8 +689,8 @@ Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atveryend pac
 kage
 with kernel methods
 )
-\Fld@listcount=\count443
-\c@bookmark@seq@number=\count444
+\Fld@listcount=\count452
+\c@bookmark@seq@number=\count453
 
 (c:/texlive/2024/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
 Package: rerunfilecheck 2022-07-10 v1.10 Rerun checks for auxiliary files (HO)
@@ -664,22 +701,22 @@ Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
 85.
 )
-\Hy@SectionHShift=\skip96
+\Hy@SectionHShift=\skip101
 )
 (c:/texlive/2024/texmf-dist/tex/latex/doublestroke/dsfont.sty
 Package: dsfont 1995/08/01 v0.1 Double stroke roman fonts
 )
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 74.
+(hyperref)                removing `subscript' on input line 76.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 74.
+(hyperref)                removing `subscript' on input line 76.
 
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                removing `subscript' on input line 74.
+(hyperref)                removing `subscript' on input line 76.
 
 (c:/texlive/2024/texmf-dist/tex/latex/colortbl/colortbl.sty
 Package: colortbl 2024/07/06 v1.0i Color table columns (DPC)
@@ -694,14 +731,14 @@ Package color Info: Driver file: pdftex.def on input line 149.
 
 (c:/texlive/2024/texmf-dist/tex/latex/graphics/mathcolor.ltx))
 \everycr=\toks35
-\minrowclearance=\skip97
-\rownum=\count445
+\minrowclearance=\skip102
+\rownum=\count454
 )
 (c:/texlive/2024/texmf-dist/tex/latex/footmisc/footmisc.sty
 Package: footmisc 2023/07/05 v6.0f a miscellany of footnote facilities
 \FN@temptoken=\toks36
-\footnotemargin=\dimen166
-\@outputbox@depth=\dimen167
+\footnotemargin=\dimen175
+\@outputbox@depth=\dimen176
 Package footmisc Info: Declaring symbol style bringhurst on input line 696.
 Package footmisc Info: Declaring symbol style chicago on input line 704.
 Package footmisc Info: Declaring symbol style wiley on input line 713.
@@ -720,88 +757,95 @@ Writing index file proyecto.idx
 Package fancyhdr Warning: \fancyhead's `E' option without twoside option is use
 less.
 (fancyhdr)                Please consider using the `twoside' option on input l
-ine 97.
+ine 99.
 
 
 Package fancyhdr Warning: \fancyhead's `E' option without twoside option is use
 less.
 (fancyhdr)                Please consider using the `twoside' option on input l
-ine 98.
+ine 100.
 
-\c@teorema=\count446
-\c@ejemplo=\count447
-\c@definicion=\count448
-\c@proposicion=\count449
+\c@teorema=\count455
+\c@ejemplo=\count456
+\c@definicion=\count457
+\c@proposicion=\count458
 (c:/texlive/2024/texmf-dist/tex/latex/pdfpages/pdfpages.sty
 Package: pdfpages 2024/08/20 v0.6b Insert pages of external PDF documents (AM)
 
 (c:/texlive/2024/texmf-dist/tex/latex/tools/calc.sty
 Package: calc 2023/07/08 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count450
-\calc@Bcount=\count451
-\calc@Adimen=\dimen168
-\calc@Bdimen=\dimen169
-\calc@Askip=\skip98
-\calc@Bskip=\skip99
+\calc@Acount=\count459
+\calc@Bcount=\count460
+\calc@Adimen=\dimen177
+\calc@Bdimen=\dimen178
+\calc@Askip=\skip103
+\calc@Bskip=\skip104
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count452
-\calc@Cskip=\skip100
+\calc@Ccount=\count461
+\calc@Cskip=\skip105
 )
 (c:/texlive/2024/texmf-dist/tex/latex/eso-pic/eso-pic.sty
 Package: eso-pic 2023/05/03 v3.0c eso-pic (RN)
-\ESO@tempdima=\dimen170
-\ESO@tempdimb=\dimen171
+\ESO@tempdima=\dimen179
+\ESO@tempdimb=\dimen180
 )
-\AM@pagewidth=\dimen172
-\AM@pageheight=\dimen173
-\AM@fboxrule=\dimen174
+\AM@pagewidth=\dimen181
+\AM@pageheight=\dimen182
+\AM@fboxrule=\dimen183
 
 (c:/texlive/2024/texmf-dist/tex/latex/pdfpages/pppdftex.def
 File: pppdftex.def 2024/08/20 v0.6b Pdfpages driver for pdfTeX (AM)
 )
-\pdfpages@includegraphics@status=\count453
+\pdfpages@includegraphics@status=\count462
 \AM@pagebox=\box68
 \AM@global@opts=\toks37
-\AM@pagecnt=\count454
+\AM@pagecnt=\count463
 \AM@toc@title=\toks38
 \AM@lof@heading=\toks39
-\c@AM@survey=\count455
+\c@AM@survey=\count464
 \AM@templatesizebox=\box69
 )
 
 Package biblatex Warning: 'babel/polyglossia' detected but 'csquotes' missing.
 (biblatex)                Loading 'csquotes' recommended.
 
-\@quotelevel=\count456
-\@quotereset=\count457
+\@quotelevel=\count465
+\@quotereset=\count466
 (./proyecto.aux
 LaTeX Info: Redefining \. on input line 12.
 LaTeX Info: Redefining \% on input line 12.
+
+
+LaTeX Warning: Label `fig:resblock1x1' multiply defined.
+
+
+LaTeX Warning: Label `table:exp' multiply defined.
+
 )
 \openout1 = `proyecto.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 170.
-LaTeX Font Info:    ... okay on input line 170.
-\c@lstlisting=\count458
-LaTeX Info: Redefining \. on input line 170.
-LaTeX Info: Redefining \% on input line 170.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 172.
+LaTeX Font Info:    ... okay on input line 172.
+\c@lstlisting=\count467
+LaTeX Info: Redefining \. on input line 172.
+LaTeX Info: Redefining \% on input line 172.
 Package biblatex Info: Trying to load language 'spanish'...
 Package biblatex Info: ... file 'spanish.lbx' found.
  (c:/texlive/2024/texmf-dist/tex/latex/biblatex/lbx/spanish.lbx
@@ -814,22 +858,46 @@ Package biblatex Info: Automatic encoding selection.
 
 Package biblatex Info: Trying to load bibliographic data...
 Package biblatex Info: ... file 'proyecto.bbl' found.
- (./proyecto.bbl)
-Package biblatex Info: Reference section=0 on input line 170.
-Package biblatex Info: Reference segment=0 on input line 170.
+
+(./proyecto.bbl
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                numerical_optimization
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+
+Package biblatex Warning: The following entry could not be found
+(biblatex)                in the database:
+(biblatex)                y
+(biblatex)                Please verify the spelling and rerun
+(biblatex)                LaTeX afterwards.
+
+)
+Package biblatex Info: Reference section=0 on input line 172.
+Package biblatex Info: Reference segment=0 on input line 172.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: subfig package v1.3 is loaded.
+Package caption Info: hyperref package is loaded.
+Package caption Info: longtable package is loaded.
+ (c:/texlive/2024/texmf-dist/tex/latex/caption/ltcaption.sty
+Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
+)
+Package caption Info: End \AtBeginDocument code.
 
 (c:/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count459
-\scratchdimen=\dimen175
+\scratchcounter=\count468
+\scratchdimen=\dimen184
 \scratchbox=\box70
-\nofMPsegments=\count460
-\nofMParguments=\count461
+\nofMPsegments=\count469
+\nofMParguments=\count470
 \everyMPshowfont=\toks40
-\MPscratchCnt=\count462
-\MPscratchDim=\dimen176
-\MPnumerator=\count463
-\makeMPintoPDFobject=\count464
+\MPscratchCnt=\count471
+\MPscratchDim=\dimen185
+\MPnumerator=\count472
+\makeMPintoPDFobject=\count473
 \everyMPtoPDFconversion=\toks41
 ) (c:/texlive/2024/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
 Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
@@ -840,7 +908,7 @@ Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
 File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
 e
 ))
-Package hyperref Info: Link coloring OFF on input line 170.
+Package hyperref Info: Link coloring OFF on input line 172.
 
 (./proyecto.out) (./proyecto.out)
 \@outlinefile=\write5
@@ -860,8 +928,8 @@ Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
 ))
 (./Plantilla_TFG_latex/portada/portada.tex
-\centeroffset=\skip101
-<Plantilla_TFG_latex/imagenes/logo_ugr.jpg, id=55, 777.90625pt x 231.86626pt>
+\centeroffset=\skip106
+<Plantilla_TFG_latex/imagenes/logo_ugr.jpg, id=284, 777.90625pt x 231.86626pt>
 File: Plantilla_TFG_latex/imagenes/logo_ugr.jpg Graphic file (type jpg)
 <use Plantilla_TFG_latex/imagenes/logo_ugr.jpg>
 Package pdftex.def Info: Plantilla_TFG_latex/imagenes/logo_ugr.jpg  used on inp
@@ -879,13 +947,13 @@ LaTeX Font Info:    Trying to load font information for U+msb on input line 23.
 (c:/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
-<Plantilla_TFG_latex/imagenes/etsiit_logo.png, id=56, 110.814pt x 40.4712pt>
+<Plantilla_TFG_latex/imagenes/etsiit_logo.png, id=285, 110.814pt x 40.4712pt>
 File: Plantilla_TFG_latex/imagenes/etsiit_logo.png Graphic file (type png)
 <use Plantilla_TFG_latex/imagenes/etsiit_logo.png>
 Package pdftex.def Info: Plantilla_TFG_latex/imagenes/etsiit_logo.png  used on 
 input line 35.
 (pdftex.def)             Requested size: 108.0011pt x 39.44412pt.
-<Plantilla_TFG_latex/imagenes/fcienciasLogo.png, id=58, 289.08pt x 245.718pt>
+<Plantilla_TFG_latex/imagenes/fcienciasLogo.png, id=287, 289.08pt x 245.718pt>
 File: Plantilla_TFG_latex/imagenes/fcienciasLogo.png Graphic file (type png)
 <use Plantilla_TFG_latex/imagenes/fcienciasLogo.png>
 Package pdftex.def Info: Plantilla_TFG_latex/imagenes/fcienciasLogo.png  used o
@@ -902,117 +970,905 @@ LaTeX Info: Redefining \sptext on input line 1.
 LaTeX Info: Redefining \. on input line 1.
 LaTeX Info: Redefining \% on input line 1.
 
-Overfull \hbox (17.90211pt too wide) in paragraph at lines 2--2
+Overfull \hbox (17.90211pt too wide) in paragraph at lines 29--29
 [][]\OT1/cmr/bx/n/12 I Par-te in-form^^Sati-ca: en-fo-que cl^^Sasi-co vs t^^Sec
 ni-cas me-ta-heur^^S^^Psti- 
  []
 
-)
-\tf@toc=\write6
-\openout6 = `proyecto.toc'.
 
 
-
-LaTeX Info: Redefining \. on input line 175.
-LaTeX Info: Redefining \% on input line 175.
+LaTeX Info: Redefining \sptext on input line 38.
+LaTeX Info: Redefining \. on input line 38.
+LaTeX Info: Redefining \% on input line 38.
 
 LaTeX Font Warning: Font shape `OT1/cmr/bx/sc' undefined
-(Font)              using `OT1/cmr/bx/n' instead on input line 175.
+(Font)              using `OT1/cmr/bx/n' instead on input line 38.
 
 
 Package spanish Warning: Replacing `OT1/cmr/bx/sc' by 
-(spanish)                faked small caps on input line 175.
+(spanish)                faked small caps on input line 38.
 
 
 pdfTeX warning (ext4): destination with the same identifier (name{page.I}) has 
 been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.175 \newpage
-               [1]
+l.38 ...berline {6.2}ConvNets}{50}{subsection.6.2}
+                                                  % [1])
+\tf@toc=\write6
+\openout6 = `proyecto.toc'.
 
-[1] (./Plantilla_TFG_latex/Informatica/Introducción.tex
+
+
+LaTeX Info: Redefining \. on input line 177.
+LaTeX Info: Redefining \% on input line 177.
+
+Package spanish Warning: Replacing `OT1/cmr/bx/sc' by 
+(spanish)                faked small caps on input line 177.
+
+[2] (./Plantilla_TFG_latex/Matemática/00Intro.tex
+
+LaTeX Info: Redefining \. on input line 11.
+LaTeX Info: Redefining \% on input line 11.
+[1]
+<Plantilla_TFG_latex//imagenes//Mat//1.intro/1.1GDMatIntroGoodFellowBook.png, i
+d=410, 573.64313pt x 392.96812pt>
+File: Plantilla_TFG_latex//imagenes//Mat//1.intro/1.1GDMatIntroGoodFellowBook.p
+ng Graphic file (type png)
+<use Plantilla_TFG_latex//imagenes//Mat//1.intro/1.1GDMatIntroGoodFellowBook.pn
+g>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Mat//1.intro/1.1GDMatIn
+troGoodFellowBook.png  used on input line 15.
+(pdftex.def)             Requested size: 270.0pt x 184.96486pt.
+
+
+LaTeX Info: Redefining \. on input line 26.
+LaTeX Info: Redefining \% on input line 26.
+[2 <./Plantilla_TFG_latex//imagenes//Mat//1.intro/1.1GDMatIntroGoodFellowBook.p
+ng>]
+
+LaTeX Info: Redefining \. on input line 36.
+LaTeX Info: Redefining \% on input line 36.
+[3]) (./Plantilla_TFG_latex/Matemática/01_01Fundamentos.tex
+
+LaTeX Info: Redefining \. on input line 8.
+LaTeX Info: Redefining \% on input line 8.
+[4]
+Overfull \hbox (9.00423pt too wide) in paragraph at lines 26--27
+\OT1/cmr/m/it/10.95 par-cial de $\OML/cmm/m/it/10.95 g$ \OT1/cmr/m/it/10.95 con
+ res-pec-to a la $\OML/cmm/m/it/10.95 k$\OT1/cmr/m/it/10.95 -^^Sesi-ma va-ria-b
+le $\OML/cmm/m/it/10.95 x[]$ \OT1/cmr/m/it/10.95 en el pun-to $\OML/cmm/m/it/10
+.95 a \OT1/cmr/m/n/10.95 = (\OML/cmm/m/it/10.95 a[]; [] ; a[]\OT1/cmr/m/n/10.95
+ ) \OMS/cmsy/m/n/10.95 2
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 49.
+LaTeX Info: Redefining \% on input line 49.
+[5]
+
+LaTeX Info: Redefining \. on input line 99.
+LaTeX Info: Redefining \% on input line 99.
+[6]
+Overfull \hbox (15.14902pt too wide) in paragraph at lines 113--114
+[]\OT1/cmr/m/it/10.95 El cam-po es-ca-lar h es lips-chitziano
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 133.
+LaTeX Info: Redefining \% on input line 133.
+[7]
+Overfull \hbox (0.63272pt too wide) in paragraph at lines 188--189
+[]\OT1/cmr/m/it/10.95 Una va-ria-ble alea-to-ria so-bre un es-
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 189.
+LaTeX Info: Redefining \% on input line 189.
+[8]
+Overfull \hbox (11.50822pt too wide) in paragraph at lines 192--193
+[]
+ []
+
+
+Overfull \hbox (1.05554pt too wide) in paragraph at lines 203--204
+[]\OT1/cmr/m/it/10.95 Una va-ria-ble alea-to-
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 236.
+LaTeX Info: Redefining \% on input line 236.
+[9]) (./Plantilla_TFG_latex/Matemática/2.GD.tex
+
+LaTeX Info: Redefining \. on input line 4.
+LaTeX Info: Redefining \% on input line 4.
+[10]
 
 LaTeX Info: Redefining \. on input line 14.
 LaTeX Info: Redefining \% on input line 14.
-[2]
+[11]
 
-LaTeX Info: Redefining \. on input line 29.
-LaTeX Info: Redefining \% on input line 29.
-[3]
+LaTeX Info: Redefining \. on input line 47.
+LaTeX Info: Redefining \% on input line 47.
+[12]
 
-LaTeX Info: Redefining \. on input line 62.
-LaTeX Info: Redefining \% on input line 62.
-[4]) (./Plantilla_TFG_latex/Informatica/Experimentacion.tex
+LaTeX Info: Redefining \. on input line 64.
+LaTeX Info: Redefining \% on input line 64.
+[13]
+<Plantilla_TFG_latex//imagenes//Mat//GD/lr.png, id=540, 818.05624pt x 345.29pt>
+
+File: Plantilla_TFG_latex//imagenes//Mat//GD/lr.png Graphic file (type png)
+<use Plantilla_TFG_latex//imagenes//Mat//GD/lr.png>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Mat//GD/lr.png  used on
+ input line 71.
+(pdftex.def)             Requested size: 180.0pt x 75.97456pt.
+
+
+LaTeX Info: Redefining \. on input line 87.
+LaTeX Info: Redefining \% on input line 87.
+[14 <./Plantilla_TFG_latex//imagenes//Mat//GD/lr.png>]
+<3ReLU&oth.jpg, id=552, 520.94624pt x 532.99126pt>
+File: 3ReLU&oth.jpg Graphic file (type jpg)
+<use 3ReLU&oth.jpg>
+Package pdftex.def Info: 3ReLU&oth.jpg  used on input line 107.
+(pdftex.def)             Requested size: 180.0pt x 184.15869pt.
+
+Overfull \hbox (151.8108pt too wide) in paragraph at lines 108--108
+[][][]\OT1/cmr/m/n/9 https://www.researchgate.net/publication/319438080[]A[]nov
+el[]softplus[]linear[]unit[]for[]deep[]convolutional[]neural[]networks| 
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 119.
+LaTeX Info: Redefining \% on input line 119.
+[15]
+
+LaTeX Info: Redefining \. on input line 147.
+LaTeX Info: Redefining \% on input line 147.
+[16 <./3ReLU&oth.jpg>]
+
+LaTeX Info: Redefining \. on input line 190.
+LaTeX Info: Redefining \% on input line 190.
+[17]
+Overfull \hbox (7.53285pt too wide) in paragraph at lines 219--220
+[]\OT1/cmr/m/it/10.95 Sea $\OML/cmm/m/it/10.95 E \OMS/cmsy/m/n/10.95 ^^Z \U/msb
+/m/n/10.95 R[]$ \OT1/cmr/m/it/10.95 un con-
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 231.
+LaTeX Info: Redefining \% on input line 231.
+[18]
+Overfull \hbox (10.80365pt too wide) detected at line 256
+[]
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 275.
+LaTeX Info: Redefining \% on input line 275.
+[19]
+Overfull \hbox (1.80421pt too wide) in paragraph at lines 313--314
+[]\OT1/cmr/m/it/10.95 La fun-ci^^Son Re-LU es
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 330.
+LaTeX Info: Redefining \% on input line 330.
+[20]
+
+LaTeX Info: Redefining \. on input line 354.
+LaTeX Info: Redefining \% on input line 354.
+[21]
+Overfull \hbox (1.07845pt too wide) in paragraph at lines 355--356
+[]\OT1/cmr/m/it/10.95 Suponemos la
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 394.
+LaTeX Info: Redefining \% on input line 394.
+[22]
+Overfull \hbox (30.01677pt too wide) detected at line 410
+[]
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 430.
+LaTeX Info: Redefining \% on input line 430.
+[23]
+Overfull \hbox (48.30797pt too wide) in paragraph at lines 447--448
+[]\OT1/cmr/m/n/10.95 Usamos co-mo re-fe-ren-cia el li-bro []$\OT1/cmtt/m/n/10.9
+5 http : / / www . sze . hu / []harmati / Sztochasztikus %
+ []
+
+
+Overfull \hbox (7.89923pt too wide) in paragraph at lines 453--454
+\OT1/cmr/m/n/10.95 con-te-ni-da en $\OML/cmm/m/it/10.95 X[]; [] ; X[]$\OT1/cmr/
+m/n/10.95 ". Es-cri-bi-re-mos $\OML/cmm/m/it/10.95 E\OT1/cmr/m/n/10.95 [\OML/cm
+m/m/it/10.95 Y\OMS/cmsy/m/n/10.95 jF[]\OT1/cmr/m/n/10.95 ]$ en lu-gar de $\OML/
+cmm/m/it/10.95 E\OT1/cmr/m/n/10.95 [\OML/cmm/m/it/10.95 Y\OMS/cmsy/m/n/10.95 j\
+OML/cmm/m/it/10.95 X[]; [] ; X[]\OT1/cmr/m/n/10.95 ]$. 
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 456.
+LaTeX Info: Redefining \% on input line 456.
+[24]
+
+LaTeX Info: Redefining \. on input line 491.
+LaTeX Info: Redefining \% on input line 491.
+[25]
+Overfull \hbox (1.86295pt too wide) detected at line 530
+[]
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 539.
+LaTeX Info: Redefining \% on input line 539.
+[26]
+Overfull \hbox (3.78082pt too wide) in paragraph at lines 585--586
+[]\OT1/cmr/m/n/10.95 La pri-me-ra par-te se si-gue di-rec-ta-men-te del teo-re-
+ma de Robbins-Siegmund.
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 589.
+LaTeX Info: Redefining \% on input line 589.
+[27]
+Overfull \hbox (13.46062pt too wide) in paragraph at lines 591--592
+[]\OT1/cmr/m/n/10.95 con pro-ba-bi-li-dad po-si-ti-va. Es-to con-tra-di-ce el t
+eo-re-ma de Robbins-Siegmund.
+ []
+
+
+LaTeX Warning: Reference `prop:convsgd' on page 28 undefined on input line 613.
+
+
+
+
+LaTeX Info: Redefining \. on input line 616.
+LaTeX Info: Redefining \% on input line 616.
+[28]) (./Plantilla_TFG_latex/Matemática/Definición.tex
+
+LaTeX Info: Redefining \. on input line 5.
+LaTeX Info: Redefining \% on input line 5.
+[29]
+
+LaTeX Info: Redefining \. on input line 20.
+LaTeX Info: Redefining \% on input line 20.
+[30]
+
+LaTeX Info: Redefining \. on input line 50.
+LaTeX Info: Redefining \% on input line 50.
+[31]
+Package hyperref Info: bookmark level for unknown algorithm defaults to 0 on in
+put line 92.
+
+
+LaTeX Info: Redefining \. on input line 111.
+LaTeX Info: Redefining \% on input line 111.
+[32]
+
+LaTeX Info: Redefining \. on input line 145.
+LaTeX Info: Redefining \% on input line 145.
+[33]
+Overfull \hbox (2.35124pt too wide) in paragraph at lines 157--158
+[]\OT1/cmr/m/n/10.95 En la sec-ci^^Son an-te-rior he-mos vis-to un mo-de-lo que
+ no ten^^S^^Pa ning^^Sun par^^Same-
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 161.
+LaTeX Info: Redefining \% on input line 161.
+[34]
+Overfull \hbox (9.94405pt too wide) in paragraph at lines 165--166
+\OT1/cmr/m/it/10.95 (pro-ble-ma de re-gre-si^^Son) y una fun-ci^^Son de p^^Serd
+i-da $\OML/cmm/m/it/10.95 C\OT1/cmr/m/n/10.95 (\OML/cmm/m/it/10.95 f\OT1/cmr/m/
+n/10.95 (\OML/cmm/m/it/10.95 x; W\OT1/cmr/m/n/10.95 )\OML/cmm/m/it/10.95 ; y\OT
+1/cmr/m/n/10.95 ) = []\OMS/cmsy/m/n/10.95 k\OML/cmm/m/it/10.95 f\OT1/cmr/m/n/10
+.95 (\OML/cmm/m/it/10.95 x; W\OT1/cmr/m/n/10.95 ) \OMS/cmsy/m/n/10.95 ^^@
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 213.
+LaTeX Info: Redefining \% on input line 213.
+[35]
+
+LaTeX Info: Redefining \. on input line 263.
+LaTeX Info: Redefining \% on input line 263.
+[36]
+
+LaTeX Info: Redefining \. on input line 292.
+LaTeX Info: Redefining \% on input line 292.
+[37]
+
+LaTeX Info: Redefining \. on input line 325.
+LaTeX Info: Redefining \% on input line 325.
+[38]
+<Plantilla_TFG_latex/imagenes/Mat/Definicion/graf.png, id=727, 595.47469pt x 21
+2.29312pt>
+File: Plantilla_TFG_latex/imagenes/Mat/Definicion/graf.png Graphic file (type p
+ng)
+<use Plantilla_TFG_latex/imagenes/Mat/Definicion/graf.png>
+Package pdftex.def Info: Plantilla_TFG_latex/imagenes/Mat/Definicion/graf.png  
+used on input line 333.
+(pdftex.def)             Requested size: 360.0pt x 128.34216pt.
+
+
+LaTeX Info: Redefining \. on input line 351.
+LaTeX Info: Redefining \% on input line 351.
+[39 <./Plantilla_TFG_latex/imagenes/Mat/Definicion/graf.png>]
+
+LaTeX Info: Redefining \. on input line 378.
+LaTeX Info: Redefining \% on input line 378.
+[40]
+
+LaTeX Info: Redefining \. on input line 406.
+LaTeX Info: Redefining \% on input line 406.
+[41])
+
+LaTeX Info: Redefining \. on input line 205.
+LaTeX Info: Redefining \% on input line 205.
+[42]
+
+[43] (./Plantilla_TFG_latex/Informatica/Introducción.tex
+
+LaTeX Info: Redefining \. on input line 14.
+LaTeX Info: Redefining \% on input line 14.
+[44]
+
+LaTeX Info: Redefining \. on input line 30.
+LaTeX Info: Redefining \% on input line 30.
+[45]
+
+LaTeX Warning: Citation 'y' on page 46 undefined on input line 48.
+
+
+
+LaTeX Info: Redefining \. on input line 49.
+LaTeX Info: Redefining \% on input line 49.
+[46]
+
+LaTeX Info: Redefining \. on input line 77.
+LaTeX Info: Redefining \% on input line 77.
+[47]) (./Plantilla_TFG_latex/Informatica/Fundamentos.tex
+
+LaTeX Warning: Citation 'numerical_optimization' on page 48 undefined on input 
+line 2.
+
+
+LaTeX Warning: Reference `sec:lbfgs' on page 48 undefined on input line 2.
+
+
+Overfull \hbox (0.49257pt too wide) in paragraph at lines 2--3
+\OT1/cmr/m/n/10.95 [[]] y [[]Fei24[]] pa-ra la sec-ci^^Son []; [[]Zha+23[]] y [
+[]GBC16[]]
+ []
+
+<Plantilla_TFG_latex//imagenes//Inf//2.Fund/neuron_model.jpeg, id=806, 661.4712
+5pt x 377.41pt>
+File: Plantilla_TFG_latex//imagenes//Inf//2.Fund/neuron_model.jpeg Graphic file
+ (type jpg)
+<use Plantilla_TFG_latex//imagenes//Inf//2.Fund/neuron_model.jpeg>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//2.Fund/neuron_mode
+l.jpeg  used on input line 25.
+(pdftex.def)             Requested size: 270.0pt x 154.04803pt.
+
+
+LaTeX Info: Redefining \. on input line 34.
+LaTeX Info: Redefining \% on input line 34.
+[48]
+
+LaTeX Info: Redefining \. on input line 46.
+LaTeX Info: Redefining \% on input line 46.
+[49 <./Plantilla_TFG_latex//imagenes//Inf//2.Fund/neuron_model.jpeg>]
+<Plantilla_TFG_latex//imagenes//Inf//2.Fund/neural_net2.jpeg, id=823, 793.96625
+pt x 389.455pt>
+File: Plantilla_TFG_latex//imagenes//Inf//2.Fund/neural_net2.jpeg Graphic file 
+(type jpg)
+<use Plantilla_TFG_latex//imagenes//Inf//2.Fund/neural_net2.jpeg>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//2.Fund/neural_net2
+.jpeg  used on input line 49.
+(pdftex.def)             Requested size: 270.0pt x 132.44266pt.
+
+
+LaTeX Info: Redefining \. on input line 68.
+LaTeX Info: Redefining \% on input line 68.
+[50 <./Plantilla_TFG_latex//imagenes//Inf//2.Fund/neural_net2.jpeg>]
+<Plantilla_TFG_latex//imagenes//Inf//2.Fund/Conv.png, id=834, 377.91188pt x 387
+.69844pt>
+File: Plantilla_TFG_latex//imagenes//Inf//2.Fund/Conv.png Graphic file (type pn
+g)
+<use Plantilla_TFG_latex//imagenes//Inf//2.Fund/Conv.png>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//2.Fund/Conv.png  u
+sed on input line 94.
+(pdftex.def)             Requested size: 270.0pt x 276.99522pt.
+
+
+LaTeX Info: Redefining \. on input line 108.
+LaTeX Info: Redefining \% on input line 108.
+[51]
+
+LaTeX Info: Redefining \. on input line 108.
+LaTeX Info: Redefining \% on input line 108.
+[52 <./Plantilla_TFG_latex//imagenes//Inf//2.Fund/Conv.png (PNG copy)>]
+<Plantilla_TFG_latex//imagenes//Inf//2.Fund/2.stride.jpeg, id=848, 864.22874pt 
+x 172.645pt>
+File: Plantilla_TFG_latex//imagenes//Inf//2.Fund/2.stride.jpeg Graphic file (ty
+pe jpg)
+<use Plantilla_TFG_latex//imagenes//Inf//2.Fund/2.stride.jpeg>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//2.Fund/2.stride.jp
+eg  used on input line 132.
+(pdftex.def)             Requested size: 270.0pt x 53.93561pt.
+
+
+LaTeX Info: Redefining \. on input line 140.
+LaTeX Info: Redefining \% on input line 140.
+[53 <./Plantilla_TFG_latex//imagenes//Inf//2.Fund/2.stride.jpeg>]
+<Plantilla_TFG_latex//imagenes//Inf//2.Fund/maxpool.jpeg, id=864, 789.95125pt x
+ 369.38pt>
+File: Plantilla_TFG_latex//imagenes//Inf//2.Fund/maxpool.jpeg Graphic file (typ
+e jpg)
+<use Plantilla_TFG_latex//imagenes//Inf//2.Fund/maxpool.jpeg>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//2.Fund/maxpool.jpe
+g  used on input line 146.
+(pdftex.def)             Requested size: 270.0pt x 126.25261pt.
+
+
+LaTeX Info: Redefining \. on input line 165.
+LaTeX Info: Redefining \% on input line 165.
+[54 <./Plantilla_TFG_latex//imagenes//Inf//2.Fund/maxpool.jpeg>]
+<Plantilla_TFG_latex//imagenes//Inf//2.Fund/resblock.png, id=879, 374.39874pt x
+ 297.11pt>
+File: Plantilla_TFG_latex//imagenes//Inf//2.Fund/resblock.png Graphic file (typ
+e png)
+<use Plantilla_TFG_latex//imagenes//Inf//2.Fund/resblock.png>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//2.Fund/resblock.pn
+g  used on input line 184.
+(pdftex.def)             Requested size: 270.0pt x 214.27264pt.
+<Plantilla_TFG_latex//imagenes//Inf//2.Fund/resblock1x1.png, id=883, 547.04375p
+t x 346.29375pt>
+File: Plantilla_TFG_latex//imagenes//Inf//2.Fund/resblock1x1.png Graphic file (
+type png)
+<use Plantilla_TFG_latex//imagenes//Inf//2.Fund/resblock1x1.png>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//2.Fund/resblock1x1
+.png  used on input line 193.
+(pdftex.def)             Requested size: 270.0pt x 170.91658pt.
+
+
+LaTeX Info: Redefining \. on input line 203.
+LaTeX Info: Redefining \% on input line 203.
+[55]
+
+LaTeX Info: Redefining \. on input line 203.
+LaTeX Info: Redefining \% on input line 203.
+[56 <./Plantilla_TFG_latex//imagenes//Inf//2.Fund/resblock.png> <./Plantilla_TF
+G_latex//imagenes//Inf//2.Fund/resblock1x1.png>]
+Overfull \hbox (7.82619pt too wide) in paragraph at lines 218--219
+[]\OT1/cmr/m/n/10.95 Con es-ta es-tra-te-gia se con-si-gue en el en-tre-na-mien
+-to una super-convergencia
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 223.
+LaTeX Info: Redefining \% on input line 223.
+[57]
+
+Package caption Warning: \label without proper reference on input line 229.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig:momentum' on page 58 undefined on input line 226.
+
+
+<Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwoutmom.png, id=914, 203.25937pt
+ x 194.97844pt>
+File: Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwoutmom.png Graphic file (t
+ype png)
+<use Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwoutmom.png>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwoutmom.
+png  used on input line 231.
+(pdftex.def)             Requested size: 270.0pt x 259.00864pt.
+<Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwmom.png, id=915, 213.79875pt x 
+208.52907pt>
+File: Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwmom.png Graphic file (type
+ png)
+<use Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwmom.png>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwmom.png
+  used on input line 233.
+(pdftex.def)             Requested size: 270.0pt x 263.3653pt.
+
+LaTeX Warning: Float too large for page by 1.97368pt on input line 235.
+
+
+
+LaTeX Info: Redefining \. on input line 249.
+LaTeX Info: Redefining \% on input line 249.
+[58]
+
+LaTeX Info: Redefining \. on input line 249.
+LaTeX Info: Redefining \% on input line 249.
+[59 <./Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwoutmom.png> <./Plantilla_
+TFG_latex//imagenes//Inf//2.Fund/sgdwmom.png>]
+
+LaTeX Warning: Reference `fig:NAG' on page 60 undefined on input line 251.
+
+<Plantilla_TFG_latex//imagenes//Inf//2.Fund/NAG.png, id=935, 444.15938pt x 124.
+96687pt>
+File: Plantilla_TFG_latex//imagenes//Inf//2.Fund/NAG.png Graphic file (type png
+)
+<use Plantilla_TFG_latex//imagenes//Inf//2.Fund/NAG.png>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//2.Fund/NAG.png  us
+ed on input line 255.
+(pdftex.def)             Requested size: 270.0pt x 75.96463pt.
+
+
+LaTeX Info: Redefining \. on input line 272.
+LaTeX Info: Redefining \% on input line 272.
+[60 <./Plantilla_TFG_latex//imagenes//Inf//2.Fund/NAG.png>]
+
+LaTeX Info: Redefining \. on input line 302.
+LaTeX Info: Redefining \% on input line 302.
+[61]
+<Plantilla_TFG_latex//imagenes//Inf//2.Fund/cruce_mh.png, id=956, 639.13782pt x
+ 271.76532pt>
+File: Plantilla_TFG_latex//imagenes//Inf//2.Fund/cruce_mh.png Graphic file (typ
+e png)
+<use Plantilla_TFG_latex//imagenes//Inf//2.Fund/cruce_mh.png>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//2.Fund/cruce_mh.pn
+g  used on input line 311.
+(pdftex.def)             Requested size: 270.0pt x 114.80414pt.
+
+
+LaTeX Info: Redefining \. on input line 318.
+LaTeX Info: Redefining \% on input line 318.
+[62 <./Plantilla_TFG_latex//imagenes//Inf//2.Fund/cruce_mh.png>]
+<Plantilla_TFG_latex//imagenes//Inf//2.Fund/alg_gen.png, id=967, 1027.84pt x 47
+8.78876pt>
+File: Plantilla_TFG_latex//imagenes//Inf//2.Fund/alg_gen.png Graphic file (type
+ png)
+<use Plantilla_TFG_latex//imagenes//Inf//2.Fund/alg_gen.png>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//2.Fund/alg_gen.png
+  used on input line 326.
+(pdftex.def)             Requested size: 270.0pt x 125.76794pt.
+
+
+LaTeX Info: Redefining \. on input line 339.
+LaTeX Info: Redefining \% on input line 339.
+[63 <./Plantilla_TFG_latex//imagenes//Inf//2.Fund/alg_gen.png>]
+
+LaTeX Warning: Reference `sec:l-bfgs' on page 64 undefined on input line 387.
+
+
+Overfull \hbox (15.58138pt too wide) in paragraph at lines 390--391
+[]\OT1/cmr/m/n/10.95 El m^^Seto-do L-BFGS-B (Limited-memory Broyden-Fletcher-Go
+ldfarb-Shanno
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 393.
+LaTeX Info: Redefining \% on input line 393.
+[64]
+Overfull \hbox (4.81383pt too wide) in paragraph at lines 399--400
+[]\OT1/cmr/m/n/10.95 SHADE (Success-History ba-sed Adap-ta-ti-ve Dif-fe-ren-tia
+l Evo-lu-tion) [[]TF13[]]
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 400.
+LaTeX Info: Redefining \% on input line 400.
+[65]
+
+LaTeX Info: Redefining \. on input line 443.
+LaTeX Info: Redefining \% on input line 443.
+[66]
+
+LaTeX Info: Redefining \. on input line 458.
+LaTeX Info: Redefining \% on input line 458.
+[67]
+Overfull \hbox (5.75662pt too wide) in paragraph at lines 458--459
+[]\OT1/cmr/m/n/10.95 Cabe des-ta-car que es-to se rea-li-za ya que SHADE-ILS ma
+n-tie-ne los par^^Same-
+ []
+
+) (./Plantilla_TFG_latex/Informatica/EstadoDelArte.tex
+
+LaTeX Info: Redefining \. on input line 4.
+LaTeX Info: Redefining \% on input line 4.
+[68]
+<Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_deep.png, id=1026, 666.99188pt 
+x 360.59718pt>
+File: Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_deep.png Graphic file (typ
+e png)
+<use Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_deep.png>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_deep.pn
+g  used on input line 17.
+(pdftex.def)             Requested size: 270.0pt x 145.97502pt.
+
+
+LaTeX Info: Redefining \. on input line 26.
+LaTeX Info: Redefining \% on input line 26.
+[69 <./Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_deep.png>]
+<Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_mh.png, id=1033, 649.67719pt x 
+359.09157pt>
+File: Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_mh.png Graphic file (type 
+png)
+<use Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_mh.png>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_mh.png 
+ used on input line 42.
+(pdftex.def)             Requested size: 270.0pt x 149.23938pt.
+<Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_gd.png, id=1034, 648.17157pt x 
+361.35pt>
+File: Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_gd.png Graphic file (type 
+png)
+<use Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_gd.png>
+Package pdftex.def Info: Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_gd.png 
+ used on input line 44.
+(pdftex.def)             Requested size: 270.0pt x 150.52538pt.
+
+
+Package caption Warning: \label without proper reference on input line 40.
+See the caption package documentation for explanation.
+
+
+LaTeX Warning: Reference `fig:resEdA' on page 70 undefined on input line 48.
+
+
+
+LaTeX Info: Redefining \. on input line 55.
+LaTeX Info: Redefining \% on input line 55.
+[70 <./Plantilla_TFG_latex//imagenes//Inf//EdA/scopus_mh.png> <./Plantilla_TFG_
+latex//imagenes//Inf//EdA/scopus_gd.png>]
+
+LaTeX Warning: Reference `sec:l-bfgs' on page 71 undefined on input line 58.
+
+
+
+LaTeX Info: Redefining \. on input line 63.
+LaTeX Info: Redefining \% on input line 63.
+[71]
+
+LaTeX Warning: No positions in optional float specifier.
+               Default added (so using `tbp') on input line 64.
+
+
+
+LaTeX Info: Redefining \. on input line 91.
+LaTeX Info: Redefining \% on input line 91.
+[72]
+
+LaTeX Info: Redefining \. on input line 104.
+LaTeX Info: Redefining \% on input line 104.
+[73]) (./Plantilla_TFG_latex/Informatica/Experimentacion.tex
 
 LaTeX Warning: No positions in optional float specifier.
                Default added (so using `tbp') on input line 8.
 
 
 
-LaTeX Info: Redefining \. on input line 25.
-LaTeX Info: Redefining \% on input line 25.
-[5]
+LaTeX Info: Redefining \. on input line 23.
+LaTeX Info: Redefining \% on input line 23.
+[74]
 
 LaTeX Warning: No positions in optional float specifier.
                Default added (so using `tbp') on input line 28.
 
 
 
-LaTeX Info: Redefining \. on input line 47.
-LaTeX Info: Redefining \% on input line 47.
-[6]
+LaTeX Info: Redefining \. on input line 43.
+LaTeX Info: Redefining \% on input line 43.
+[75]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 50.
-
-
-LaTeX Warning: Reference `sec:desvyexpl' on page 7 undefined on input line 77.
+               Default added (so using `tbp') on input line 51.
 
 
 
-LaTeX Info: Redefining \. on input line 81.
-LaTeX Info: Redefining \% on input line 81.
-[7]
+LaTeX Info: Redefining \. on input line 79.
+LaTeX Info: Redefining \% on input line 79.
+[76]
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 83.
+               Default added (so using `tbp') on input line 84.
 
 
 LaTeX Warning: No positions in optional float specifier.
-               Default added (so using `tbp') on input line 106.
+               Default added (so using `tbp') on input line 107.
 
 
 
-LaTeX Info: Redefining \. on input line 142.
-LaTeX Info: Redefining \% on input line 142.
-[8]
+LaTeX Info: Redefining \. on input line 143.
+LaTeX Info: Redefining \% on input line 143.
+[77]
 
-LaTeX Info: Redefining \. on input line 157.
-LaTeX Info: Redefining \% on input line 157.
-[9]
+LaTeX Info: Redefining \. on input line 143.
+LaTeX Info: Redefining \% on input line 143.
+[78]
 
-LaTeX Info: Redefining \. on input line 168.
-LaTeX Info: Redefining \% on input line 168.
-[10]
+LaTeX Info: Redefining \. on input line 162.
+LaTeX Info: Redefining \% on input line 162.
+[79]
 
-LaTeX Info: Redefining \. on input line 181.
-LaTeX Info: Redefining \% on input line 181.
-[11])
+LaTeX Info: Redefining \. on input line 173.
+LaTeX Info: Redefining \% on input line 173.
+[80])
 
-LaTeX Info: Redefining \. on input line 323.
-LaTeX Info: Redefining \% on input line 323.
-[12]
-Overfull \hbox (27.12268pt too wide) in paragraph at lines 335--335
-\OT1/cmr/m/n/10.95 cog-ni-tion''. En: \OT1/cmr/m/it/10.95 Pro-cee-dings of the 
-IEEE \OT1/cmr/m/n/10.95 86.11 (1998), p^^Sags. 2278[]2324.
+LaTeX Info: Redefining \. on input line 328.
+LaTeX Info: Redefining \% on input line 328.
+[81]
+
+LaTeX Info: Redefining \. on input line 328.
+LaTeX Info: Redefining \% on input line 328.
+[82]
+Overfull \hbox (5.37271pt too wide) in paragraph at lines 340--340
+[]\OT1/cmr/m/n/10.95 Anan Banharn-sa-kun. ``To-wards im-pro-ving the con-vo-lu-
+tio-nal neu-
+ []
+
+
+Overfull \hbox (7.08162pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/n/10.95 Pro-blems: A Re-view''. En: \OT1/cmr/m/it/10.95 Evo-lu-tio-n
+ary Compu-tation \OT1/cmr/m/n/10.95 25 (mar. de
+ []
+
+
+Overfull \hbox (2.27634pt too wide) in paragraph at lines 340--340
+[]\OT1/cmr/m/n/10.95 S^^Sebas-tien Bu-beck. ``Con-vex Op-ti-mi-za-tion: Al-go-r
+ithms and Com-
+ []
+
+
+Overfull \hbox (1.81651pt too wide) in paragraph at lines 340--340
+[]\OT1/cmr/m/n/10.95 Richard H. Byrd et al. ``A Li-mi-ted Me-mory Al-go-rithm f
+or Bound
+ []
+
+
+Overfull \hbox (4.78868pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/it/10.95 Com-pu-ting \OT1/cmr/m/n/10.95 16.5 (1995), p^^Sags. 1190[]
+1208. \OT1/cmr/m/sc/10.95 doi\OT1/cmr/m/n/10.95 : []$\OT1/cmtt/m/n/10.95 10 . 1
+137 / 0916069$[]\OT1/cmr/m/n/10.95 .
  []
 
 
 
-LaTeX Info: Redefining \. on input line 336.
-LaTeX Info: Redefining \% on input line 336.
-[13] (./proyecto.aux
+LaTeX Info: Redefining \. on input line 329.
+LaTeX Info: Redefining \% on input line 329.
+[83]
+Overfull \hbox (26.27621pt too wide) in paragraph at lines 340--340
+[]\OT1/cmr/m/n/10.95 Augustin-Louis Cauchy. ``ANALY-SE MATH[]EMA-TI-QUE. { M^^S
+ethodc
+ []
+
+
+Overfull \hbox (8.92421pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/n/10.95 g^^Sen^^Sera-le pour la r^^Seso-lu-tion des syst^^Remes d'^^
+Sequa-tions si-mul-tan^^Sees''.
+ []
+
+
+Overfull \hbox (6.42822pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/n/10.95 En: 2009. \OT1/cmr/m/sc/10.95 url\OT1/cmr/m/n/10.95 : []$\OT
+1/cmtt/m/n/10.95 https : / / api . semanticscholar . org / CorpusID :
+ []
+
+
+Overfull \hbox (32.30591pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/it/10.95 ma-tics \OT1/cmr/m/n/10.95 2 (1944), p^^Sags. 258[]261. \OT
+1/cmr/m/sc/10.95 url\OT1/cmr/m/n/10.95 : []$\OT1/cmtt/m/n/10.95 https : / / api
+ . semanticscholar .
+ []
+
+
+Overfull \hbox (9.66536pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/it/10.95 for Un-cons-trai-ned Op-ti-mi-za-tion and Non-li-near Equa-
+tions\OT1/cmr/m/n/10.95 . Vol. 16.
+ []
+
+
+Overfull \hbox (3.13524pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/n/10.95 Clas-sics in Ap-plied Mathe-ma-tics. Phi-la-delphia, PA, USA
+: SIAM,
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 329.
+LaTeX Info: Redefining \% on input line 329.
+[84]
+Overfull \hbox (13.01097pt too wide) in paragraph at lines 340--340
+[]\OT1/cmr/m/n/10.95 Kaiming He et al. \OT1/cmr/m/it/10.95 Del-ving Deep in-to 
+Rec-ti-fiers: Sur-pas-sing Human-
+ []
+
+
+Overfull \hbox (24.85587pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/it/10.95 Level Per-for-man-ce on Ima-ge-Net Clas-si-fi-ca-tion\OT1/c
+mr/m/n/10.95 . ci-te ar-xiv:1502.01852.
+ []
+
+
+Overfull \hbox (17.49069pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/n/10.95 lear-ning of con-vo-lu-tion neu-ral net-work''. En: nov. de 
+2017, p^^Sags. 1[]5.
+ []
+
+
+Overfull \hbox (2.39436pt too wide) in paragraph at lines 340--340
+\OT1/cmtt/m/n/10.95 2012 / file / c399862d3b9d6b76c8436e924a68c45b -[] Paper . 
+pdf$[]\OT1/cmr/m/n/10.95 . 
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 329.
+LaTeX Info: Redefining \% on input line 329.
+[85]
+Overfull \hbox (39.89769pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/n/10.95 re-cog-ni-tion''. En: \OT1/cmr/m/it/10.95 Pro-cee-dings of t
+he IEEE \OT1/cmr/m/n/10.95 86.11 (1998), p^^Sags. 2278[]2324.
+ []
+
+
+Overfull \hbox (10.52531pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/n/10.95 method for lar-ge sca-le op-ti-mi-za-tion''. En: 45 (1989), 
+p^^Sags. 503[]528. 
+ []
+
+
+Overfull \hbox (3.66571pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/it/10.95 Deep Lear-ning: Ta-xo-nomy, Cri-ti-cal Metho-do-lo-gi-cal A
+naly-sis, Ca-
+ []
+
+
+Overfull \hbox (2.60481pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/n/10.95 Adap-ti-ve Compu-tation and Ma-chi-ne Lear-ning se-ries. MIT
+ Press,
+ []
+
+
+Overfull \hbox (23.12456pt too wide) in paragraph at lines 340--340
+[]\OT1/cmr/m/n/10.95 Krzysztof Pa-we lczyk, Mi-chal Ka-wu-lok y Ja-kub Na-le-pa
+. ``Genetically-
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 329.
+LaTeX Info: Redefining \% on input line 329.
+[86]
+Overfull \hbox (9.21521pt too wide) in paragraph at lines 340--340
+\OT1/cmr/m/n/10.95 ning al-go-rithms''. En: \OT1/cmr/m/it/10.95 Neu-ral Net-wor
+ks \OT1/cmr/m/n/10.95 12.1 (1999), p^^Sags. 145[]151.
+ []
+
+
+
+LaTeX Info: Redefining \. on input line 329.
+LaTeX Info: Redefining \% on input line 329.
+[87]
+
+LaTeX Info: Redefining \. on input line 341.
+LaTeX Info: Redefining \% on input line 341.
+[88] (./proyecto.aux
 LaTeX Info: Redefining \sptext on input line 12.
 LaTeX Info: Redefining \. on input line 12.
 LaTeX Info: Redefining \% on input line 12.
@@ -1028,33 +1884,59 @@ LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
 LaTeX Warning: There were undefined references.
 
+
+LaTeX Warning: There were multiply-defined labels.
+
 Package rerunfilecheck Info: File `proyecto.out' has not changed.
-(rerunfilecheck)             Checksum: 2799873757214C2E8B756089A6FB2638;1773.
+(rerunfilecheck)             Checksum: CC60248B2F01F785F74C5936BDDF0872;11525.
 Package logreq Info: Writing requests to 'proyecto.run.xml'.
 \openout1 = `proyecto.run.xml'.
 
  ) 
 Here is how much of TeX's memory you used:
- 22108 strings out of 473578
- 378312 string characters out of 5732243
- 1948960 words of memory out of 5000000
- 44677 multiletter control sequences out of 15000+600000
- 566573 words of font info for 67 fonts, out of 8000000 for 9000
+ 24509 strings out of 473578
+ 433366 string characters out of 5732243
+ 1949960 words of memory out of 5000000
+ 46748 multiletter control sequences out of 15000+600000
+ 569990 words of font info for 80 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 68i,16n,81p,1755b,1914s stack positions out of 10000i,1000n,20000p,200000b,200000s
-<c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/tex
-live/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2024
-/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2024/texmf-dis
-t/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><c:/texlive/2024/texmf-dist/fonts/
-type1/public/amsfonts/cm/cmmi10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmmi8.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfon
-ts/cm/cmr10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy
-10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb><c
-:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
-Output written on proyecto.pdf (15 pages, 359761 bytes).
+ 69i,17n,84p,1755b,2379s stack positions out of 10000i,1000n,20000p,200000b,200000s
+
+pdfTeX warning (dest): name{Hfootnote.9} has been referenced but does not exist
+, replaced by a fixed one
+
+
+pdfTeX warning (dest): name{Hfootnote.7} has been referenced but does not exist
+, replaced by a fixed one
+
+<c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb><c:/texli
+ve/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb><c:/texlive/2024/t
+exmf-dist/fonts/type1/public/amsfonts/cm/cmbx8.pfb><c:/texlive/2024/texmf-dist/
+fonts/type1/public/amsfonts/cm/cmbxti10.pfb><c:/texlive/2024/texmf-dist/fonts/t
+ype1/public/amsfonts/cm/cmcsc10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmex10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfo
+nts/cmextra/cmex7.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/c
+mextra/cmex8.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmm
+i10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi5.pfb><c
+:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi6.pfb><c:/texlive/
+2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb><c:/texlive/2024/texmf
+-dist/fonts/type1/public/amsfonts/cm/cmmi9.pfb><c:/texlive/2024/texmf-dist/font
+s/type1/public/amsfonts/cm/cmr10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/pu
+blic/amsfonts/cm/cmr5.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfon
+ts/cm/cmr6.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.
+pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.pfb><c:/tex
+live/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb><c:/texlive/2024
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy5.pfb><c:/texlive/2024/texmf-dis
+t/fonts/type1/public/amsfonts/cm/cmsy6.pfb><c:/texlive/2024/texmf-dist/fonts/ty
+pe1/public/amsfonts/cm/cmsy8.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmti10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmtt10.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt9
+.pfb><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb
+><c:/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on proyecto.pdf (91 pages, 1442128 bytes).
 PDF statistics:
- 253 PDF objects out of 1000 (max. 8388607)
- 208 compressed objects within 3 object streams
- 45 named destinations out of 1000 (max. 500000)
- 120 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1445 PDF objects out of 1728 (max. 8388607)
+ 1235 compressed objects within 13 object streams
+ 331 named destinations out of 1000 (max. 500000)
+ 671 words of extra memory for PDF output out of 10000 (max. 10000000)
 
