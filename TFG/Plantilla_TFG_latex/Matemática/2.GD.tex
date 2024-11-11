@@ -4,7 +4,7 @@ Se trata de un algoritmo de aprendizaje iterativo clásico, basado en el método
 
 Debemos ver que el entrenamiento de los modelos, está intrínsecamente ligado a la optimización, en concreto a la minimización de la función de coste $C$. Este no es un problema sencillo, y como se ha mencionado antes se trata de un problema NP-Completo, por tanto de existir algoritmos exactos estos requieren demasiado coste computacional como para utilizarlos en la práctica, por lo que se buscan estrategias aproximadas como el descenso de gradiente para obtener buenas soluciones en un tiempo asequible. 
 
-Otros factores a tener en cuenta son la necesidad de escapar de óptimos locales, aún no conociendo de manera explícita la función de error; y la generalización: no es  importante únicamente obtener un error bajo en el entrenamiento sino que se mantenga cuando usamos datos de entrada nuevos, ya que nuestro objetivo es ser capaces de encontrar patrones que podamos aplicar en situaciones nuevas y no ajustar el modelo a unos datos dados.
+Otros factores a tener en cuenta son la necesidad de escapar de óptimos locales y la generalización: no es importante únicamente obtener un error bajo en el entrenamiento sino que se mantenga cuando usamos datos de entrada nuevos, ya que nuestro objetivo es ser capaces de encontrar patrones que podamos aplicar en situaciones nuevas y no ajustar el modelo a unos datos dados.
 
 \subsection{Gradiente descendente de Cauchy}
 
@@ -190,7 +190,7 @@ donde se ha usado que $g \in \partial f(x)$ para ver que es no negativa. Derivam
 
 
 
-Para presentar una proposición que relaciona los subgradientes con las funciones convexas, las cuales están muy ligadas a la convergencia del gradiente descendente, primero vamos a definir lo que es un conjunto convexo.
+Para presentar una proposición que relaciona los subgradientes con las funciones convexas, las cuales están muy ligadas a la convergencia del gradiente descendente, primero vamos a recordar lo que es un conjunto convexo.
 
 
 \begin{definicion}[Conjunto convexo]
@@ -213,12 +213,15 @@ Para presentar una proposición que relaciona los subgradientes con las funcione
     Sea $E \subset \mathbb{R}^n$ un conjunto convexo y $f:E \rightarrow \mathbb{R}$. Si $\forall x \in E, \partial f(x) \neq \emptyset$ entonces $f$ es una función convexa. Recíprocamente, si $f$ es convexa  entonces se tiene que $\forall x \in int(E)$ $\partial f(x) \neq \emptyset$.
 \end{proposicion}
 
-Esta proposición nos asegura que la familia de las funciones ReLU, que son convexas, siempre tienen subgradiente en su interior. Para demostrarla, primero vamos a necesitar de un teorema, en el ámbito de la convexidad:
+Esta proposición nos asegura que la familia de las funciones ReLU, que son convexas, siempre tienen subgradiente en su interior. Para demostrarla, primero vamos a necesitar de un teorema en el ámbito de la convexidad:
 
 \begin{teorema}[Teorema del Hiperplano de apoyo]
     Sea $E \subset \mathbb{R}^n$ un conjunto convexo y $x_0 \in Fr(E)$ un puntro de la frontera de $E$. Entonces, $\exists w \in \mathbb{R}^n, w \neq 0$ tal que
-    $$\forall x \in E, \quad w^Tx \geq w^T x_0$$
+    $$\forall x \in E, \quad w^Tx \geq w^T x_0.$$
 \end{teorema}
+
+\vspace{1cm}
+
 
 \textbf{\textit{Demostración de la proposición 3.1.}}
 Para la primera implicación, queremos probar que si para todo punto $x \in E$ existe al menos un subgradiente de $f(x)$ entonces se verifica
@@ -261,7 +264,7 @@ Ahora vamos a probar que $f$ tiene algún subgradiente en $int(E)$ si es convexa
 
  $$epi(f)=\left \{ (x,t) \in E \times \mathbb{R} : t \geq f(x) \right \}.$$
 
-Es obvio que f es convexa si y sólo si su epigrafo es un conjunto convexo. Vamos a aprovechar esta propidad y vamos a construir un subgradiente usando un hiperplano de apoyo al epigrafo de la función. Sea $x \in E$, claramente $(x, f(x)) \in Fr(epi(f))$, y $epi(f)$ es un conjunto convexo por ser $f$ convexa. Entonces usando el Teorema del Hiperplano de Apoyo, existe $(a,b) \in \mathbb{R}^n \times \mathbb{R}$ tal que
+Es obvio que f es convexa si y sólo si su epigrafo es un conjunto convexo. Vamos a aprovechar esta propiedad y vamos a construir un subgradiente usando un hiperplano de apoyo al epigrafo de la función. Sea $x \in E$, claramente $(x, f(x)) \in Fr(epi(f))$, y $epi(f)$ es un conjunto convexo por ser $f$ convexa. Entonces usando el Teorema del Hiperplano de Apoyo, existe $(a,b) \in \mathbb{R}^n \times \mathbb{R}$ tal que
 
 \begin{equation}\label{proof1:epi}
     a^Tx + bf(x) \geq a^Ty + bt, \quad \forall (y,t) \in epi(f).
@@ -319,7 +322,7 @@ c \in [0,1] \quad si \quad x=0\\
 \end{matrix}\right.$$
 \end{ejemplo}
 
-En \cite{ReLuat0} se analiza la elección del valor que toma el subgradiente en el punto $x=0$ y se ve su influencia, que no es poca, en la ejecución del algoritmo, y se concluye que el valor 0 es el que ofrece mejor robustez de manera general.
+En \cite{ReLuat0} se analiza la elección del valor que toma el subgradiente en el punto $x=0$ y se analiza su influencia en el entrenamiento de modelos. Se discuten varios valores y se observa que el 0 es el que mejor resultados ofrece en cuanto al rendimiento de los modelos entrenados.
 
 
 
@@ -331,7 +334,7 @@ La convergencia es un factor crucial en el algoritmo de gradiente descendente. A
 En caso de que lo sea sólo existirá un punto crítico\footnote{Si existiera una región donde la función fuera constante, cada punto de la región sería un punto crítico pero esto sería extraordinariamente extraño} y será un mínimo global, por lo que no tenemos que preocuparnos de si el algoritmo se queda estancado en un mínimo local, ya que si converge tendremos la solución óptima. Además en este caso el análisis de la convergencia resulta mucho más sencillo, y por eso encontramos más resultados teóricos y más fuertes que en el caso contrario. Desgraciadamente la situación normal es que la función de coste no sea convexa, y de hecho comprobar que una función sea convexa se trata de un problema NP-Hard \cite{Ahmadi_2011_NP_Convex}, por lo que en la práctia normalmente no realizamos el análisis teórico de la función y la convergencia previo al entrenamiento del modelo. En caso que no sea convexa, podemos converger hacia un punto crítico que no sea un mínimo global, con lo cual el algoritmo parará y puede que hallamos llegado a una solución que aunque sea subóptima no sea lo suficientemente buena.
 
 
-\subsubsection{Convergencia para BGD}
+\subsubsection{Convergencia para \textit{Batch Gradient Descent}}
 
 Los desarrollos teóricos sobre la convergencia del algoritmo de descenso del gradiente son muchos y variados, sin embargo no son lo suficientemente útiles en la práctica y se presupone que la función no es convexa. Los principales inconvenientes para el desarrollo de un marco teórico práctico son:
 
@@ -369,7 +372,7 @@ En el caso que la función de coste sea convexa tenemos un caso más sencillo de
 
 En el teorema anterior $x \in \mathbb{R}^n$ contiene los pesos del modelo, y suponemos que el conjunto de datos con el que entrenamos es constante, por lo tanto el error del modelo, $f(x)$, sólo dependerá de los parámetros $x$.
 
-Como el gradiente $\nabla f$ es Lipschitz continuo con constante $L$ entonces $\nabla ^2 f(x) \preceq LI$. Esto equivale a que $ \textstyle LI- \nabla^2f(x) $ sea una matriz semidefinida positiva, por lo que $\nabla ^2 f(x) -LI$ es una matriz semidefinida negativa. Ahora hacemos un desarrollo cuadrático de $f$ alrededor de $f(x)$ para obtener:
+Como el gradiente $\nabla f$ es Lipschitz continuo con constante $L$ entonces $\nabla ^2 f(x) \preceq LI$. Esto equivale a que $ \textstyle LI- \nabla^2f(x) $ sea una matriz semidefinida positiva, por lo que $\nabla ^2 f(x) -LI$ es una matriz semidefinida negativa. Usando la aproximación de Taylor de segundo orden de $f$ alrededor de $x$, que se convierte en desigualdad por ser $f$ convexa, se tiene:
 
 \begin{align*}
     f(y) &\leq f(x) + \nabla f(x)^T (y-x) +\frac{1}{2}\nabla^2 f(x) \|y-x\|^2_2  \\
@@ -420,14 +423,14 @@ $$ f(x^+) - f(x^*) \leq  \frac{1}{2\eta}  \left ( \| x - x^* \|^2_2 -  \| x^+ - 
 Hacemos la sumatoria sobre las $k$ primeras iteraciones y tenemos
 
 \begin{align*}
-    \sum^k_{i=1} \left ( fx^{(i)} - f(x^*) \right ) &\leq \sum^k_{i=1} \frac{1}{2\eta}  \left ( \| x^{(i-1)} - x^* \|^2_2 -  \| x^{(i)} - x^* \|^2_2 \right ) \\ 
+    \sum^k_{i=1} \left ( f(x^{(i)}) - f(x^*) \right ) &\leq \sum^k_{i=1} \frac{1}{2\eta}  \left ( \| x^{(i-1)} - x^* \|^2_2 -  \| x^{(i)} - x^* \|^2_2 \right ) \\ 
     &=\frac{1}{2\eta}  \left ( \| x^{(0)} - x^* \|^2_2 -  \| x^{(k)} - x^* \|^2_2 \right ) \\ 
     &\leq \frac{1}{2\eta}  \left ( \| x^{(0)} - x^* \|^2_2 \right ). 
 \end{align*}
 
 El sumatorio de la derecha ha desaparecido ya que es una serie telescópica. Usando que $f$ decrece con cada iteración, e introduciendo la anterior desigualdad, finalmente llegamos a donde queríamos:
 
-$$f(x^{(k)}) - f(x^*) \leq \frac{1}{k} \sum ^k _{i=1} \left ( f(x^{(i)} - f(x^*) \right ) \leq \frac{\|x^{(0)}-x^* \|^2_2}{2\eta k} .$$
+$$f(x^{(k)}) - f(x^*) \leq \frac{1}{k} \sum ^k _{i=1} \left ( f(x^{(i)}) - f(x^*) \right ) \leq \frac{\|x^{(0)}-x^* \|^2_2}{2\eta k} .$$
 
 
 \begin{flushright}
@@ -435,24 +438,24 @@ $$f(x^{(k)}) - f(x^*) \leq \frac{1}{k} \sum ^k _{i=1} \left ( f(x^{(i)} - f(x^*)
 \end{flushright} 
 
 
-Este teorema nos garantiza que bajo las condiciones supuestas el algoritmo del gradiente descendente converge y además lo hace con ratio de convergencia de $O(1/k)$. Es un resultado teórico muy fuerte que por desgracia no puede usarse en la práctica en la gran mayoría de casos: la constante de Lipschitz $L$ es computacionalmente costosa de calcular, por lo que se usan aproximaciones experimentales para el $\eta$, además en muy contadas ocasiones la función de error con la que trabajamos es convexa, y tampoco es sencilla de calcular por lo que directamente no se comprueba si lo es o no lo es, y directamente la suponemos no convexa. 
+Este teorema nos garantiza que bajo las condiciones supuestas el algoritmo de gradiente descendente converge y además lo hace con ratio de convergencia de $O(1/k)$. Es un resultado teórico muy fuerte que por desgracia no puede usarse en la práctica en la gran mayoría de casos: la constante de Lipschitz $L$ es computacionalmente costosa de calcular, por lo que se usan aproximaciones experimentales para el $\eta$, además en muy contadas ocasiones la función de error con la que trabajamos es convexa, y tampoco es sencilla de calcular por lo que directamente no se comprueba si lo es o no lo es, y directamente la suponemos no convexa. 
 
 
 
-\subsubsection{Convergencia para SGD y MBGD}
+\subsubsection{Convergencia para versiones estocásticas}
 
 
-Podemos obtener un resultado mucho más práctico, ya que es para SGD y MBGD y además con condiciones más relajadas. A partir de ahora usaremos SGD para referirnos de manera general a las versiones estocásticas del algoritmo de gradiente descendente, tanto SGD como MBGD.Usando la teoría de algoritmos aproximados estocásticos, con el teorema de Robbins-Siegmund tenemos que bajo las siguientes condiciones, cuando la función es convexa se tiene la convergencia casi segura al mínimo global y cuando no lo es hay convergencia casi segura a un mínimo local. Esto nos da un criterio sencillo con el que aseguramos la convergencia, y que no depende de parámetros como la constante de Lipschitz que son complejos de computar. Para una correcta exposición del teorema y su demostración, primero vamos a definir el concepto de supermartingala y casi-supermartingala. 
+Podemos obtener un resultado mucho más práctico, ya que es para SGD y MBGD y además con condiciones más relajadas. A partir de ahora usaremos SGD para referirnos de manera general a las versiones estocásticas del algoritmo de gradiente descendente, tanto SGD como MBGD. Usando la teoría de algoritmos aproximados estocásticos, con el teorema de Robbins-Siegmund tenemos que bajo las siguientes condiciones, cuando la función es convexa se tiene la convergencia casi segura al mínimo global y cuando no lo es hay convergencia casi segura a un mínimo local. Esto nos da un criterio sencillo con el que aseguramos la convergencia, y que no depende de parámetros como la constante de Lipschitz que son complejos de computar. Para una correcta exposición del teorema y su demostración, primero vamos a definir el concepto de supermartingala y casi-supermartingala. 
 
-Usamos como referencia el libro \url{http://www.sze.hu/~harmati/Sztochasztikus\%20folyamatok/lawler.pdf}. En primer lugar vamos a introducir los conceptos de martingala, supermartingala y casi supermartingala, que son tipos de procesos estocásticos. Luego enunciaremos un teorema, el de Robbins-Siegmund, que proporciona un fuerte resultado de convergencia para los procesos casi supermartingalas. Demostrando que el algoritmo de SGD es un proceso de este tipo precisamente, enunciaremos el teorema de convergencia para estos algoritmos, demostrándolo en gran parte gracias al teorema de Robbins-Siegmund.
-
-
+Usamos como referencia el libro\footnote{\url{http://www.sze.hu/~harmati/Sztochasztikus\%20folyamatok/lawler.pdf}}. En primer lugar vamos a introducir los conceptos de martingala, supermartingala y casi supermartingala, que son tipos de procesos estocásticos. Luego enunciaremos un teorema, el de Robbins-Siegmund, que proporciona un fuerte resultado de convergencia para los procesos casi supermartingalas. Demostrando que el algoritmo de SGD es un proceso de este tipo precisamente, enunciaremos el teorema de convergencia para estos algoritmos, demostrándolo en gran parte gracias al teorema de Robbins-Siegmund.
 
 
 
-Vamos a hacer la notación un poco más compacta. Si $X_1, X_2, \ldots$ es una sucesión de variables aleatorias usaremos $\mathcal{F}_n$ para denotar "la información contenida en $X_1, \ldots, X_n$". Escribiremos $E[Y | \mathcal{F}_n]$ en lugar de $E[Y | X_1, \ldots, X_n]$.
 
-Una martingala es un modelo de juego justo. Denotamos por $\left \{ \mathcal{F}_n \right \}$ una sucesión creciente de información, es decir, para cada $n$ tenemos una sucesión de variables aleatorias $\mathcal{A}_n$ tal que $\mathcal{A}_m < \mathcal{A}_n$ si $m<n$. La información que tenemos en el momento $n$ es el valor de todas las variables en $\mathcal{A}_n$. La suposición $\mathcal{A}_m \subseteq \mathcal{A}_n$ implica que no perdemos información. Decimos que una variable aleatoria $X$ es $\mathcal{F}_n$-medible si podemos determinar el valor de $X$ en caso de conocer el valor de todas las variables aleatorias en $\mathcal{A}_n$. A menudo está sucesión creciente de información $\mathcal{F}_n$ se denomina filtración.
+
+Vamos a hacer la notación un poco más compacta. Si $X_1, X_2, \ldots$ es una sucesión de variables aleatorias usaremos $\mathcal{F}_n$ para denotar ``la información contenida en $X_1, \ldots, X_n$". Usamos $E[Y | \mathcal{F}_n]$ en lugar de $E[Y | X_1, \ldots, X_n]$.
+
+Una martingala es un modelo de juego justo. Denotamos por $\left \{ \mathcal{F}_n \right \}$ una sucesión creciente de información, es decir, para cada $n$ tenemos una sucesión de variables aleatorias $\mathcal{A}_n$ tal que $\mathcal{A}_m \subseteq \mathcal{A}_n$ si $m<n$. La información que tenemos en el momento $n$ es el valor de todas las variables en $\mathcal{A}_n$. La suposición $\mathcal{A}_m \subseteq \mathcal{A}_n$ implica que no perdemos información. Decimos que una variable aleatoria $X$ es $\mathcal{F}_n$-medible si podemos determinar el valor de $X$ en caso de conocer el valor de todas las variables aleatorias en $\mathcal{A}_n$. A menudo está sucesión creciente de información $\mathcal{F}_n$ se denomina filtración.
 
 Decimos que una secuencia de variables aleatorias $M_0, M_1, M_2, \ldots$ con $E[ |M_i|] < \infty$ es una martingala con respecto a $\left \{ \mathcal{F} \right \} _n$ si cada $M_n$ es medible con respecto a $\mathcal{F}_n$ y para cada $m<n$,
 
@@ -468,7 +471,7 @@ o equivalentemente,
 
 La condición $E[|M_i|] < \infty$ es necesaria para garantizar que las esperanzas condicionadas están bien definidas. Si $\mathcal{F}_n$ es la información en variables aleatorias $X_1, \ldots, X_n$ entonces también diremos que $M_0, M_1, \ldots$ es una martingala con respecto a $X_0, X_1, \ldots$. A veces diremos que $M_0, M_1, \ldots$ es una martingala sin hacer referencia a la filtración $\mathcal{F}_n$. En ese caso significará que la sucesión $M_n$ es una martingala con respecto a sí misma. 
 
-Un proceso $M_n$ con $E[|M_n|] < \infty$ es una supermartingala con respecto a $\left \{ \mathcal{F}_n \right \}$ si para cada $m<n$ se tiene $E[M_n | \mathcal{F}_m) \leq M_m$. En otras palabras, una supermartingala es un juego injusto. Si un proceso no negativo no verifica la desigualdad anterior, pero verifica que 
+Un proceso $M_n$ con $E[|M_n|] < \infty$ es una supermartingala con respecto a $\left \{ \mathcal{F}_n \right \}$ si para cada $m<n$ se tiene $E[M_n | \mathcal{F}_m] \leq M_m$. En otras palabras, una supermartingala es un juego injusto. Si un proceso estocástico no negativo no verifica la desigualdad anterior, pero verifica que 
 
 \begin{equation*}
 	E[M_n | \mathcal{F}_m] \leq (1 + \beta _m ) V_m + \xi _m + \zeta _m
@@ -489,42 +492,42 @@ para $m<n$ y $\beta _n, \xi _n, \zeta _n \geq 0$ siendo $\mathcal{F}_n$-medibles
 
 Ahora vamos a comprobar que el algoritmo de gradiente descendente en su versión SGD es una casi supermartingala. Vamos a definir las funciones fuertemente convexas, porque las necesitaremos para este desarrollo. 
 
-\begin{definicion}[Función estrictamente convexa]
+\begin{definicion}[Función fuertemente convexa]
 	Sea $E \subset \mathbb{R}^n$ un conjunto convexo no vacío y sea $f:E \rightarrow \mathbb{R}$, $f$ es una función fuertemente convexa en $E$ si es estrictamente convexa\footnote{La convexidad estricta es igual que la convexidad normal, pero la desigualdad de su definición es una desigualdad estricta} y además se verifica para algún $m \geq 0$:
 
    	$$( \nabla f(x) - \nabla f(y))^T(x-y) \geq m \|x-y\|^2 \quad  \forall x,y \in E.$$
 \end{definicion}
 
-Ahora nos fijamos en la minimización, para un conjunto abierto de parámetros $\mathcal W$, de la función objetivo
+Ahora nos fijamos en la minimización, para un conjunto abierto de parámetros W, de la función objetivo
 
-\begin{equation}
+\begin{equation*}
 	H(W) = E[ C(X,W)]
-\end{equation}
+\end{equation*}
 
 para una función de pérdida C. Asumimos que $\nabla H(W) = E[\nabla C(X, W)]$ y que 
 
-\begin{equation}
+\begin{equation*}
 	G(W):= E[ \| \nabla C(X,W)\|^2] \leq A + B\|W\|^2.
-\end{equation}
+\end{equation*}
 
 Asumimos también que $\nabla H(W^*)=0$ y que
 
-\begin{equation}
+\begin{equation*}
 	(W-W^*)^T \nabla H(W) \geq c \|W - W^*\|^2,
-\end{equation}
+\end{equation*}
 
-lo que implica que $W^*$ es un minimizador único de $H$, es decir, que es un mínimo global y es único. Esta última condición se mantiene siempre que $H$ sea estrictamente convexa, pero solo necesitamos que se mantenga en $W^*$.
+lo que implica que $W^*$ es un minimizador único de $H$, es decir, que es un mínimo global y es único. Esta última condición se mantiene siempre que $H$ sea fuertemente convexa, pero solo necesitamos que se mantenga en $W^*$.
 
 Añadiendo la tasa de aprendizaje como una sucesión en lugar de una constante y expresando las sucesiones como en \ref{teor:sig} para facilitar la comprensión, la regla de actualización de los pesos que vimos en \ref{eq:SGD} quedaría como
 
-\begin{equation}
+\begin{equation*}
 W_{n} = W_{n-1} - \eta_{n-1} \nabla C(X_n, W_{n-1})
-\end{equation} 
+\end{equation*} 
 
 para una secuencia $X_1, X_2, \ldots$ de variables aleatorias independientes e idénticamente distribuidas. Asumimos que la tasa de aprendizaje $\eta_{n-1}$ puede depender de $X_1, \ldots, X_{n-1}$ y $W_0, \ldots, W_{n-1}$. De esto obtenemos que 
 
 \begin{align*}
-	V_{n} &= \| W_{n} - W* \|^2 \\
+	V_{n} &= \| W_{n} - W^* \|^2 \\
 	       &= \| W_{n-1} - \eta_{n-1} \nabla C(X_{n}, W_{n-1}) - W^* \|^2 \\
 	       &= V_{n-1} + \eta^2_{n-1} \|\nabla C(X_n, W_{n-1}) \|^2 - 2\eta_{n-1}(W_{n-1} - W^*)^T \nabla C(X_n, W_{n-1}).
 \end{align*}
@@ -578,6 +581,8 @@ Estamos ya en condiciones de enunciar y demostrar el teorema relativo a la conve
 \end{teorema}
 
 
+\vspace{1cm}
+
 \begin{flushleft}
    \textbf{\textit{Demostración.}}
 \end{flushleft} 
@@ -599,7 +604,7 @@ casi seguro cuando $n \rightarrow \infty$.
     $\square$
 \end{flushright} 
 
-Aunque la suposición de que $H$ es globalmente fuertemente convexa es demasiado fuerte, ya que hace que el teorema no sea útil en la práctica, podemos esperar que el algoritmo tenga un comportamiento similar en el entorno de un minimizador local $W*$ si $H$ es fuertemente convexa en ese entorno.
+Aunque la suposición de que $H$ es globalmente fuertemente convexa es demasiado fuerte, ya que hace que el teorema no sea útil en la práctica, podemos esperar que el algoritmo tenga un comportamiento similar en el entorno de un minimizador local $W^*$ si $H$ es fuertemente convexa en ese entorno.
 
 La conclusión más importante que obtenemos de este resultado es que la tasa de aprendizaje debe tender a cero para asegurarnos la convergencia teórica del algoritmo. En el teorema \ref{teor:convsgd} la condición \ref{eq:convsgd1} nos dice cómo de rápido debe converger, mientras que la condición \ref{eq:convsgd2} nos dice que no debe converger demasiado rápido.
 
@@ -610,7 +615,7 @@ La conclusión más importante que obtenemos de este resultado es que la tasa de
 \subsubsection{Problemas en la convergencia}
 
 
-En el teorema \ref{proof:gdconvex} tenemos asegurada la convergencia a un mínimo aunque con unos requisitos que no se suelen encontrar en la práctica. En la proposición \ref{prop:convsgd} por el contrario solo nos garantizamos llegar a un punto crítico, ni siquiera a un mínimo local. Encontramos aquí el mayor problema para la convergencia del algoritmo del gradiente descendente: la convergencia prematura en puntos con gradiente muy cercano a cero que no son soluciones subóptimas. 
+En el teorema \ref{proof:gdconvex} tenemos asegurada la convergencia a un mínimo aunque con unos requisitos que no se suelen encontrar en la práctica. En el teorema \ref{teor:convsgd} por el contrario solo nos garantizamos llegar a un punto crítico, ni siquiera a un mínimo local. Encontramos aquí el mayor problema para la convergencia del algoritmo de gradiente descendente: la convergencia prematura en puntos con gradiente muy cercano a cero que no son soluciones subóptimas. 
 
 Cuando el algoritmo se aproxima a un punto crítico, la magnitud del gradiente se aproxima a cero, y teniendo en cuenta la regla de actualización de los pesos, $W_{t+1}=W_t - \eta \nabla C(W)$, tenemos por tanto que $W_{t+1} - W_t \approx 0$. Es decir que las modificaciones de los pesos con las actualizaciones serán prácticamente nulas, haciendo que el algoritmo se pare o que progrese de manera muy lenta cerca de estos puntos, lo que en un primer momento podría aparentar una falsa convergencia en regiones planas por ejemplo. 
 

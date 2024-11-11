@@ -1,0 +1,34 @@
+\section{Conclusiones y trabajos futuros}
+
+Durante la elaboración de este TFG, se ha llevado a cabo un significativo aprendizaje. En primer lugar, ha sido necesario asentar y poner en práctica los conocimientos adquiridos a lo largo de todo el grado, como la capacidad de resolver problemas, así como el análisis y planificación de los mismos. Muchos de los contenidos de las asignaturas de Aprendizaje Automático, Visión por Computador y Metaheurísticas han tenido que ser revisitados, revisados minuciosamente y, posteriormente, ampliados con nuevos conceptos complementarios. Además, se han utilizado de manera complementaria conceptos de otras asignaturas, como el análisis de la complejidad computacional de un algoritmo visto en Algorítmica, o la realización de pruebas estadísticas para comprobar hipótesis sobre distribuciones, tal como se trabajó en ISE.
+
+Al comienzo del proyecto, ha sido necesario entender de manera profunda cómo funciona el proceso de entrenamiento del algoritmo de aprendizaje del gradiente descendente y sus optimizadores. También se ha requerido una investigación para analizar cómo se relacionan las técnicas metaheurísticas con problemas de optimización continua a gran escala, como es el entrenamiento de modelos de aprendizaje profundo. Además, fue necesario investigar sobre la literatura reciente para tomar decisiones en cuanto a la experimentación y el entorno de trabajo.
+
+La amplia batería experimental ha permitido comprender en profundidad numerosos aspectos del aprendizaje profundo, logrando responder, ya sea de manera experimental o teórica, a los diversos objetivos planteados al inicio del trabajo. Primero, analizamos detalladamente los factores que más influyen en la disminución del rendimiento de las técnicas metaheurísticas, conocimiento que nos sirvió como base para abordar el resto de las cuestiones. De manera práctica, también propusimos dos nuevas técnicas para el entrenamiento de modelos y las analizamos a través de los resultados obtenidos. A nivel teórico, examinamos la complejidad computacional de las técnicas metaheurísticas y confirmamos estadísticamente las primeras impresiones observadas en los resultados experimentales acerca de la diferencia de rendimiento de las técnicas metaheurísticas para tareas de clasificación y regresión.
+
+\subsection{Objetivos satisfechos}
+
+Hemos conseguido realizar exitosamente todos los objetivos propuestos al comienzo del trabajo:
+
+\begin{enumerate}
+	\item Se ha realizado una experimentación rigurosa atendiendo a no caer en fallos comunes de la literatura. 
+
+	\item Hemos analizado los factores que más influyen en la disminución del rendimiento de las técnicas metaheurísticas en el entrenamiento de modelos de aprendizaje profundo en comparación con las técnicas clásicas. Gracias a la amplia batería experimental propuesta, pudimos confirmar que los factores que más afectan al rendimiento son, en orden: tamaño del conjunto de datos utilizado, número de parámetros del modelo que entrenamos y complejidad de la tarea a resolver.
+	
+	\item Comprobamos estadísticamente que existe una diferencia significativa en el rendimiento de las técnicas metaheurísticas según si la tarea es de clasificación o de regresión. Para ello, nos basamos en la prueba de los rangos con signo de Wilcoxon para comparar los datos de entrenamiento obtenidos en tareas de clasificación y regresión para conjuntos de datos de similar complejidad y tamaño.
+	
+	\item Realizamos un análisis de la complejidad computacional de las técnicas metaheurísticas, primero entendiendo por qué existe una diferencia de tiempo entre estas técnicas y el gradiente descendente, más allá de que se les asignen más recursos computacionales; y más tarde acotando ese tiempo de manera asintótica.
+	
+	\item Hemos propuesto dos técnicas metaheurísticas híbridas con el gradiente descendente, basadas en algoritmos que se considera que tienen muy buen rendimiento en la literatura. Hemos conseguido mejorar a SHADE, la técnica menos eficaz, pero no así a SHADE-ILS. Aunque la propuesta no empeora su rendimiento, por lo que se valora positivamente teniendo en cuenta que SHADE-ILS obtiene resultados del estado del arte.
+\end{enumerate}
+
+\subsection{Trabajos futuros}
+Después de analizar los resultados de este TFG, exponemos algunos posibles trabajos futuros:
+
+\begin{enumerate}
+	\item Hibridaciones de técnicas metaheurísticas con el gradiente descendente aprovechando la estructura de capas de las redes neuronales profundas. De esta manera se consumiría menos tiempo en el entrenamiento y se aprovecharía información del problema.
+	
+	\item Comparar el rendimiento de las técnicas metaheurísticas en modelos ConvNets y MLP, investigando si existe alguna diferencia entre su rendimiento de manera análoga a como hicimos en la cuestión \textit{P3}.
+	
+	\item Ampliar el análisis sobre la complejidad computacional de las técnicas metaheurísticas, añadiendo más variedad en la cantidad de datos y la complejidad de los modelos.
+\end{enumerate}

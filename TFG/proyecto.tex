@@ -3,16 +3,18 @@
 \usepackage{listings}
 \usepackage[utf8]{inputenc}
 \usepackage[spanish]{babel}
-\usepackage[backend=biber, style=alphabetic]{biblatex} 
+\usepackage[backend=biber, style=alphabetic, date=year, eprint=false, isbn=false, url=false, doi=false]{biblatex} 
 \usepackage{amsmath}
 \usepackage{amssymb}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{multirow}
 \usepackage{subfig}
+\usepackage{diagbox}
 \usepackage{verbatim}
 
 \addbibresource{bibliografia.bib}
+\AtEveryBibitem{\clearfield{address}}
 %Que no se muestren las imagenes
 %\setkeys{Gin}{draft}
 
@@ -40,6 +42,7 @@
 \usepackage{longtable}
 
 \usepackage[pdfborder={000}]{hyperref} %referencia
+%\usepackage{cleveref}
 
 
 %Math packages
@@ -193,6 +196,10 @@ pdfproducer = {pdflatex}
 
 \newpage 
 
+\part{Parte matemática: análisis del gradiente descendente, su convergencia y \textit{backpropagation}.}
+
+\newpage
+
 
 \input{Plantilla_TFG_latex/Matemática/00Intro}
 
@@ -201,10 +208,11 @@ pdfproducer = {pdflatex}
 \input{Plantilla_TFG_latex/Matemática/2.GD}
 
 \input{Plantilla_TFG_latex/Matemática/Definición}
+\input{Plantilla_TFG_latex/Matemática/Conclusión}
 
 \newpage
 
-\part{Parte informática: enfoque clásico vs técnicas metaheurísticas}
+\part{Parte informática: Estudio empírico comparativo entre gradiente descendiente y metaheurísticas para el entrenamiento de redes neuronales.}
 
 \vspace{4cm}
 
@@ -217,88 +225,15 @@ pdfproducer = {pdflatex}
 \input{Plantilla_TFG_latex/Informatica/EstadoDelArte}
 
 \input{Plantilla_TFG_latex/Informatica/Experimentacion}
+\input{Plantilla_TFG_latex/Informatica/Resultados}
+\input{Plantilla_TFG_latex/Informatica/Conclusiones
+}
 
 
 
 
 
 
-%\part{Parte informática}
-%\setcounter{section}{0}
-%\vspace{4cm}
-%\section{Fundamentos previos}
-%\section{Estado del arte}
-%\section{Entorno de pruebas}
-%PyTorch, fastai, elecciones del entrenamiento, CV, parámetros elegidos en los optimizadores, leslie.
-
-%\paragraph{Elecciones en las pruebas}
-%\begin{itemize}
-
- %   \item NAG, RMSProp y Adam. Uso las 3 estrategias/enfoques distintas en los optimizadores. Uso Nesterov tiene más citaciones su paper. Uso Adam frente a AdamW al tener también más citaciones y ser más comunmente usado. Uso RMSProp frente a AdaGrad ya que generalmente tiene mejor rendimiento (https://arxiv.org/pdf/1609.04747.pdf) (No hay paper para justificar citaciones)
-
-    
-  %  \item Entrenamiento con política de leslie. Convergencia más rápida y mayor generalización.
-
-   % \item Grid search para el lr en momentum a partir de los valores devueltos por lr\_find(). En total 4: [lr, lr/10, lr\_steep, lr\_steep/10]. lr\_find() es una buena función para obtener una idea de por donde puede estar el learning rate óptimo. No lo uso en RMSProp ni Adam ya que tienen lr adaptativos y se comenta en papers que no es necesario (https://arxiv.org/pdf/1609.04747.pdf).
-
-    %\item Para el resto de los hiperparámetros seleccionar los valores de los papers originales, en caso de que no haya usar el por defecto de PyTorch. Estos valores para los hiperparámetros se proponen tras muchas pruebas empíricas por lo que suelen ser una buena aproximación en el caso general cuando no se dispone de excesivo tiempo de tunearlos.
-
-    %\item GS para seleccionar batch size, con Valores [64,128,256,512]. 64 es uno de los más usados pero con la política de Leslie mejora la regularización usar batch sizes grandes.
-
-    %\item Para cada ejecución de GS uso 3 epochs. 
-
-    %\item CV 3-fold. Con EarlyStopping de paciencia 3 y delta 0.1 o 0.01. Son valores comunes en la literatura.
-
-    %\item Experimentación modular, orden de realización de experimentos:
-     %   \begin{enumerate}
-      %      \item LeNet5 con MNIST y CIFAR-10.
-
-       %     \item Algoritmo genético. 
-
-        %    \item ResNet18 con MNIST y CIFAR-10.
-
-         %   \item Algoritmo memético
-
-          %  \item Añadir más datasets
-
-           % \item Probar variaciones en el genético/memético
-        %\end{enumerate}
-    
-%\end{itemize}
-
-
-%\subsection{Modelos}
-%Describir los modelos usados
-%\subsection{Datasets}
-%Describir los datasets usados
-%\section{Análisis de los métodos clásicos}
-%Comentar los 3 optimizadores que uso, su base teórica y puntos fuertes y deficiencias de cada estrategia. 
-
-%\paragraph{Momento}
-
-%\paragraph{Learning Rates adaptativos}
-
-%\paragraph{Combinación}
-
-%\subsection{Resultados experimentales}
-%Comparación del rendimiento de los 3 en las distintas pruebas. 
-
-%\section{Nuevos enfoques y metaheurísticas}
-%Comentar cuándo se empezaron a usar en ML, en qué tareas se les da mejor y en cuales se usan más. Comentar distintos tipos de metaheuristicas, enfocando en algoritmos geneticos que son los más usados y que mejor resultado dan de manera general en problemas de optimización , pero que suelen llevar a un overffiting en entrenamiento. Aun asi se usan para arquitecturas y seleccion de hiperparámetros.
-
-%En principio los algoritmos geneticos sobreentrenan los modelos por tanto no hacer prueba empírica de un genético estándar, sino realizar trabajo teorico de ellos como de otras alternativas basadas en distintas metaheurísticas. Prueba empírica con propuesta. Poner ejemplos concretos de trabajos realizados, resultados, problemas, puntos fuertes y debiles, investigaciones futuras.
-
-
-%\subsection{Propuesta} 
- %La mayoria de algoritmos geneticos se entrenan con todos los pesos a la vez sin hacer distincion por capas (Lights and Shadows in Evolutionary Deep Learning: Taxonomy, Critical Methodological Analysis, Cases of Study, Learned Lessons, Recommendations and Challenges), en este mismo paper se usa entrenamiento basado en evolutivos pero entrenando primero una capa mientras están las demás fijas. Proponer una variacion de algoritmo genetico con un nivel más de abstracción donde la representacion sea de: individuo=modelo, cromosoma=capa, gen=peso de la capa; aquí la recombinación no sería entre dos genes sino entre dos cromosomas. No he visto representaciones de este tipo en la literatura, aunque debería hacer una búsqueda más exhaustiva para asegurarme. A mi parecer esta representación se parece más al proceso de evolución (una persona tiene varios cromosomas cada uno con sus genes, y cada dos cromosomas del mismo tipo combinan sus genes). Además debido a la estructura de los modelos en FastAI y Pytorch resulta sencillo de operar con ellos de esta manera (a traves de un objeto learner). Usar para la recombinación el operador BLX-$\alpha$. Esto sería equivalente a usar una representación de un vector real pero usando el operador BLX-$\alpha$, en lugar de sobre cada valor independientemente, sobre un conjunto fijado de valores. El seleccionar esos conjuntos como las capas tiene bastante sentido a nivel semántico y mete una abstracción de alto nivel, que podría resultar beneficiosa. Al realizar modificaciones de la capa en su conjunto en lugar de a cada peso, la restricción es mayor y podría servir de regularizacion. Se estarían mejorando filtros en su conjunto en lugar de valores individuales.
-
-%Los demás detalles serán a concretar tras la experimentación, pero en principio selección por torneo es ampliamente usado y no costoso. El número de la población suele situarse en 50, si uso un valor cercano a ese haría un modelo estacionario para ahorrar computación, podría probar con modelo generacional si uso un valor más bajo como 5 o 10. Idea para la mutación: truncamiento de valores float a un número concreto de decimales, simulando la imperfección en la copia genética, sería una mutación general (actúa sobre todo el cromosoma o individuo en lugar de sobre un gen concreto) que se iría acumulando de a poco. Previsiblemente el coste computacional no será todo lo reducido que debiera por el uso del objeto learner en lugar de estructuras de datos de bajo nivel, pero creo que si me pongo a realizar esas cosas de bajo nivel sería demasiado costoso y puede salir mal.
-
-
-%Proponer otra variación basado en meméticos: cada x generaciones se realiza un entrenamiento de los modelos usando GD. De esta manera se combina la capacidad exploradora (busqueda global) de los genéticos con la capacidad explotadora (busqueda local) del gradiente descendente. 
-
-%\subsection{Resultados experimentales}
-%\section{Conclusiones}
 
 
 
@@ -325,8 +260,15 @@ pdfproducer = {pdflatex}
 %%\nocite{*}
 
 \addcontentsline{toc}{section}{Bibliografía}
+%\addcontentsline{toc}{section}{Apéndice A}
+%\addcontentsline{toc}{section}{Apéndice B}
 \newpage
 \printbibliography
+
+\newpage
+\input{Plantilla_TFG_latex/Apéndices/ApendiceA}
+\newpage
+\input{Plantilla_TFG_latex/Apéndices/ApendiceB}
 %\bibliographystyle{miunsrturl}
 %
 %\appendix

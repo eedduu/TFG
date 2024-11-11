@@ -1,4 +1,4 @@
-\section{BP}
+\section{\textit{Backpropagation}}
 Ya conocemos el algoritmo de aprendizaje del gradiente descentente, y en esta sección veremos BP, que como ya hemos mencionado, es el algoritmo más usado a la hora de calcular el gradiente en el entrenamiento de un modelo. 
 
 Cuando queremos obtener las predicciones de una red neuronal para unos datos de entrada concretos, la información fluye desde atrás hacia delante, es decir desde la capa de entrada $x$, pasando por las capas ocultas hasta producir una salida $o$, que si es evaluada con la función de coste $C$ produce un escalar $E$ que representa el error del modelo. A esto lo llamamos propagación hacia delante (\textit{forward propagation}).
@@ -22,7 +22,7 @@ Debido a la estructura general de una red neuronal donde la dimensión de la ent
 Vamos a explorar el algoritmo de BP de manera progresiva: en primer lugar veremos la diferenciación hacia delante y hacia atrás, viendo por qué es más eficiente usar la segunda y acotando este algoritmo general para llegar al algoritmo de BP, para lo que veremos como calcular la matriz Jacobiana de la salida de un perceptrón multicapa (MLP, por sus siglas en inglés) respecto a la entrada, en una situación que no será de entrenamiento, ya que no habrá parámetros entrenables, pero nos servirá para ilustrar el funcionamiento de BP. Luego veremos cómo obtenemos el gradiente del error con respecto a los pesos de cada capa usando el algoritmo de BP en un MLP con parámetros entrenables, concretando con ejemplos para las capas más comúnmente utilizadas. Finalmente vamos a generalizar este concepto hacia modelos más abstractos usando grafos dirigidos acíclicos. 
 
 
-Los MLP son un tipo de red neuronal, dividos en capas compuestas de nodos llamados neuronas, donde cada nodo de cada capa está conectado con todos los nodos de la capa siguiente. Son usados principalmente con conjuntos de entrenamiento tabulares, es decir aquellos que sus datos tienen formato de tabla. Usaremos esta arquitectura para realizar el desarrollo teórico ya que es más sencilla conceptualmente y facilita la notación. 
+Los MLP son un tipo de red neuronal, divididos en capas compuestas de nodos llamados neuronas, donde cada nodo de cada capa está conectado con todos los nodos de la capa siguiente. Son usados principalmente con conjuntos de entrenamiento tabulares, es decir aquellos que sus datos tienen formato de tabla. Usaremos esta arquitectura para realizar el desarrollo teórico ya que es más sencilla conceptualmente y facilita la notación. 
 
 \subsection{Diferenciación hacia delante vs hacia atrás en un MLP}
 
@@ -43,16 +43,19 @@ Donde la entrada del modelo viene representada en la primera capa, $x=x_1$. Adem
 Podemos ver que la matriz jacobiana de la salida con respecto a la entrada $J_f(x) \in  \mathbb{R}^{m\times n}$ puede ser calculada usando la regla de la cadena . Esto nos va a servir para ilustrar las diferencias entre la diferenciación hacia atrás y hacia delante
 
 
-\begin{align*}
-	J_f(x) &= \frac{\partial o}{\partial x} = \frac{\partial o}{\partial x_k} \frac{\partial x_k}{\partial x_{k-1}} \cdots \frac{\partial x_3}{\partial x_2} \frac{\partial x_2}{\partial x_1} \\	
-	&=\frac{\partial f_k(x_k)}{\partial x_k} \frac{\partial f_{k-1}(x_{k-1})}{\partial x_{k-1}} \cdots \frac{\partial f_2(x_2)}{\partial x_2} \frac{\partial f_1(x_1)}{\partial x_1} \\	
-	&= J_{f_k}(x_k) J_{f_{k-1}}(x_{k-1}) \cdots J_{f_2}(x_2) J_{f_1}(x_1).
-\end{align*}
+\begin{equation*}
+	J_f(x) = J_{f_k}(x_k) J_{f_{k-1}}(x_{k-1}) \cdots J_{f_2}(x_2) J_{f_1}(x_1).
+\end{equation*}
 
+
+
+%&= \frac{\partial o}{\partial x} = \frac{\partial o}{\partial x_k} \frac{\partial x_k}{\partial x_{k-1}} \cdots \frac{\partial x_3}{\partial x_2} \frac{\partial x_2}{\partial x_1} \\	
+	%&=\frac{\partial f_k(x_k)}{\partial x_k} \frac{\partial f_{k-1}(x_{k-1})}{\partial x_{k-1}} \cdots \frac{\partial f_2(x_2)}{\partial x_2} \frac{\partial f_1(x_1)}{\partial x_1} \\	
+	%&
 Se discute ahora como calcular el jacobiano $J_f(x)$ de manera eficiente. Recordamos que 
 
 \begin{align*}
-	J_f(x_1)&=\frac{\partial f(x_1)}{\partial x_1} =
+	J_f(x_1)&=
 	\begin{pmatrix}
 	\frac{\partial f_1}{\partial x_1} & \cdots & \frac{\partial f_1}{\partial x_n} \\	
 	\vdots & \ddots & \vdots \\
@@ -151,7 +154,7 @@ Acabamos de comprobar que para calcular una matriz jacobiana resulta más eficie
 
 
 
-\subsection{BP para MLP}
+\subsection{\textit{Backpropagation} en perceptrones multicapa}
 
 
 En la sección anterior hemos visto un modelo que no tenía ningún parámetro entrenable. Ahora usaremos uno que sí los tiene y veremos cómo calcular el gradiente de la función de coste con respecto a ellos. Los parámetros son valores reales y tienen la forma $W= W_1 \times W_2 \times \cdots \times W_k \subset \Omega$, con $W_i \in \mathbb{R}^{n_i \times n_{i+1}}$ donde $n_i$ es el número de neuronas de la $i$-ésima capa. El modelo que tendríamos añadiendo los pesos es $f: \mathbb{R}^n \times \Omega \rightarrow \mathbb{R}^m$, $o=f(x,W)$ con $x \in \mathbb{R}^n$  y $o \in \mathbb{R}^m$. Donde las funciones de cada capa son de la forma $f_i(x_i, W_i)= \sigma_i(W_ix_i)=x_{i+1}$ donde $\sigma_i$ es una función de activación generalmente no lineal. Dependiendo del tipo de problema, la función $f_k$ puede ser distinta: en un problema de regresión usamos la identidad, en clasificación usamos la función \textit{Softmax} que convierte el vector de la predicción del modelo en uno cuyos elementos suman 1 y donde el elemento de la posición $i$-ésima representa la probabilidad de que la entrada pertenezca a la clase $i$.
@@ -276,24 +279,22 @@ $$\frac{\partial z}{\partial x_i} = \frac{\partial}{\partial x_i} log \sum_j e^{
 
 \subsubsection{Capa lineal}
 
-
-
 Consideramos por último una capa lineal $z=f(x,W)=Wx$, donde $W \in \mathbb{R}^{m \times n}$, con $x \in \mathbb{R}^n$ y $z \in \mathbb{R}^m$ son respectivamente la entrada y la salida de esa capa.
 
 Conviene aclarar, para evitar confusiones, que en la descripción previa hemos considerado las capas ocultas como una combinación de las operaciones lineales que aquí se describen con las funciones de activación, aquí sin embargo las analizamos por separado con el objetivo de una descripción más sencilla y un análisis más individualizado. Esta agrupación es una abstracción y por tanto no varía en cuanto a resultados.
 
 
-Podemos calcular el Jacobiano de la función de la capa con respecto al vector entrada de esa capa, $J=\frac{\partial z}{\partial x} \in \mathbb{R}^{m \times n}$. Como
+Como $z$ es lineal, el Jacobiano de la función de la capa con respecto al vector de entrada de esa capa coincide con su matriz de coeficientes, $\frac{\partial z}{\partial x}=W$
 
-$$z_i = \sum_{l=1}^n W_{il}x_l.$$
+%$$z_i = \sum_{l=1}^n W_{il}x_l.$$
 
-El elemento que ocupa la posición $(i,j)$ en la matriz Jacobiana será 
+%El elemento que ocupa la posición $(i,j)$ en la matriz Jacobiana será 
 
-$$\frac{\partial z_i}{\partial x_j} = \frac{\partial}{\partial x_j} \sum_{l=1}^n W_{il} x_l = \sum_{l=1}^n W_{il} \frac{\partial}{\partial x_j} x_l = W_{ij}$$
+%$$\frac{\partial z_i}{\partial x_j} = \frac{\partial}{\partial x_j} \sum_{l=1}^n W_{il} x_l = \sum_{l=1}^n W_{il} \frac{\partial}{\partial x_j} x_l = W_{ij}$$
 
-ya que $\frac{\partial}{\partial x_j} x_l= \mathbb{I} (l=j)$. Por tanto el Jacobiano con respecto a la entrada será
+%ya que $\frac{\partial}{\partial x_j} x_l= \mathbb{I} (l=j)$. Por tanto el Jacobiano con respecto a la entrada será
 
-$$J=\frac{\partial z}{\partial x}=W.$$
+%$$J=\frac{\partial z}{\partial x}=W.$$
 
 El PVJ entre $u^T \in \mathbb{R}^{1 \times m}$ y $J \in \mathbb{R}^{m \times n}$ es
 

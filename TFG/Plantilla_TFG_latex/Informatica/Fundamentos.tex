@@ -1,5 +1,5 @@
-\section{Fundamentos previos}
-En esta sección se detallan los conceptos, familias de modelos y algoritmos necesarios para la elaboración del trabajo posterior. Se usarán los conocimientos aprendidos en las asignaturas de Aprendizaje Automático, Visión por Computador y Metaheurísticas. Además de información extraída de los artículos de publicación originales cuando corresponda, se usan las siguientes fuentes: \cite{GoodFellowBook} y \cite{stanford_231} para las secciones \ref{sec:profundo} y \ref{sec:convnets}; \cite{divedeeplearning} para las secciones \ref{sec:resnets} y ; \cite{mhhandbook} y \cite{diffevbook} para la sección \ref{sec:mh}; \cite{numerical_optimization} y \cite{stanford_231} para la sección \ref{sec:lbfgs}; \cite{divedeeplearning} y \cite{GoodFellowBook} para \ref{sec:gd}.
+\section{Fundamentos teóricos}
+En esta sección se detallan los conceptos, familias de modelos y algoritmos necesarios para la elaboración del trabajo posterior. Se usarán los conocimientos aprendidos en las asignaturas de Aprendizaje Automático, Visión por Computador y Metaheurísticas. Además de información extraída de los artículos de publicación originales cuando corresponda, se usan las siguientes fuentes: \cite{GoodFellowBook} y \cite{stanford_231} para las secciones \ref{sec:profundo} y \ref{sec:convnets}; \cite{divedeeplearning} para la sección \ref{sec:resnets}; \cite{mhhandbook}, \cite{diffevbook},  \cite{Numerical_optimization} y \cite{stanford_231} para la sección \ref{sec:mh}; y por último \cite{divedeeplearning} y \cite{GoodFellowBook} para \ref{sec:gd}.
 
 
 \subsection{Redes neuronales y aprendizaje profundo}
@@ -10,14 +10,14 @@ En esta sección se detallan los conceptos, familias de modelos y algoritmos nec
 Una red neuronal es un modelo computacional inspirado en la manera en la que las neuronas se conectan en el cerebro humano procesando la información. Consiste en capas interconectadas con nodos llamados neuronas, donde cada conexión tiene un peso asociado. Cada neurona normalmente aplica una función no linear, llamada función de activación, a la suma ponderada de las entradas de la capa anterior, permitiendo al modelo aprender relaciones complejas. Este tipo de redes se denominan totalmente conectadas. Sus componentes básicos son:
 
 \begin{itemize}
-	\item Capa de entrada: Recibe la información.
+	\item Capa de entrada: recibe la información.
 	
 	\item Capas ocultas: son las capas intermedias, que realizan los cálculos.
 	
 	\item Capa de salida: produce la salida del modelo.
 \end{itemize}
 
-El ejemplo más sencillo es el Perceptrón \cite{perceptron}, una red neuronal de una sola capa oculta y una sola neurona como podemos ver en la imagen \ref{fig:Perceptron}. Es un clasificador lineal, es decir, sólo puede resolver probleams cuyos datos sean linealmente separables. En su versión original su función de activación $f$ es la función signo. Para problemas más complejos que no sean lineales necesitamos usar redes neuronales con varias capas.
+El ejemplo más sencillo es el Perceptrón \cite{perceptron}, una red neuronal de una sola capa oculta y una sola neurona como podemos ver en la imagen \ref{fig:Perceptron}. Es un clasificador lineal, es decir, sólo puede resolver tareas cuyos datos sean linealmente separables. En su versión original su función de activación $f$ es la función signo. Para problemas más complejos que no sean lineales necesitamos usar redes neuronales con varias capas ocultas.
 
 
 \begin{figure}
@@ -30,24 +30,24 @@ El ejemplo más sencillo es el Perceptrón \cite{perceptron}, una red neuronal d
 
 \subsubsection{Aprendizaje profundo y redes neuronales profundas}
 
-Las redes neuronales profundas son redes neuronales que tienen varias capas ocultas, generalmente más de dos, aunque lo normal en este tipo de modelos es que se usen alrededor de 10 o 20. La profundidad de una red viene determinada por el número de capas ocultas que tiene, y ésta permite aprender representaciones jerárquicas de los datos, lo que permite a las redes neuronales profundas capturar patrones más complejos en los datos en comparación con redes menos profundas.
+Las redes neuronales profundas tienen varias capas ocultas, generalmente más de dos, aunque lo normal en este tipo de modelos es que se usen alrededor de 10 o 20. La profundidad de una red viene determinada por el número de capas ocultas que tiene, y ésta permite aprender representaciones jerárquicas de los datos, lo que habilita a las redes neuronales profundas a capturar patrones más complejos en los datos en comparación con redes con menos profundidad.
 
-El aprendizaje profundo es una subrama del aprendizaje automático que se centra mayoritariamente en las redes neuronales profundas. Generalmente se usan modelos muy profundos y grandes cantidades de datos para resolver tareas complejas. Esto supone que se requiere de mucho poder computacional y de algoritmos avanzados para optimizar sus parámetros. Este tipo de modelos obtiene un gran rendimiento en tareas como el procesamiento del lenguaje natural, reconocimiento de voz o visión por computador. Los MLP son el ejemplo más clásico.
-
-
+El aprendizaje profundo es una subrama del aprendizaje automático que se centra en las redes neuronales profundas. Generalmente se usan modelos muy profundos con un alto número de parámetros y grandes cantidades de datos para resolver tareas complejas. Esto supone que se requiere de mucho poder computacional y de algoritmos avanzados para optimizar sus parámetros. Este tipo de modelos obtiene un gran rendimiento en tareas como el procesamiento del lenguaje natural, reconocimiento de voz o visión por computador. Los MLP son el ejemplo más clásico.
 
 
 
-\subsubsection{MLP}
 
-Los perceptrones multicapa o \textit{Multilayer Perceptrons} (MLP) son una versión más compleja del Perceptrón, que cuenta con varias capas ocultas y varias neuronas en cada una. Son capaces de procesar datos no linealmente separables ya que pueden aprender información más compleja. Sus capas son totalmente conectadas y la información fluye sólo hacia delante a la hora de hacer una predicción con el modelo. 
+
+\subsubsection{Perceptrones multicapa}
+
+Los perceptrones multicapa o \textit{Multilayer Perceptrons} (MLP) son una versión más compleja del Perceptrón, que cuenta con varias capas ocultas y varias neuronas en cada una como el ejemplo de la figura \ref{fig:NeuralNet}. Son capaces de procesar datos no linealmente separables ya que pueden aprender información más compleja. Sus capas son totalmente conectadas y la información fluye sólo hacia delante a la hora de hacer una predicción con el modelo. 
 
 En su definición original, usan la función signo como función de activación en todas las neuronas y sólo se usan para tareas de clasificación. Sin embargo actualmente son sinónimo de redes profundas totalmente conectadas, siendo usadas con cualquier tipo de función de activación y para tareas de clasificación o regresión.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.75\linewidth]{Plantilla_TFG_latex//imagenes//Inf//2.Fund/neural_net2.jpeg}
-    \caption{Red neuronal de tres capas (sin contar la capa de entrada) con dos capas ocultas de cuatro neuronas cada una y una capa de salida con una neurona. Destacar que no hay conexiones de una neurona con varias capas. Obtenida de \cite{stanford_231}}
+    \caption{Red neuronal de tres capas (sin contar la capa de entrada) con dos capas ocultas de cuatro neuronas cada una y una capa de salida con una neurona. Destacar que cada neurona se conecta solo con la siguiente capa. Obtenida de \cite{stanford_231}}
     \label{fig:NeuralNet}
 \end{figure}
 
@@ -55,7 +55,7 @@ En su definición original, usan la función signo como función de activación 
 \subsection{ConvNets}
 \label{sec:convnets}
 
-Las ConvNets o redes convolucionales son una familia de modelos de aprendizaje profundo usadas en la visión por computador. Obtienen un rendimiento al nivel del estado del arte en tareas como el reconocimiento de imágenes o la detección de objetos. Se caracterizan por tener una o varias capas (al menos una) basadas en convoluciones para luego tener una o varias capas totalmente conectadas. Las primeras sirven como extractores de características que capturan propiedades espaciales de las imágenes, mientras que las segundas sirven para clasificación. Comenzaron a ganar popularidad con el modelo LeNet-5 \cite{lenet5} presentado por Yann LeCun en 1998, consiguiendo superar en rendimiento al resto de técnicas hasta la fecha en el reconocimiento de dígitos manuscritos (MNIST).
+Las ConvNets o redes convolucionales son una familia de modelos de aprendizaje profundo usadas en la visión por computador. Obtienen un rendimiento al nivel del estado del arte en tareas como el reconocimiento de imágenes o la detección de objetos. Se caracterizan por tener una o varias capas (al menos una) basadas en convoluciones para luego tener una o varias capas totalmente conectadas. Las primeras sirven como extractores de características que capturan propiedades espaciales de las imágenes, mientras que las segundas sirven para clasificación. Comenzaron a ganar popularidad con el modelo LeNet5 \cite{lenet5} presentado por Yann LeCun en 1998, consiguiendo superar en rendimiento al resto de técnicas hasta la fecha en el reconocimiento de dígitos manuscritos (MNIST).
 
 \subsubsection{Operación de convolución}
 
@@ -84,15 +84,15 @@ Las convoluciones cumplen las siguientes propiedades:
 
 \end{itemize}
 
-La propiedad conmutativa es útil a nivel matemático pero no es demasiado práctica en la implementación de una red neuronal. Por ello muchas librerías de aprendizaje automático optan por implementar la función llamada \textit{cross-relation} en lugar de la convolución, volteando el núcleo como podemos ver en \ref{fig:3.Conv}.
+La propiedad conmutativa es útil a nivel matemático pero no es demasiado práctica en la implementación de una red neuronal. Por ello muchas librerías de aprendizaje automático optan por implementar la función llamada relación cruzada en lugar de la convolución, volteando el núcleo como podemos ver en la figura\ref{fig:3.Conv}.
 
 $$C(i,j)= (I \cdot K)(i,j) = \sum_m \sum_n I(i+m,j+n)K(m,n).$$
 
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.75\linewidth]{Plantilla_TFG_latex//imagenes//Inf//2.Fund/Conv.png}
-    \caption{Convolución 2D sin voltear el filtro (\textit{cross-relation}). Obtenida de \cite{GoodFellowBook}}
+    \includegraphics[width=0.5\linewidth]{Plantilla_TFG_latex//imagenes//Inf//2.Fund/Conv.png}
+    \caption{Convolución 2D sin voltear el filtro (relación cruzada). Obtenida de \cite{GoodFellowBook}}
     \label{fig:3.Conv}
 \end{figure}
 
@@ -119,7 +119,7 @@ Con la disposición espacial nos referimos al tamaño del volumen de salida y c�
 \end{enumerate}
 
 
-Las dimensiones del volumen de salida podemos calcularlas como una función dependiente del tamaño del volumen de entrada $W$, el tamaño del filtro $F$, el stride $S$ y el padding $P$ que queramos aplicar. La fórmula es la siguiente:
+Las dimensiones del volumen de salida podemos calcularlas como una función dependiente del tamaño del volumen de entrada $W$, el tamaño del filtro $F$, el \textit{stride} $S$ y el \textit{padding} $P$ que queramos aplicar. La fórmula es la siguiente:
 
 \begin{equation}\label{eq:output}
 \frac{W-F-2P}{S+1}.
@@ -130,21 +130,21 @@ Esta nos dará las dimensiones en ancho y altura del volumen de salida como pode
 \begin{figure}
     \centering
     \includegraphics[width=0.75\linewidth]{Plantilla_TFG_latex//imagenes//Inf//2.Fund/2.stride.jpeg}
-    \caption{Ilustración de la disposición espacial. El tamaño de la entrada es $W=5$ (vector gris) y el del filtro $F=3$ (vector verde), sin usar padding $P=1$. En el ejemplo de la izquierda se usa \textit{stride} $S=1$, mientras que en el de la derecha se usa $S=2$, obteniendo tamaños de salida de 5 y 3, respectivamente. Estos tamaños se pueden calcular según la fórmula \ref{eq:output}. Obtenida de \cite{stanford_231}}
+    \caption{Ilustración de la disposición espacial. El tamaño de la entrada es $W=5$ (vector gris) y el del filtro $F=3$ (vector verde), sin usar \textit{padding} ($P=1$). En el ejemplo de la izquierda se usa \textit{stride} $S=1$, mientras que en el de la derecha se usa $S=2$, obteniendo tamaños de salida de 5 y 3, respectivamente. Estos tamaños se pueden calcular según la fórmula \ref{eq:output}. Obtenida de \cite{stanford_231}}
     \label{fig:stride}
 \end{figure}
 
 
-Compartir parámetros en una ConvNet nos permite reducir el número de éstos, reduciendo el coste del entrenamiento. Se basa en la suposición de que si una característica es útil en una posición espacial $(x,y)$ tambien lo será en otr $(x',y')$. En un volumen $W \times H \times D$, en lugar de que cada neurona tenga su conjuntos de pesos, tenemos $D$ conjuntos de pesos, reduciendo drásticamente su número. 
+Compartir parámetros en una ConvNet nos permite reducir el número de éstos, reduciendo el coste del entrenamiento. Se basa en la suposición de que si una característica es útil en una posición espacial $(x,y)$ tambien lo será en otra cercana $(x',y')$. En un volumen $W \times H \times D$, en lugar de que cada neurona tenga su conjuntos de pesos, tenemos $D$ conjuntos de pesos, reduciendo drásticamente su número. 
 
-\subsubsection{Capa Pooling}
+\subsubsection{Capa \textit{Pooling}}
 
-Su función es reducir progresivamente el tamaño de la representación para reducir el número de parámetros y la carga computacional en la red, además de controlar el sobreajuste. Opera independientemente a lo largo de la profundidad del volumen, usando la operación máximo. La opción más común es usar filtros $2 \times 2$ con un stride de 2 como se observa en la figura \ref{fig:pooling}. La dimensión de la profundidad permanece intacta. Existen otros tipos de pooling, por ejemplo realizar la media entre los elementos, pero esta opción fue dejando paso a la de seleccionar el máximo ya que obtiene mejores resultados en la práctica.
+Su función es reducir progresivamente el tamaño de la representación para reducir el número de parámetros y la carga computacional en la red, además de controlar el sobreajuste. Opera independientemente a lo largo de la profundidad del volumen, usando la operación máximo. La opción más común es usar filtros $2 \times 2$ con un \textit{stride} $S= 2$ como se observa en la figura \ref{fig:pooling}. La dimensión de la profundidad permanece intacta. Existen otros tipos de \textit{pooling}, por ejemplo realizar la media entre los elementos, pero esta opción fue dejando paso a la de seleccionar el máximo ya que obtiene mejores resultados en la práctica.
 
 \begin{figure}
     \centering
     \includegraphics[width=0.75\linewidth]{Plantilla_TFG_latex//imagenes//Inf//2.Fund/maxpool.jpeg}
-    \caption{Capa de pooling con un filtro de tamaño $2 \times 2$ y stride 2. Obtenida de \cite{stanford_231}}
+    \caption{Capa de \textit{pooling} con un filtro de tamaño $2 \times 2$ y \textit{stride} 2. Obtenida de \cite{stanford_231}}
     \label{fig:pooling}
 \end{figure}
 
@@ -161,11 +161,11 @@ Su función es reducir progresivamente el tamaño de la representación para red
 	\item Se escala y se traslada la entrada normalizada: $y_i=\gamma \hat{x}_i + \beta$, donde $\gamma$ y $\beta$ son parámetros aprendibles por el modelo.
 \end{enumerate}
 
-Normalizando la entrada conseguimos hacer el proceso de entrenamiento más estable y ayuda a evitar el problema de la exlosión o desvanecimiento del gradiente. También proporciona flexibilidad y mejora el rendimiento al reescalar y trasladar la entrada, y que esto dependa de parámetros aprendibles.
+Normalizando la entrada conseguimos hacer el proceso de entrenamiento más estable e intentar evitar el problema de la exlosión o desvanecimiento del gradiente. También proporciona flexibilidad y mejora el rendimiento al reescalar y trasladar la entrada, y que esto dependa de parámetros aprendibles.
 
-\subsubsection{Capa FC}
+\subsubsection{Capa totalmente conectada}
 
-Al final de las redes convolucionales lo más común es encontrarnos una o varias capas totalmente conectadas (FC, fully connected), es decir, que cada neurona está conectada a todas las neuronas de la capa anterior, de la misma manera que ocurre en un MLP. Esta parte de la red permite clasificar las características extraídas por las caps convolucionales.
+Al final de las redes convolucionales lo más común es encontrarnos una o varias capas totalmente conectadas o \textit{fully connected} (FC), es decir, que cada neurona está conectada a todas las neuronas de la capa anterior, de la misma manera que ocurre en un MLP. Esta parte de la red permite clasificar las características extraídas por las capas convolucionales.
 
 
 \subsection{ResNets}
@@ -177,7 +177,7 @@ Las ResNets (Residual Networks) \cite{ResNets} son una familia de modelos dentro
 
 La función identidad se aprende a través de las conexiones residuales, que conectan el inicio y el final de los bloques residuales pasando la identidad. Estas conexiones además permiten aliviar el problema del desvanecimiento de gradiente. Vamos a centrarnos en una red neuronal de manera local, como se muestra en la figura \ref{fig:resblock}. 
 
-Si la función identidad $f(x)=x$ es el mapeo subyacente deseado, la función residual equivale a $g(x)=0$ y, por tanto, es más fácil de aprender: sólo tenemos que llevar a cero los pesos y bias de la últma capa de pesos dentro de la línea de puntos. Con los bloques residuales, las entradas pueden propagarse más rápidamente a través de las conexiones residuales entre capas.
+Si la función identidad $f(x)=x$ es el mapeo subyacente deseado, la función residual equivale a $g(x)=0$ y, por tanto, es más fácil de aprender: sólo tenemos que llevar a cero los pesos y sesgos de la última capa de pesos dentro de la línea de puntos. Con los bloques residuales, las entradas pueden propagarse más rápidamente a través de las conexiones residuales entre capas.
 
 \begin{figure}
     \centering
@@ -209,29 +209,30 @@ Los bloques residuales nos permiten aumentar la profundidad de la red evitando c
 	Usándolas debemos elegir un tamaño de filtro intermedio, por ejemplo $C'=64$. Aplicamos primero la convolución $1 \times 1$: $P'_1= 1 \times 1 \times C \times C' + C'=16.448$ parámetros. A continuación realizamos la convolución con el tamaño de filtro original: $P'_2: F \times F \times C' \times O + O=295.424$. En total, sumando las dos capas tendríamos $311.872$ parámetros, unas cuatro veces menos que en el caso anterior.
 \end{ejemplo}
 
-\subsection{Política de ciclos de Leslie}
+\subsection{Política de un ciclo de Leslie} \label{sec:leslie}
 
 En \cite{leslie1} se presenta una estrategia que modifica la tasa de aprendizaje de manera cíclica. En lugar de usar valores fijos o decrecientes, se divide el entrenamiento en ciclos, en los cuales la primera etapa se usa para aumentar la tasa de aprendizaje y la segunda para disminuirla, dentro de unos valores razonables. 
 
-Más adelante en \cite{leslie2} el mismo autor propone una extensión de esta estrategia en la que se usa un único ciclo durante todo el entrenamiento. Es decir que la primera mitad del entrenamiento aumentamos la tasa de aprendizaje de manera lineal y en la segunda mitad la hacemos decrecer de igual manera hasta su valor original. Además se propone modificar el momento (en el caso de que se use) de manera inversa a la tasa de aprendizaje. Esto se conoce como la política de ciclos de Leslie o \textit{One Cycle Policy}.
+Más adelante en \cite{leslie2} el mismo autor propone una extensión de esta estrategia en la que se usa un único ciclo durante todo el entrenamiento. Es decir que la primera mitad del entrenamiento aumentamos la tasa de aprendizaje de manera lineal y en la segunda mitad la hacemos decrecer de igual manera hasta su valor original. Además se propone modificar el momento (en el caso de que se use) de manera inversa a la tasa de aprendizaje. Esto se conoce como la política de un ciclo de Leslie o \textit{One Cycle Policy}. Esta se encuentra implementada en la librería de aprendizaje automático PyTorch\footnote{\url{https://pytorch.org/}} pero no en TensorFlow\footnote{\url{https://www.tensorflow.org/}}.
 
-Con esta estrategia se consigue en el entrenamiento una super-convergencia \cite{leslie3}, es decir se agiliza el entrenamiento un orden de magnitud más rápido que con las estrategias convencionales. Además se comprobó que usar tasas de aprendizajes altas en el valor máximo de la política de ciclos tiene un efecto de regularización en el entrenamiento.
+Con esta estrategia se consigue en el entrenamiento una super-convergencia \cite{leslie3}, es decir se agiliza el entrenamiento un orden de magnitud más rápido que con las estrategias convencionales. Además se comprobó que usar tasas de aprendizajes altas en el valor máximo de la política de un ciclo tiene un efecto de regularización en el entrenamiento.
 
 \subsection{Optimizadores de gradiente descendente}
 \label{sec:gd}
-Con el objetivo de intentar abordar los principales problemas del algoritmo de aprendizaje del gradiente descendente se han propuesto en la literatura diversas modificaciones, añadiendo términos en la regla de actualización de los pesos. Existen optimizadores de primer y segundo orden, en función de si hacen uso sólo de la información del gradiente o también de la matriz Hessiana. Vamos a ver en esta sección únicamente los de primer orden, y veremos un método de segundo orden en la sección siguiente pero como parte de una metaheurística memética. Existen tres enfoques en este ámbito: el uso de momento, learning rates adaptativos y la combinación de los dos anteriores. De cada uno hacemos hincapié en el que vamos a usar en el presente TFG, en orden respectivo: NAG, RMSProp y Adam.
+Con el objetivo de intentar abordar los principales problemas del algoritmo de aprendizaje del gradiente descendente se han propuesto en la literatura diversas variantes, modificando la regla de actualización de los pesos. Existen optimizadores de primer y segundo orden, en función de si hacen uso sólo de la información del gradiente o también de la matriz Hessiana, respectivamente. Vamos a ver en esta sección únicamente los de primer orden, y veremos un método de segundo orden en la sección siguiente pero como parte de una metaheurística memética. Se dan tres enfoques en este ámbito: el uso de momento, tasas de aprendizaje adaptativas y la combinación de los dos anteriores. De cada uno hacemos hincapié en el que vamos a usar en el presente TFG, en orden respectivo: NAG, RMSProp y Adam.
 
 \subsubsection{NAG}
 
 El algoritmo del gradiente descendente es problemático en regiones de la función de error donde una dimensión tiene mucha más pendiente que otra, que son comunes alrededor de óptimos locales. En estos escenarios el algoritmo oscila y realiza poco progreso real. El momento \cite{momentumorig} es un método que acelera al algoritmo en la dirección relevante y compensa las oscilaciones, como podemos ver en la figura \ref{fig:momentum}. Esto se realiza añadiendo una fracción $\gamma$ del vector gradiente de la última iteración al vector gradiente actual.
 
 \begin{figure}[!tbp]
-\label{fig:momentum}
+
   \centering
-  \subfloat{\includegraphics[width=0.75\textwidth]{Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwoutmom.png}}
+  \subfloat{\includegraphics[width=0.4\textwidth]{Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwoutmom.png}}
   \hfill
-  \subfloat{\includegraphics[width=0.75\textwidth]{Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwmom.png}}
+  \subfloat{\includegraphics[width=0.4\textwidth]{Plantilla_TFG_latex//imagenes//Inf//2.Fund/sgdwmom.png}}
   \caption{Comparación entre el algoritmo de gradiente descendente sin usar el método del momento (izquierda) y usándolo (derecha). Vemos que en la figura de la derecha se diferencia la dirección del gradiente (flechas negras) y el camino seguido por el algoritmo en rojo. Imágenes obtenidas de \cite{GoodFellowBook}.}
+    \label{fig:momentum}
 \end{figure}
 
 \begin{align*}	
@@ -241,7 +242,7 @@ El algoritmo del gradiente descendente es problemático en regiones de la funci�
 
 El valor de $\gamma$ se sitúa normalmente alrededor de 0.9. El término del momento se incrementa en las dimensiones en las que el gradiente apunta en la misma dirección y se reduce en las que el gradiente cambia de dirección, consiguiendo una convergencia más rápida y estable. Dotamos al algoritmo de cierta inercia para reducir la brusquedad en los cambios de dirección.
 
-El optimizador NAG \cite{Nesterov} modifica esta idea de manera que podamos ''predecir'' a dónde nos lleva esa inercia. A la hora de calcular el gradiente de la función de coste, no lo hacemos respecto a los parámetros, sino respecto a una aproximación de los parámetros tras la iteración actual, de manera que podamos saber de forma aproximada dónde nos encontraremos después de actualizar los pesos. Se puede interpretar como una corrección del método de momento original. El valor del momento se sitúa también alrededor de 0.9.
+El optimizador \textit{Nesterov Accelerated Gradient} (NAG) \cite{Nesterov} modifica esta idea de manera que podamos ``predecir'' a dónde nos lleva esa inercia. A la hora de calcular el gradiente de la función de coste, no lo hacemos respecto a los parámetros, sino respecto a una aproximación de los parámetros tras la iteración actual, de manera que podamos saber de forma aproximada dónde nos encontraremos después de actualizar los pesos. Se puede interpretar como una corrección del método de momento original. El valor del momento se sitúa también alrededor de 0.9.
 
 \begin{align*}	
 	v_t&= \gamma v_{t-1} + \eta \nabla C(W-v_t) \\
@@ -260,16 +261,16 @@ Mientras que usando el optimizador momento original primero calculamos el gradie
 
 \subsubsection{RMSProp}
 
-RMSProp (Root Mean Square Propagation) es un optimizador de primer orden que introduce \textit{learning rates} adaptativos. Presentado por Geoff Hinton en su curso \cite{rmsprop}, la fórmula de actualización de los pesos es la siguiente:
+RMSProp (Root Mean Square Propagation) es un optimizador de primer orden que introduce tasas de aprendizaje adaptativas. Presentado por Geoff Hinton en su curso \cite{rmsprop}, la fórmula de actualización de los pesos es la siguiente:
 
 \begin{align*}
-	E[\nabla C(W_t)] &= 0.9 E[\nabla C(W_{t-1})] + 0.1 \nabla C(W_t)^{2}\\
-	W_{t+1} &= W-t - \frac{\eta}{\sqrt{E[\nabla C(W_t)^2]_t + \epsilon}}\nabla C(W_t)
+	E[g]_t &= 0.9 E[g]_{t-1} + 0.1 \nabla C(W_t)^{2}\\
+	W_{t+1} &= W-t - \frac{\eta}{\sqrt{E[g_t^2]_t + \epsilon}}\nabla C(W_t)
 \end{align*}
 
 Donde $E[g^2]_t$ es la media móvil en la iteración $t$, que depende solamente de la iteración anterior y del gradiente actual. Las operaciones anteriores se realizan elemento a elemento, es decir, cada peso recibe una actualización con un factor personalizado. Actualizando los pesos de esta forma, cuando el gradiente es grande en una dirección entonces el factor de ese peso será pequeño, evitando oscilaciones; mientras que si en otra dirección el gradiente es relativamente pequeño entonces el valor será grande, acelerando el proceso de entrenamiento.
 
-Existen otros optimizadores que usan tasas de aprendizaje variables como Adagrad \cite{adagrad}, sus diferencias residen en la ventana de iteraciones y el cálculo del factor de multiplicación del peso. En este optimizador sólo se tienen en cuenta la iteración pasada y la actual, mientras que el uso de una media exponencial decreciente permite que los \textit{learning rates} no se vuelvan demasiado pequeños.
+Existen otros optimizadores que usan tasas de aprendizaje variables como Adagrad \cite{adagrad}, sus diferencias residen en la ventana de iteraciones y el cálculo del factor de multiplicación del peso. En este optimizador sólo se tienen en cuenta la iteración pasada y la actual, mientras que el uso de una media exponencial decreciente permite que las tasas de aprendizaje no se vuelvan demasiado pequeñas.
 
 \subsubsection{Adam}
 
@@ -280,7 +281,7 @@ Existen otros optimizadores que usan tasas de aprendizaje variables como Adagrad
 	v_t&= \beta_2 v_{t-1} + (1-\beta_2)\nabla C(W)^2.
 \end{align*}
 
-$m_t$ y $v_t$ son estimaciones del momento de primer orden (media) y de segundo orden (varianza no centrada) de los gradientes respectivamente. Son inicializados como vectores de 0, por lo que sus autores encontraron que tenían un sesgo al 0, especialmente durante las primeras iteraciones y cuando $\beta_1$ y $\beta_2$ son próximos a 1. Por tanto se calculan nuevas variables corrigiendo el sesgo:
+$m_t$ y $v_t$ son estimaciones del momento de primer orden (media) y de segundo orden (varianza no centrada) de los gradientes, respectivamente. Son inicializados como vectores de 0, por lo que sus autores encontraron que tenían un sesgo al 0, especialmente durante las primeras iteraciones y cuando $\beta_1$ y $\beta_2$ son próximos a 1. Por tanto se calculan nuevas variables corrigiendo el sesgo:
 
 \begin{align*}
 	\hat{m}_t&=\frac{m_t}{a-\beta_1}\\
@@ -298,7 +299,7 @@ Los autores proponen valores por defecto de 0.9 para $\beta_1$, 0.999 para $\bet
 \subsection{Metaheurísticas}
 \label{sec:mh}
 
-En su definición original las metaheurísticas son métodos que combinan técnicas de mejora local con estrategias de alto nivel para crear un proceso capaz de escapar óptimos locales y realizar una búsqueda robusta del espacio de soluciones. Aunque no hay garantía teórica de que puedan encontrar la solución óptima, su rendimiento es muy superior en algunos casos al de algoritmos exactos que requieren demasiado tiempo para completar su ejecución, especialmente en problemas complejos del mundo real. En problemas NP-Hard por ejemplo se prioriza el uso de metaheurísticas que dan una solución cercana a la óptima en un tiempo mucho menor que algoritmos exactos.
+En su definición original las metaheurísticas son métodos que combinan técnicas de mejora local con estrategias de alto nivel para crear un proceso capaz de escapar óptimos locales y realizar una búsqueda robusta del espacio de soluciones. Aunque no hay garantía teórica de que puedan encontrar la solución óptima, su rendimiento es muy superior en algunos casos al de algoritmos exactos que requieren demasiado tiempo para completar su ejecución, especialmente en problemas complejos del mundo real. En problemas NP-Difícil por ejemplo se prioriza el uso de metaheurísticas que dan una solución cercana a la óptima en un tiempo mucho menor que algoritmos exactos.
 
 Podemos clasificar a las metaheurísticas en dos grandes grupos en función de cómo se realiza la búsqueda por el espacio de soluciones: basadas en trayectorias y basadas en poblaciones. En las primeras el proceso de búsqueda se caracteriza por realizar una trayectoria en el espacio de búsqueda, que puede ser visto como la evolución en tiempo discreto de un sistema dinámico. En las metaheurísticas basadas en poblaciones, en cada iteración hay un conjunto de soluciones que interactúan entre sí. Nos centraremos en este último tipo ya que es el que vamos a usar.
 
@@ -315,7 +316,7 @@ Son técnicas de optimización probabilística que con frecuencia mejoran a otro
 
 \begin{itemize}
 	\item Selección: se elige una parte de la población actual, normalmente con criterios elitistas (se elige a los mejores) aunque introduciendo cierta aleatoriedad. Si el número de individuos elegidos es igual al tamaño de la población, hablamos de un modelo generacional, mientras que si es menor hablamos de un modelo estacionario. 
-	\item Cruce: Los individuos seleccionados se agrupan por parejas y se combinan a través del operador de cruce. Las soluciones resultantes se denominan hijos. Operadores comunes son el cruce en un punto, el cruce en dos puntos y el cruce uniforme. Podemos ver un ejemplo gráfico y su semejanza con la genética en la imagen IMAGEN
+	\item Cruce: Los individuos seleccionados se agrupan por parejas y se combinan a través del operador de cruce. Las soluciones resultantes se denominan hijos. Operadores comunes son el cruce en un punto, el cruce en dos puntos y el cruce uniforme. 
 	\item Mutación: A los hijos se les aplican cambios aleatorios en sus valores para mantener cierta diversidad genética en la población.
 	\item Reemplazo: Se reemplaza la población actual con la nueva generación. Podemos reemplazarla entera o aplicar criterios elitistas, como reemplazar sólo con los mejores o reemplazar sólo si la nueva generación es mejor que la anterior.
 	\item Terminación: se comprueba si se cumple la condición de parada. Criterios comunes son un número máximo de iteraciones o la convergencia de la población (falta de mejoras entre generaciones).
@@ -342,14 +343,14 @@ Los algoritmos de DE \cite{diffev} son modelos basados en poblaciones que son pa
 	
 	$$v_i = x_{r1} + F \cdot (x_{r2} - x_{r3}).$$
 	
-	Donde $x_{r1}, x_{r2}$ y $x_{r3}$ son individuos seleccinados aleatoriamente con las restricciones de que $x_i  \neq x_{rj}$ y $x_{rj} \neq x_{rj'}$ con $j \in \left \{ 1,2,3 \right \}$. $F$ se suele situar en la práctica ente 0 y 2.		
+	Donde $x_{r1}, x_{r2}$ y $x_{r3}$ son individuos seleccionados aleatoriamente con las restricciones de que $x_i  \neq x_{rj}$ y $x_{rj} \neq x_{rj'}$ con $j, j' \in \left \{ 1,2,3 \right \}$. $F$ se suele situar en la práctica ente 0 y 2.		
 	}
 	
-	\item{Cruce: se realiza el cruce entre el vector solución de partida $x_i$ y el vector mutante $v_i$ para generar el vector de prueba $u_i$. Se usa el cruce binomial:
+	\item{Cruce: se combinan el vector solución de partida $x_i$ y el vector mutante $v_i$ para generar el vector de prueba $u_i$. Se usa el cruce binomial:
 	
 	$$u_{ij} = \begin{cases}
-		v_{ij} & \text{if } \text{rand}_j(0,1) \leq C_r \\
-		x_{ij} & \text{otherwise}
+		v_{ij} & \text{si } \text{rand}_j(0,1) \leq C_r \\
+		x_{ij} & \text{en otro caso}
 		\end{cases} $$
 		
 		donde $\text{rand}_j(0,1)$ es generado aleatoriamente con una distribución uniforme entre 0 y 1 para cada componente $j$.	
@@ -359,7 +360,7 @@ Los algoritmos de DE \cite{diffev} son modelos basados en poblaciones que son pa
 
 \end{itemize}
 
-En el pseudocódigo \ref{alg:de} podemos apreciar el cambio de orden en las etapas de cada generación con respecto al esquema general de los algoritmos basados en poblaciones que veíamos en la figura \ref{fig:gen_alg}
+En el pseudocódigo \ref{alg:de} podemos apreciar el cambio de orden en las etapas de cada generación con respecto al esquema general de los algoritmos basados en poblaciones que veíamos en la figura \ref{fig:gen_alg}.
 
 \begin{algorithm}
 \caption{Esquema general de DE}
@@ -383,11 +384,10 @@ En el pseudocódigo \ref{alg:de} podemos apreciar el cambio de orden en las etap
 		
 	
 
-\subsubsection{L-BFGS-B}
-\ref{sec:l-bfgs}
+\subsubsection{L-BFGS-B}\label{sec:l-bfgs}
 
 
-El método L-BFGS-B (Limited-memory Broyden-Fletcher-Goldfarb-Shanno with Box constraints) \cite{L-BFGS-B} es un algoritmo Quasi-Newton, es decir, un algoritmo de optimización iterativo. Los métodos de Newton usan la matriz Hessiana de la función a optimizar para usar más información del problema y ofrecer una convergencia más rápida y estable. Para problemas complejos de  dimensionalidad elevada, calcular la Hessiana en cada paso es una tarea computacionalmente inabarcable, y los métodos de Quasi-Newton implementan una aproximación de la Hessiana para rebajar esta carga computacional. Estos métodos se diferencian entre ellos principalmente en la forma de aproximar la matriz Hessiana.
+El método L-BFGS-B (\textit{Limited-memory Broyden-Fletcher-Goldfarb-Shanno with Box constraints}) \cite{L-BFGS-B} es un algoritmo Quasi-Newton, es decir, un algoritmo de optimización iterativo. Los métodos de Newton usan la matriz Hessiana de la función a optimizar para usar más información del problema y ofrecer una convergencia más rápida y estable. Para problemas complejos de  dimensionalidad elevada, calcular la Hessiana en cada paso es una tarea computacionalmente inabarcable, y los métodos de Quasi-Newton implementan una aproximación de la Hessiana para rebajar esta carga computacional. Estos métodos se diferencian entre ellos principalmente en la forma de aproximar la matriz Hessiana.
 
 Uno de los métodos Quasi-Newton más populares es BFGS \cite{BFGS}, que usa una aproximación de la Hessiana de forma que mantiene su propiedad de definida positiva, lo que asegura una convergencia estable. Sin embargo, aunque se reduce el coste computacional, para almacenar la matriz Hessiana se requiere demasiada memoria. El método L-BFGS \cite{L-BFGS}, en lugar de guardar una matriz con $n \times n$ aproximaciones, guarda únicamente un vector de tamaño $n$ que guarda todas las aproximaciones de manera implícita. Esta variante está diseñada para problemas de alta dimensionalidad, y produce resultados similares a su versión sin la memoria limitada.
 
@@ -396,18 +396,18 @@ La última variante L-BFGS-B, que usamos en el presente TFG en el algoritmo SHAD
 
 \subsubsection{SHADE}
 
-SHADE (Success-History based Adaptative Differential Evolution) \cite{shade} es una variante avanzada del algoritmo original de DE. Consigue mejorar a éste a través de guardar información histórica sobre configuraciones de los parámetros de factor de mutación ($F$) y el ratio de cruce ($CR$) que han tenido buenos resultados para poder ajustar de manera adaptativa estos parámetros y guiar el proceso de evolución, su pseudocódigo puede observarse en \ref{alg:shade}. 
+SHADE (\textit{Success-History based Adaptative Differential Evolution}) \cite{shade} es una variante avanzada del algoritmo original de DE. Consigue mejorar éste a través de guardar información histórica sobre configuraciones de los parámetros de factor de mutación ($F$) y el ratio de cruce ($CR$) que han tenido buenos resultados para poder ajustar de manera adaptativa estos parámetros y guiar el proceso de evolución, su pseudocódigo puede observarse en \ref{alg:shade}. 
 
 Los mecanismos de cruce y de selección son los mismos que en DE, variando principalmente el mecanismo de mutación. Para generar el vector mutante $v_i$ a partir de la solución $x_i$, SHADE usa la siguiente estrategia\footnote{Esta es la estrategia original, existen más modificaciones, aunque basadas en esta propuesta}:
 
-$$v_i = x_{r1} + F \cdot (x_p - x_i) F \cdot (x_{r1} - x_{r2}).$$
+$$v_i = x_{r1} + F \cdot (x_p - x_i)  + F \cdot (x_{r1} - x_{r2}).$$
 
-Donde $x_p$ es un individuo seleccionado aleatoriamente de entre los $p$ mejores de la población y que es distinto a $x_i$. También se verifica que $x_i  \neq x_{rj}$ y $x_{rj} \neq x_{rj'}$ con $j \in \left \{ 1,2 \right \}$. En el algoritmo de SHADE se usa $p=1$, es decir, se elige al mejor individuo de la población.
+Donde $x_p$ es un individuo seleccionado aleatoriamente de entre los $p$ mejores de la población y que es distinto a $x_i$. También se verifica que $x_i  \neq x_{rj}$ y $x_{rj} \neq x_{rj'}$ con $j, j' \in \left \{ 1,2 \right \}$. En el algoritmo de SHADE se usa $p=1$, es decir, se elige al mejor individuo de la población.
 
 El algoritmo inicia los parámetros de factor de mutación y ratio de cruce al valor 0.5, y los va adaptando según se va ejecutando. Para ello mantiene un archivo de memoria, que se actualiza al final de cada generación y en el que se guardan parejas de los valores de los dos parámetros que han dado lugar a mejores soluciones. Al actualizar el archivo se usa la media de Lehmer\footnote{$Lehmer(X) = \frac{\sum_{x\in X} x^2}{\sum_{x\in X} x}$}  de manera que se le da más peso a las parejas de parámetros que mejor rendimiento obtienen. Al comienzo de cada generación el algoritmo obtiene valores de $F$ y $C_r$ para cada individuo basándose en el archivo de memoria e introduciendo pequeñas modificaciones.
 
 
-REVISAR PSEUDOCODIGO
+%REVISAR PSEUDOCODIGO
 \begin{algorithm}
 \caption{Algoritmo SHADE}
 \label{alg:shade}
@@ -439,11 +439,11 @@ REVISAR PSEUDOCODIGO
 
 \subsubsection{Algoritmos meméticos}
 
-Los algoritmos meméticos son técnicas de optimización metaheurísticas basadas en el interacción entre componentes de búsqeuda globales y locales, y tienen la explotación de conocimiento específico del problema como uno de sus principios. De manera general se componen principalmente de un algoritmo basado en poblaciones al cual se le ha integrado un componente de búsqueda local.
+Los algoritmos meméticos son técnicas de optimización metaheurísticas basadas en el interacción entre componentes de búsqueda globales y locales, y tienen la explotación de conocimiento específico del problema como uno de sus principios. De manera general se componen principalmente de un algoritmo basado en poblaciones al cual se le ha integrado un componente de búsqueda local.
 
-Su principal diferencia con los algoritmos evolutivos tradicionales es que usan de manera concienzuda todo conocimiento disponible acerca del problema. Esto no es algo opcional sino que es una característica fundamental de los algoritmos meméticos. Al igual que los algoritmos genéticos se inspiran en los genes y la evolución, estas estrategias se inspiran en el concepto de ''meme'', análogo al de gen pero en el contexto de la evolución cultural. Normalmente se llama ''hibridar'' a incorporar información del problema a un algoritmo de búsqueda ya existente y que no usaba esta información.
+Su principal diferencia con los algoritmos evolutivos tradicionales es que usan de manera concienzuda todo conocimiento disponible acerca del problema. Esto no es algo opcional sino que es una característica fundamental de los algoritmos meméticos. Al igual que los algoritmos genéticos se inspiran en los genes y la evolución, estas estrategias se inspiran en el concepto de ``meme'', análogo al de gen pero en el contexto de la evolución cultural. Normalmente se llama ``hibridar'' a incorporar información del problema a un algoritmo de búsqueda ya existente y que no usaba esta información.
 
-Esta característica de incorporar información del problema está respaldada por fuertes resultados teóricos. En el Teorema \textit{No Free Lunch} [68] se establece que un algoritmo de búsqueda tiene un rendimiento acorde con la cantidad y calidad de información del problema que usa. Más precisamente, el teorema establece que el rendimiento de cualquier algoritmo de búsqueda es indistinguible de media de cualquier otro cuando consideramos el conjunto de todos los problemas. 
+Esta característica de incorporar información del problema está respaldada por fuertes resultados teóricos. En el teorema \textit{No Free Lunch} \cite{nofreelunch} se establece que un algoritmo de búsqueda tiene un rendimiento acorde con la cantidad y calidad de información del problema que usa. Más precisamente, el teorema establece que el rendimiento de cualquier algoritmo de búsqueda es indistinguible de media de cualquier otro cuando consideramos el conjunto de todos los problemas. 
 
 \subsubsection{SHADE-ILS}
 \label{sec:shade-ils}
@@ -453,11 +453,11 @@ SHADE-ILS \cite{shadeils} es un algoritmo memético para problemas de optimizaci
 
 En la parte de búsqueda local, en el algoritmo original existe un mecanismo de elección para usar entre varias búsquedas locales, una de ellas L-BFGS-B. En el presente TFG se ha decidido usar sólo esta última, por facilidad de implementación y porque usa más información específica del problema. Por tanto no se detallará este mecanismo de elección entre búsquedas.
 
-Las características fundamentales de esta técnica y que las diferencia con respecto a otros algoritmos meméticos son la elección de los algoritmos empleados (tanto el de búsqueda local como el basado en poblaciones) y su mecanismo de reinicio. Éste se activa cuando a lo largo de tres generaciones el rendimiento de la mejor solución no supera en más de un 5\% al de la anterior. En dicho caso, se elige una solución aleatoria de la población y se le aplica una pequeña perturbación usando una distribución normal y el resto de la población se vuelve a generar aleatoriamente. Cuando ocurre esto los parámetros adaptativos son reiniciados a los valores por defecto.
+Las características fundamentales de esta técnica y que la diferencia con respecto a otros algoritmos meméticos son la elección de los algoritmos empleados (tanto el de búsqueda local como el basado en poblaciones) y su mecanismo de reinicio. Éste se activa cuando a lo largo de tres generaciones el rendimiento de la mejor solución no supera en más de un 5\% al de la anterior. En dicho caso, se elige una solución aleatoria de la población y se le aplica una pequeña perturbación usando una distribución normal y el resto de la población se vuelve a generar aleatoriamente. Cuando ocurre esto los parámetros adaptativos son reiniciados a los valores por defecto.
 
 Cabe destacar que esto se realiza ya que SHADE-ILS mantiene los parámetros adaptativos del algoritmo SHADE entre generaciones. Esto tiene mucho sentido ya que al finalizar una ejecución de dicho algoritmo, sólo aplicamos búsqueda local a una solución, con lo que la gran mayoría de la población queda intacta y por tanto podemos reutilizar estos parámetros que se han ido adaptando a ella. 
 
-SHADE-ILS mantiene un variable para guardar la mejor solución hasta ahora y otra para guardar la mejor solución desde el último reinicio, devolviendo la primera cuando finaliza el algoritmo. En la versión utilizada se ha añadido además un array para guardar el histórico de las mejores soluciones junto con su fitness correspondiente, de manera que podamos analizar y representar las mejoras que realiza el algoritmo.
+SHADE-ILS mantiene un variable para guardar la mejor solución hasta ahora y otra para guardar la mejor solución desde el último reinicio, devolviendo la primera cuando finaliza el algoritmo. En la versión utilizada se ha añadido además un array para guardar el histórico de las mejores soluciones junto con su fitness correspondiente, de manera que podamos analizar y representar las mejoras que realiza el algoritmo. 
 
 
 \begin{algorithm}
@@ -467,13 +467,13 @@ SHADE-ILS mantiene un variable para guardar la mejor solución hasta ahora y otr
 		\State $t:=0$
 		\State Inicializar Pob$_t$
 		\State solucion\_inicial = (maximo+minimo)/2
-		\State mejor\_actual = LS(solucion\_inicial)
+		\State mejor\_actual = L-BFGS(solucion\_inicial)
 		\State mejor = mejor\_actual
 		
 		\While{evals $<$ total\_evals}
 			\State anterior = mejor\_actual.fitness
 			\State mejor\_actual, Pob = SHADE(Pob)
-			\State mejor\_actual = LS(mejor\_actual)
+			\State mejor\_actual = L-BFGS(mejor\_actual)
 			\State mejora = anterior - mejor\_actual.fitness
 			\If{mejor\_actual.fitness $<$ mejor.fitness}
 				\State mejor = mejor\_actual

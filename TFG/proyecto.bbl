@@ -42,9 +42,8 @@
            given={John\bibnamedelima N.},
            giveni={J\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
       }
-      \list{publisher}{2}{%
-        {Springer Science}%
-        {Business Media LLC}%
+      \list{publisher}{1}{%
+        {Springer}%
       }
       \strng{namehash}{9825c5144f95d0a494aa88531df32784}
       \strng{fullhash}{450d3d1add79579c1eb6d7a415440e87}
@@ -68,15 +67,6 @@
       \field{year}{2011}
       \field{pages}{453\bibrangedash 476}
       \range{pages}{24}
-      \verb{doi}
-      \verb 10.1007/s10107-011-0499-2
-      \endverb
-      \verb{urlraw}
-      \verb http://dx.doi.org/10.1007/s10107-011-0499-2
-      \endverb
-      \verb{url}
-      \verb http://dx.doi.org/10.1007/s10107-011-0499-2
-      \endverb
     \endentry
     \entry{176}{misc}{}{}
       \name{author}{4}{}{%
@@ -121,12 +111,6 @@
       \verb{eprint}
       \verb 1610.02306
       \endverb
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/1610.02306
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/1610.02306
-      \endverb
     \endentry
     \entry{162}{article}{}{}
       \name{author}{1}{}{%
@@ -154,9 +138,6 @@
       \field{title}{Towards improving the convolutional neural networks for deep learning using the distributed artificial bee colony method}
       \field{volume}{10}
       \field{year}{2019}
-      \verb{doi}
-      \verb 10.1007/s13042-018-0811-z
-      \endverb
     \endentry
     \entry{AutomaticDiff}{misc}{}{}
       \name{author}{4}{}{%
@@ -194,15 +175,8 @@
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{note}{cite arxiv:1502.05767Comment: 43 pages, 5 figures}
       \field{title}{Automatic differentiation in machine learning: a survey}
       \field{year}{2015}
-      \verb{urlraw}
-      \verb http://arxiv.org/abs/1502.05767
-      \endverb
-      \verb{url}
-      \verb http://arxiv.org/abs/1502.05767
-      \endverb
       \keyw{2015 arxiv calculus deep-learning paper pytorch symbolic-computation}
     \endentry
     \entry{ReLuat0}{misc}{}{}
@@ -256,11 +230,8 @@
            given={Christopher\bibnamedelima M.},
            giveni={C\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
       }
-      \list{location}{1}{%
-        {Berlin, Heidelberg}%
-      }
       \list{publisher}{1}{%
-        {Springer-Verlag}%
+        {Springer}%
       }
       \strng{namehash}{9dfd0135a5e80aa6d81cea2c10fb7f73}
       \strng{fullhash}{9dfd0135a5e80aa6d81cea2c10fb7f73}
@@ -310,19 +281,13 @@
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{Commun. ACM}
+      \field{journaltitle}{Communications of the Association for Computing Machinery (ACM)}
       \field{number}{7}
       \field{title}{Deep learning for AI.}
       \field{volume}{64}
       \field{year}{2021}
       \field{pages}{58\bibrangedash 65}
       \range{pages}{8}
-      \verb{urlraw}
-      \verb http://dblp.uni-trier.de/db/journals/cacm/cacm64.html\#BengioLH21
-      \endverb
-      \verb{url}
-      \verb http://dblp.uni-trier.de/db/journals/cacm/cacm64.html%5C#BengioLH21
-      \endverb
       \keyw{dblp}
     \endentry
     \entry{pso}{article}{}{}
@@ -358,9 +323,6 @@
       \field{year}{2017}
       \field{pages}{1\bibrangedash 54}
       \range{pages}{54}
-      \verb{doi}
-      \verb 10.1162/EVCO_r_00180
-      \endverb
     \endentry
     \entry{convexSubgrad}{article}{}{}
       \name{author}{1}{}{%
@@ -383,15 +345,8 @@
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{note}{cite arxiv:1405.4980Comment: A previous version of the manuscript was titled "Theory of Convex Optimization for Machine Learning"}
       \field{title}{Convex Optimization: Algorithms and Complexity}
       \field{year}{2015}
-      \verb{urlraw}
-      \verb http://arxiv.org/abs/1405.4980
-      \endverb
-      \verb{url}
-      \verb http://arxiv.org/abs/1405.4980
-      \endverb
       \keyw{convex optimization readings}
     \endentry
     \entry{L-BFGS-B}{article}{}{}
@@ -430,23 +385,14 @@
       \field{sortinithash}{d7095fff47cda75ca2589920aae98399}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{SIAM Journal on Scientific Computing}
+      \field{journaltitle}{Society for Industrial and Applied Mathematics (SIAM) Journal on Scientific Computing}
       \field{number}{5}
       \field{title}{A Limited Memory Algorithm for Bound Constrained Optimization}
       \field{volume}{16}
       \field{year}{1995}
       \field{pages}{1190\bibrangedash 1208}
       \range{pages}{19}
-      \verb{doi}
-      \verb 10.1137/0916069
-      \endverb
       \verb{eprint}
-      \verb https://doi.org/10.1137/0916069
-      \endverb
-      \verb{urlraw}
-      \verb https://doi.org/10.1137/0916069
-      \endverb
-      \verb{url}
       \verb https://doi.org/10.1137/0916069
       \endverb
     \endentry
@@ -473,12 +419,6 @@
       \field{labeltitlesource}{title}
       \field{title}{ANALYSE MATHÉMATIQUE. – Méthodc générale pour la résolution des systèmes d'équations simultanées}
       \field{year}{2009}
-      \verb{urlraw}
-      \verb https://api.semanticscholar.org/CorpusID:123755271
-      \endverb
-      \verb{url}
-      \verb https://api.semanticscholar.org/CorpusID:123755271
-      \endverb
     \endentry
     \entry{Curry1944GDNoLin}{article}{}{}
       \name{author}{1}{}{%
@@ -507,12 +447,6 @@
       \field{year}{1944}
       \field{pages}{258\bibrangedash 261}
       \range{pages}{4}
-      \verb{urlraw}
-      \verb https://api.semanticscholar.org/CorpusID:125304075
-      \endverb
-      \verb{url}
-      \verb https://api.semanticscholar.org/CorpusID:125304075
-      \endverb
     \endentry
     \entry{dauphin2014SaddlePoints}{misc}{}{}
       \name{author}{6}{}{%
@@ -641,12 +575,6 @@
       \field{year}{2012}
       \field{pages}{1223\bibrangedash 1231}
       \range{pages}{9}
-      \verb{urlraw}
-      \verb http://papers.nips.cc/paper/4687-large-scale-distributed-deep-networks.pdf
-      \endverb
-      \verb{url}
-      \verb http://papers.nips.cc/paper/4687-large-scale-distributed-deep-networks.pdf
-      \endverb
     \endentry
     \entry{adagrad}{article}{}{}
       \name{author}{3}{}{%
@@ -679,7 +607,7 @@
       \field{sortinithash}{6f385f66841fb5e82009dc833c761848}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{Journal of Machine Learning Research}
+      \field{journaltitle}{Journal of Machine Learning Research (JMLR)}
       \field{month}{07}
       \field{title}{Adaptive Subgradient Methods for Online Learning and Stochastic Optimization}
       \field{volume}{12}
@@ -700,11 +628,9 @@
            given={Robert\bibnamedelima B.},
            giveni={R\bibinitperiod\bibinitdelim B\bibinitperiod}}}%
       }
-      \list{location}{1}{%
-        {Philadelphia, PA, USA}%
-      }
-      \list{publisher}{1}{%
-        {SIAM}%
+      \list{publisher}{2}{%
+        {Society for Industrial}%
+        {Applied Mathematics (SIAM) on Scientific Computing}%
       }
       \strng{namehash}{c2063378677a3e54a1f968ae4a398271}
       \strng{fullhash}{c2063378677a3e54a1f968ae4a398271}
@@ -745,7 +671,6 @@
       \field{sortinithash}{2638baaa20439f1b5a8f80c6c08a13b4}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{howpublished}{\url{https://cs231n.stanford.edu/}}
       \field{title}{CS231n: Convolutional Neural Networks for Visual Recognition}
       \field{year}{2024}
     \endentry
@@ -775,7 +700,7 @@
            giveni={D\bibinitperiod\bibinitdelim M\bibinitperiod}}}%
       }
       \list{publisher}{1}{%
-        {JMLR.org}%
+        {Journal of Machine Learning Research (JMLR)}%
       }
       \strng{namehash}{02af15243279c938a0a5ca766835bcd4}
       \strng{fullhash}{02af15243279c938a0a5ca766835bcd4}
@@ -795,18 +720,12 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{booktitle}{AISTATS}
-      \field{series}{JMLR Proceedings}
+      \field{series}{Journal of Machine Learning Research (JMLR)}
       \field{title}{Understanding the difficulty of training deep feedforward neural networks.}
       \field{volume}{9}
       \field{year}{2010}
       \field{pages}{249\bibrangedash 256}
       \range{pages}{8}
-      \verb{urlraw}
-      \verb http://dblp.uni-trier.de/db/journals/jmlr/jmlrp9.html\#GlorotB10
-      \endverb
-      \verb{url}
-      \verb http://dblp.uni-trier.de/db/journals/jmlr/jmlrp9.html%5C#GlorotB10
-      \endverb
       \keyw{dblp}
     \endentry
     \entry{GoodFellowBook}{book}{}{}
@@ -827,9 +746,6 @@
            given={Aaron},
            giveni={A\bibinitperiod}}}%
       }
-      \list{location}{1}{%
-        {Cambridge, MA, USA}%
-      }
       \list{publisher}{1}{%
         {MIT Press}%
       }
@@ -846,7 +762,6 @@
       \field{sortinithash}{32d67eca0634bf53703493fb1090a2e8}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{note}{\url{http://www.deeplearningbook.org}}
       \field{title}{Deep Learning}
       \field{year}{2016}
     \endentry
@@ -862,9 +777,6 @@
            familyi={P\bibinitperiod},
            given={Jean-Yves},
            giveni={J\bibinithyphendelim Y\bibinitperiod}}}%
-      }
-      \list{location}{1}{%
-        {New York, NY, USA}%
       }
       \list{publisher}{1}{%
         {Springer}%
@@ -931,12 +843,6 @@
       \verb{eprint}
       \verb 1512.03385
       \endverb
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/1512.03385
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/1512.03385
-      \endverb
     \endentry
     \entry{heinic}{misc}{}{}
       \name{author}{4}{}{%
@@ -976,15 +882,8 @@
       \field{extraalpha}{2}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{note}{cite arxiv:1502.01852}
       \field{title}{Delving Deep into Rectifiers: Surpassing Human-Level Performance on ImageNet Classification}
       \field{year}{2015}
-      \verb{urlraw}
-      \verb http://arxiv.org/abs/1502.01852
-      \endverb
-      \verb{url}
-      \verb http://arxiv.org/abs/1502.01852
-      \endverb
       \keyw{deep prelu relu tech}
     \endentry
     \entry{rmsprop}{misc}{}{}
@@ -1008,10 +907,44 @@
       \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{howpublished}{\url{https://www.cs.toronto.edu/~tijmen/csc321/slides/lecture_slides_lec6.pdf}}
       \field{note}{Neural Networks for Machine Learning, Coursera}
       \field{title}{Lecture 6e rmsprop: Divide the gradient by a running average of its recent magnitude}
       \field{year}{2012}
+    \endentry
+    \entry{randomforest}{inproceedings}{}{}
+      \name{author}{1}{}{%
+        {{hash=bd8f33685f26fc02be5f9e5ffb9fe0ed}{%
+           family={Ho},
+           familyi={H\bibinitperiod},
+           given={Tin\bibnamedelima Kam},
+           giveni={T\bibinitperiod\bibinitdelim K\bibinitperiod}}}%
+      }
+      \list{publisher}{2}{%
+        {Institute of Electrical}%
+        {Electronics Engineers (IEEE) Computer Society}%
+      }
+      \strng{namehash}{bd8f33685f26fc02be5f9e5ffb9fe0ed}
+      \strng{fullhash}{bd8f33685f26fc02be5f9e5ffb9fe0ed}
+      \strng{fullhashraw}{bd8f33685f26fc02be5f9e5ffb9fe0ed}
+      \strng{bibnamehash}{bd8f33685f26fc02be5f9e5ffb9fe0ed}
+      \strng{authorbibnamehash}{bd8f33685f26fc02be5f9e5ffb9fe0ed}
+      \strng{authornamehash}{bd8f33685f26fc02be5f9e5ffb9fe0ed}
+      \strng{authorfullhash}{bd8f33685f26fc02be5f9e5ffb9fe0ed}
+      \strng{authorfullhashraw}{bd8f33685f26fc02be5f9e5ffb9fe0ed}
+      \field{labelalpha}{Ho95}
+      \field{sortinit}{H}
+      \field{sortinithash}{23a3aa7c24e56cfa16945d55545109b5}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{abstract}{Decision trees are attractive classifiers due to their high execution speed. But trees derived with traditional methods often cannot be grown to arbitrary complexity for possible loss of generalization accuracy on unseen data. The limitation on complexity usually means suboptimal accuracy on training data. Following the principles of stochastic modeling, we propose a method to construct tree-based classifiers whose capacity can be arbitrarily expanded for increases in accuracy for both training and unseen data. The essence of the method is to build multiple trees in randomly selected subspaces of the feature space. Trees in, different subspaces generalize their classification in complementary ways, and their combined classification can be monotonically improved. The validity of the method is demonstrated through experiments on the recognition of handwritten digits.}
+      \field{booktitle}{Proceedings of the Third International Conference on Document Analysis and Recognition (Volume 1) - Volume 1}
+      \field{isbn}{0818671289}
+      \field{series}{ICDAR '95}
+      \field{title}{Random decision forests}
+      \field{year}{1995}
+      \field{pages}{278}
+      \range{pages}{1}
+      \keyw{complexity,decision theory,decision trees,generalization accuracy,handwriting recognition,handwritten digits,optical character recognition,random decision forests,stochastic modeling,suboptimal accuracy,tree-based classifiers}
     \endentry
     \entry{VanishExplode}{incollection}{}{}
       \name{author}{4}{}{%
@@ -1048,8 +981,9 @@
            given={J.\bibnamedelimi F.},
            giveni={J\bibinitperiod\bibinitdelim F\bibinitperiod}}}%
       }
-      \list{publisher}{1}{%
-        {IEEE Press}%
+      \list{publisher}{2}{%
+        {2001 Institute of Electrical}%
+        {Electronics Engineers (IEEE) Congress}%
       }
       \strng{namehash}{f6a7367f6264ccb72d156d6344cc61a5}
       \strng{fullhash}{66c6fb9d6a10d0447901b94c2cb04d3e}
@@ -1133,12 +1067,6 @@
       \verb{eprint}
       \verb 1502.03167
       \endverb
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/1502.03167
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/1502.03167
-      \endverb
     \endentry
     \entry{beesalgo}{article}{}{}
       \name{author}{1}{}{%
@@ -1163,7 +1091,7 @@
       \field{labeltitlesource}{title}
       \field{journaltitle}{Technical Report, Erciyes University}
       \field{month}{01}
-      \field{title}{An Idea Based on Honey Bee Swarm for Numerical Optimization, Technical Report - TR06}
+      \field{title}{An Idea Based on Honey Bee Swarm for Numerical Optimization}
       \field{year}{2005}
     \endentry
     \entry{Adam}{misc}{}{}
@@ -1238,9 +1166,6 @@
       \field{year}{1983}
       \field{pages}{671\bibrangedash 80}
       \range{pages}{11}
-      \verb{doi}
-      \verb 10.1126/science.220.4598.671
-      \endverb
     \endentry
     \entry{163}{inproceedings}{}{}
       \name{author}{4}{}{%
@@ -1283,9 +1208,6 @@
       \field{year}{2017}
       \field{pages}{1\bibrangedash 5}
       \range{pages}{5}
-      \verb{doi}
-      \verb 10.1109/SCCSIT.2017.8293059
-      \endverb
     \endentry
     \entry{NIPS2012_c399862d}{inproceedings}{}{}
       \name{author}{3}{}{%
@@ -1351,12 +1273,6 @@
       \field{title}{ImageNet Classification with Deep Convolutional Neural Networks}
       \field{volume}{25}
       \field{year}{2012}
-      \verb{urlraw}
-      \verb https://proceedings.neurips.cc/paper\_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf
-      \endverb
-      \verb{url}
-      \verb https://proceedings.neurips.cc/paper%5C_files/paper/2012/file/c399862d3b9d6b76c8436e924a68c45b-Paper.pdf
-      \endverb
     \endentry
     \entry{lecun2015deep}{article}{}{}
       \name{author}{3}{}{%
@@ -1392,7 +1308,7 @@
       \field{sortinithash}{7c47d417cecb1f4bd38d1825c427a61a}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{nature}
+      \field{journaltitle}{Nature}
       \field{number}{7553}
       \field{title}{Deep learning}
       \field{volume}{521}
@@ -1439,12 +1355,6 @@
       \verb{eprint}
       \verb 1312.4400
       \endverb
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/1312.4400
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/1312.4400
-      \endverb
     \endentry
     \entry{EffBackProp}{inbook}{}{}
       \name{author}{4}{}{%
@@ -1486,11 +1396,8 @@
            given={Klaus-Robert},
            giveni={K\bibinithyphendelim R\bibinitperiod}}}%
       }
-      \list{location}{1}{%
-        {Berlin, Heidelberg}%
-      }
       \list{publisher}{1}{%
-        {Springer Berlin Heidelberg}%
+        {Springer}%
       }
       \strng{namehash}{0e0ba0e8a05afa7242c56015c27153da}
       \strng{fullhash}{047dba8bd060cd63eaad6de11e478c90}
@@ -1510,21 +1417,12 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{abstract}{The convergence of back-propagation learning is analyzed so as to explain common phenomenon observed by practitioners. Many undesirable behaviors of backprop can be avoided with tricks that are rarely exposed in serious technical publications. This paper gives some of those tricks, and offers explanations of why they work.}
-      \field{booktitle}{Neural Networks: Tricks of the Trade: Second Edition}
+      \field{booktitle}{Neural Networks: Tricks of the Trade. Second Edition}
       \field{isbn}{978-3-642-35289-8}
       \field{title}{Efficient BackProp}
       \field{year}{2012}
       \field{pages}{9\bibrangedash 48}
       \range{pages}{40}
-      \verb{doi}
-      \verb 10.1007/978-3-642-35289-8\_3
-      \endverb
-      \verb{urlraw}
-      \verb https://doi.org/10.1007/978-3-642-35289-8\_3
-      \endverb
-      \verb{url}
-      \verb https://doi.org/10.1007/978-3-642-35289-8%5C_3
-      \endverb
     \endentry
     \entry{lenet5}{article}{}{}
       \name{author}{4}{}{%
@@ -1569,9 +1467,6 @@
       \field{year}{1998}
       \field{pages}{2278\bibrangedash 2324}
       \range{pages}{47}
-      \verb{doi}
-      \verb 10.1109/5.726791
-      \endverb
       \keyw{Neural networks;Pattern recognition;Machine learning;Optical character recognition software;Character recognition;Feature extraction;Multi-layer neural network;Optical computing;Hidden Markov models;Principal component analysis}
     \endentry
     \entry{L-BFGS}{article}{}{}
@@ -1717,11 +1612,8 @@
            given={Santosh\bibnamedelima N.},
            giveni={S\bibinitperiod\bibinitdelim N\bibinitperiod}}}%
       }
-      \list{location}{1}{%
-        {Berlin, Heidelberg}%
-      }
       \list{publisher}{1}{%
-        {Springer-Verlag}%
+        {Springer}%
       }
       \strng{namehash}{88e19db6ad751dd4cefa1d336984f770}
       \strng{fullhash}{88e19db6ad751dd4cefa1d336984f770}
@@ -1737,7 +1629,7 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{issn}{0025-5610}
-      \field{journaltitle}{Math. Program.}
+      \field{journaltitle}{Mathematical Programming}
       \field{month}{6}
       \field{number}{2}
       \field{title}{Some NP-complete problems in quadratic and nonlinear programming}
@@ -1781,14 +1673,11 @@
       \field{sortinithash}{4625c616857f13d17ce56f7d4f97d451}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{booktitle}{2018 IEEE Congress on Evolutionary Computation (CEC)}
+      \field{booktitle}{2018 Institute of Electrical and Electronics Engineers (IEEE) Congress on Evolutionary Computation (CEC)}
       \field{title}{SHADE with Iterative Local Search for Large-Scale Global Optimization}
       \field{year}{2018}
       \field{pages}{1\bibrangedash 8}
       \range{pages}{8}
-      \verb{doi}
-      \verb 10.1109/CEC.2018.8477755
-      \endverb
     \endentry
     \entry{murphy2022probabilistic}{book}{}{}
       \name{author}{1}{}{%
@@ -1818,12 +1707,6 @@
       \field{series}{Adaptive Computation and Machine Learning series}
       \field{title}{Probabilistic Machine Learning: An Introduction}
       \field{year}{2022}
-      \verb{urlraw}
-      \verb https://books.google.co.uk/books?id=HLlyzgEACAAJ
-      \endverb
-      \verb{url}
-      \verb https://books.google.co.uk/books?id=HLlyzgEACAAJ
-      \endverb
     \endentry
     \entry{Nesterov}{article}{}{}
       \name{author}{1}{}{%
@@ -1847,17 +1730,11 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{journaltitle}{Proceedings of the USSR Academy of Sciences}
-      \field{title}{A method for solving the convex programming problem with convergence rate O(1/k\^2)}
+      \field{title}{A method for solving the convex programming problem with convergence rate O(1/k$^2$}
       \field{volume}{269}
       \field{year}{1983}
       \field{pages}{543\bibrangedash 547}
       \range{pages}{5}
-      \verb{urlraw}
-      \verb https://api.semanticscholar.org/CorpusID:145918791
-      \endverb
-      \verb{url}
-      \verb https://api.semanticscholar.org/CorpusID:145918791
-      \endverb
     \endentry
     \entry{alternativabackprop1}{misc}{}{}
       \name{author}{1}{}{%
@@ -1915,12 +1792,39 @@
       \field{isbn}{9781365659911}
       \field{title}{Numerical Methods for Scientific Computing}
       \field{year}{2017}
-      \verb{urlraw}
-      \verb https://books.google.es/books?id=GvXpDQAAQBAJ
-      \endverb
-      \verb{url}
-      \verb https://books.google.es/books?id=GvXpDQAAQBAJ
-      \endverb
+    \endentry
+    \entry{Numerical_optimization}{book}{}{}
+      \name{author}{2}{}{%
+        {{hash=88a342d927bf795b0d92af8a5613da31}{%
+           family={Nocedal},
+           familyi={N\bibinitperiod},
+           given={Jorge},
+           giveni={J\bibinitperiod}}}%
+        {{hash=c49efb16d3fa7eef002cc3620d42ab8a}{%
+           family={Wright},
+           familyi={W\bibinitperiod},
+           given={Stephen\bibnamedelima J.},
+           giveni={S\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{5b8fd28f6245ae8b0af119560622fa4f}
+      \strng{fullhash}{5b8fd28f6245ae8b0af119560622fa4f}
+      \strng{fullhashraw}{5b8fd28f6245ae8b0af119560622fa4f}
+      \strng{bibnamehash}{5b8fd28f6245ae8b0af119560622fa4f}
+      \strng{authorbibnamehash}{5b8fd28f6245ae8b0af119560622fa4f}
+      \strng{authornamehash}{5b8fd28f6245ae8b0af119560622fa4f}
+      \strng{authorfullhash}{5b8fd28f6245ae8b0af119560622fa4f}
+      \strng{authorfullhashraw}{5b8fd28f6245ae8b0af119560622fa4f}
+      \field{labelalpha}{NW06}
+      \field{sortinit}{N}
+      \field{sortinithash}{22369a73d5f88983a108b63f07f37084}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{edition}{2e}
+      \field{title}{Numerical Optimization}
+      \field{year}{2006}
     \endentry
     \entry{155}{inproceedings}{}{}
       \name{author}{3}{}{%
@@ -1958,9 +1862,6 @@
       \field{year}{2018}
       \field{pages}{63\bibrangedash 64}
       \range{pages}{2}
-      \verb{doi}
-      \verb 10.1145/3205651.3208763
-      \endverb
     \endentry
     \entry{diffevbook}{book}{}{}
       \name{author}{3}{}{%
@@ -2030,15 +1931,6 @@
       \field{year}{1999}
       \field{pages}{145\bibrangedash 151}
       \range{pages}{7}
-      \verb{doi}
-      \verb https://doi.org/10.1016/S0893-6080(98)00116-6
-      \endverb
-      \verb{urlraw}
-      \verb https://www.sciencedirect.com/science/article/pii/S0893608098001166
-      \endverb
-      \verb{url}
-      \verb https://www.sciencedirect.com/science/article/pii/S0893608098001166
-      \endverb
     \endentry
     \entry{174}{inproceedings}{}{}
       \name{author}{3}{}{%
@@ -2076,9 +1968,6 @@
       \field{title}{Simulated Annealing Algorithm for Deep Learning}
       \field{volume}{72}
       \field{year}{2015}
-      \verb{doi}
-      \verb 10.1016/j.procs.2015.12.114
-      \endverb
     \endentry
     \entry{rumelbackprop}{article}{}{}
       \name{author}{3}{}{%
@@ -2099,7 +1988,7 @@
            giveni={R\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
       }
       \list{publisher}{1}{%
-        {Nature Publishing Group UK London}%
+        {Nature Publishing Group}%
       }
       \strng{namehash}{fd75cea68d6982b503a0cd84f7cc7b51}
       \strng{fullhash}{fd75cea68d6982b503a0cd84f7cc7b51}
@@ -2114,7 +2003,7 @@
       \field{sortinithash}{5e1c39a9d46ffb6bebd8f801023a9486}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{nature}
+      \field{journaltitle}{Nature}
       \field{number}{6088}
       \field{title}{Learning representations by back-propagating errors}
       \field{volume}{323}
@@ -2152,15 +2041,6 @@
       \field{year}{1958}
       \field{pages}{386\bibrangedash 408}
       \range{pages}{23}
-      \verb{doi}
-      \verb 10.1037/h0042519
-      \endverb
-      \verb{urlraw}
-      \verb http://dx.doi.org/10.1037/h0042519
-      \endverb
-      \verb{url}
-      \verb http://dx.doi.org/10.1037/h0042519
-      \endverb
       \keyw{imported}
     \endentry
     \entry{Sejnowski18}{book}{}{}
@@ -2170,12 +2050,6 @@
            familyi={S\bibinitperiod},
            given={Terrence\bibnamedelima J.},
            giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
-      }
-      \list{language}{1}{%
-        {american}%
-      }
-      \list{location}{1}{%
-        {Cambridge, MA}%
       }
       \list{publisher}{1}{%
         {MIT Press}%
@@ -2196,9 +2070,6 @@
       \field{isbn}{978-0-262-03803-4}
       \field{title}{The Deep Learning Revolution}
       \field{year}{2018}
-      \verb{file}
-      \verb 2018/Sejnowski18.pdf
-      \endverb
       \keyw{01941 105 ai analysis book data economy learn mitpress numerical pattern recognition shelf}
     \endentry
     \entry{leslie1}{misc}{}{}
@@ -2230,12 +2101,6 @@
       \verb{eprint}
       \verb 1506.01186
       \endverb
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/1506.01186
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/1506.01186
-      \endverb
     \endentry
     \entry{leslie2}{misc}{}{}
       \name{author}{1}{}{%
@@ -2266,12 +2131,6 @@
       \verb{eprint}
       \verb 1803.09820
       \endverb
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/1803.09820
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/1803.09820
-      \endverb
     \endentry
     \entry{diffev}{article}{}{}
       \name{author}{2}{}{%
@@ -2299,19 +2158,13 @@
       \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
-      \field{journaltitle}{J. Glob. Optim.}
+      \field{journaltitle}{Journal of Global Optimization}
       \field{number}{4}
       \field{title}{Differential Evolution - A Simple and Efficient Heuristic for global Optimization over Continuous Spaces.}
       \field{volume}{11}
       \field{year}{1997}
       \field{pages}{341\bibrangedash 359}
       \range{pages}{19}
-      \verb{urlraw}
-      \verb http://dblp.uni-trier.de/db/journals/jgo/jgo11.html#StornP97
-      \endverb
-      \verb{url}
-      \verb http://dblp.uni-trier.de/db/journals/jgo/jgo11.html#StornP97
-      \endverb
     \endentry
     \entry{leslie3}{misc}{}{}
       \name{author}{2}{}{%
@@ -2345,87 +2198,6 @@
       \field{year}{2018}
       \verb{eprint}
       \verb 1708.07120
-      \endverb
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/1708.07120
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/1708.07120
-      \endverb
-    \endentry
-    \entry{bottlegoogle}{misc}{}{}
-      \name{author}{9}{}{%
-        {{hash=ed568d9c3bb059e6bf22899fbf170f86}{%
-           family={Szegedy},
-           familyi={S\bibinitperiod},
-           given={Christian},
-           giveni={C\bibinitperiod}}}%
-        {{hash=c0e0d23e2d09e45e6f51cc2bcea6d9f9}{%
-           family={Liu},
-           familyi={L\bibinitperiod},
-           given={Wei},
-           giveni={W\bibinitperiod}}}%
-        {{hash=9fce03efe6b3331a1b93ed2e7c0da9d5}{%
-           family={Jia},
-           familyi={J\bibinitperiod},
-           given={Yangqing},
-           giveni={Y\bibinitperiod}}}%
-        {{hash=15f5333df96deaf51c72d065bded37d8}{%
-           family={Sermanet},
-           familyi={S\bibinitperiod},
-           given={Pierre},
-           giveni={P\bibinitperiod}}}%
-        {{hash=698ee61a2f3fa29734204496d2d36aef}{%
-           family={Reed},
-           familyi={R\bibinitperiod},
-           given={Scott},
-           giveni={S\bibinitperiod}}}%
-        {{hash=c1826f3465579186aff299a9b0e16ed7}{%
-           family={Anguelov},
-           familyi={A\bibinitperiod},
-           given={Dragomir},
-           giveni={D\bibinitperiod}}}%
-        {{hash=8bbc4c5d96f205bada839e74e0202146}{%
-           family={Erhan},
-           familyi={E\bibinitperiod},
-           given={Dumitru},
-           giveni={D\bibinitperiod}}}%
-        {{hash=8051922e7bd286f884bfbd1023ef62f5}{%
-           family={Vanhoucke},
-           familyi={V\bibinitperiod},
-           given={Vincent},
-           giveni={V\bibinitperiod}}}%
-        {{hash=aa04c4d6213a1e867b1650e298cb2668}{%
-           family={Rabinovich},
-           familyi={R\bibinitperiod},
-           given={Andrew},
-           giveni={A\bibinitperiod}}}%
-      }
-      \strng{namehash}{80f8e6bfc3aff3e75b2807a6f6962740}
-      \strng{fullhash}{64fbaf3c8a6b53523f74f0087b58e7e6}
-      \strng{fullhashraw}{64fbaf3c8a6b53523f74f0087b58e7e6}
-      \strng{bibnamehash}{80f8e6bfc3aff3e75b2807a6f6962740}
-      \strng{authorbibnamehash}{80f8e6bfc3aff3e75b2807a6f6962740}
-      \strng{authornamehash}{80f8e6bfc3aff3e75b2807a6f6962740}
-      \strng{authorfullhash}{64fbaf3c8a6b53523f74f0087b58e7e6}
-      \strng{authorfullhashraw}{64fbaf3c8a6b53523f74f0087b58e7e6}
-      \field{labelalpha}{Sze+14}
-      \field{sortinit}{S}
-      \field{sortinithash}{b164b07b29984b41daf1e85279fbc5ab}
-      \field{labelnamesource}{author}
-      \field{labeltitlesource}{title}
-      \field{eprintclass}{cs.CV}
-      \field{eprinttype}{arXiv}
-      \field{title}{Going Deeper with Convolutions}
-      \field{year}{2014}
-      \verb{eprint}
-      \verb 1409.4842
-      \endverb
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/1409.4842
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/1409.4842
       \endverb
     \endentry
     \entry{MHoverview}{article}{}{}
@@ -2465,15 +2237,6 @@
       \field{title}{Metaheuristic Algorithms for Optimization: A Brief Review}
       \field{volume}{59}
       \field{year}{2023}
-      \verb{doi}
-      \verb 10.3390/engproc2023059238
-      \endverb
-      \verb{urlraw}
-      \verb https://www.mdpi.com/2673-4591/59/1/238
-      \endverb
-      \verb{url}
-      \verb https://www.mdpi.com/2673-4591/59/1/238
-      \endverb
     \endentry
     \entry{shade}{inproceedings}{}{}
       \name{author}{2}{}{%
@@ -2502,15 +2265,47 @@
       \field{labelnamesource}{author}
       \field{labeltitlesource}{title}
       \field{isbn}{978-1-4799-0453-2}
-      \field{journaltitle}{2013 IEEE Congress on Evolutionary Computation, CEC 2013}
+      \field{journaltitle}{2013 Institute of Electrical and Electronics Engineers (IEEE) Congress on Evolutionary Computation (CEC)}
       \field{month}{06}
       \field{title}{Success-history based parameter adaptation for Differential Evolution}
       \field{year}{2013}
       \field{pages}{71\bibrangedash 78}
       \range{pages}{8}
-      \verb{doi}
-      \verb 10.1109/CEC.2013.6557555
-      \endverb
+    \endentry
+    \entry{nofreelunch}{article}{}{}
+      \name{author}{2}{}{%
+        {{hash=9e3b028ab5fe6676668bb388f38a5dea}{%
+           family={Wolpert},
+           familyi={W\bibinitperiod},
+           given={D.H.},
+           giveni={D\bibinitperiod}}}%
+        {{hash=27dff62574d6d47b2419ae464415e631}{%
+           family={Macready},
+           familyi={M\bibinitperiod},
+           given={W.G.},
+           giveni={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{e5a91da6001162a1dd1c4014f232ce1d}
+      \strng{fullhash}{e5a91da6001162a1dd1c4014f232ce1d}
+      \strng{fullhashraw}{e5a91da6001162a1dd1c4014f232ce1d}
+      \strng{bibnamehash}{e5a91da6001162a1dd1c4014f232ce1d}
+      \strng{authorbibnamehash}{e5a91da6001162a1dd1c4014f232ce1d}
+      \strng{authornamehash}{e5a91da6001162a1dd1c4014f232ce1d}
+      \strng{authorfullhash}{e5a91da6001162a1dd1c4014f232ce1d}
+      \strng{authorfullhashraw}{e5a91da6001162a1dd1c4014f232ce1d}
+      \field{labelalpha}{WM97}
+      \field{sortinit}{W}
+      \field{sortinithash}{4315d78024d0cea9b57a0c6f0e35ed0d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{1997 Institute of Electrical and Electronics Engineers (IEEE) Congress on Evolutionary Computation (CEC)}
+      \field{number}{1}
+      \field{title}{No free lunch theorems for optimization}
+      \field{volume}{1}
+      \field{year}{1997}
+      \field{pages}{67\bibrangedash 82}
+      \range{pages}{16}
+      \keyw{Iron;Evolutionary computation;Information theory;Minimax techniques;Simulated annealing;Algorithm design and analysis;Performance analysis;Probability distribution;Bayesian methods}
     \endentry
     \entry{divedeeplearning}{misc}{}{}
       \name{author}{4}{}{%
@@ -2555,12 +2350,6 @@
       \verb{eprint}
       \verb 2106.11342
       \endverb
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/2106.11342
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/2106.11342
-      \endverb
     \endentry
     \entry{yellowfin}{misc}{}{}
       \name{author}{2}{}{%
@@ -2595,16 +2384,9 @@
       \verb{eprint}
       \verb 1706.03471
       \endverb
-      \verb{urlraw}
-      \verb https://arxiv.org/abs/1706.03471
-      \endverb
-      \verb{url}
-      \verb https://arxiv.org/abs/1706.03471
-      \endverb
     \endentry
   \enddatalist
-  \missing{numerical_optimization}
-  \missing{y}
+  \missing{MHDef}
 \endrefsection
 \endinput
 

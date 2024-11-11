@@ -42,7 +42,7 @@ Notamos por $h= \left ( h_1,h_2,\ldots, h_m \right )$ indicando las $m$ componen
 \end{definicion}
 
 
-Definimos ahora los elementos clave del algoritmo de entrenamiento: el vector gradiente y la matriz jacobiana. En el algoritmo de descenso de gradiente, lo que se pretende calcular tal como indica el nombre es el vector gradiente, ya que la función de error de los modelos siempre nos devuelve un escalar, es decir que la dimensión de la imagen es 1, y la dimensión de la entrada será el número de parámetros del modelo (número de elementos que tendrá el vector gradiente). Sin embargo las matrices jacobianas también juegan un papel fundamental ya que para calcular ese vector gradiente, el algoritmo de BP necesita realizar cálculos intermedios, que son las matrices jacobianas asociadas a la salida de las capas ocultas (que tienen mayor dimensionalidad) bien con respecto a los parámetros de la capa o bien con respecto al error de la predicción del modelo. En lo que sigue fijamos $x \in X$.
+Definimos ahora los elementos clave del algoritmo de entrenamiento: el vector gradiente y la matriz jacobiana. En el algoritmo de descenso de gradiente, el objetivo principal es calcular el vector gradiente, ya que la función de error de los modelos siempre nos devuelve un escalar, es decir que la dimensión de la imagen es 1. Sin embargo las matrices jacobianas también juegan un papel fundamental ya que para calcular ese vector gradiente, el algoritmo de BP necesita realizar cálculos intermedios, que son las matrices jacobianas asociadas a la salida de las capas ocultas (que tienen mayor dimensionalidad) bien con respecto a los parámetros de la capa o bien con respecto al error de la predicción del modelo. En lo que sigue fijamos $x \in X$.
 
 \begin{definicion}[Vector gradiente]
     Cuando $h$ es parcialmente derivable en $x$, el gradiente de $h$ en $x$ es el vector $\nabla h(x) \in X$ dado por 
@@ -127,18 +127,12 @@ $$L=sup \left \{ \frac{\|h(x)-h(y)\|}{\|x - y \|} : x,y \in X, x \neq y \right \
 
 Para las funciones de clase $C^2$, es decir las que son diferenciables al menos dos veces con su derivada continua, una equivalencia a que el gradiente de $h$ sea lipschitziano es que $\nabla^2 h(x) \preceq LI \quad \forall x \in X$, esto lo usaremos luego en la demostración \ref{proof:gdconvex}. En esta expresión $L$ es la constante de Lipschitz para el gradiente de $h$ e $I$ es la matriz identidad. El símbolo $\preceq$ denota una desigualdad matricial en términos de semidefinición positiva, es decir que $LI - \nabla^2h(x)$ es una matriz semidefinida positiva. Equivalentemente para cualquier vector $z$ se tiene $z^T \left ( LI - \nabla^2h(x) \right )z \geq 0$. 
 
-\subsection{Teoría de la probabilidad}
+\subsection{Algunos conceptos sobre probabilidad}
 
-Ahora vamos a introducir los conceptos necesarios para el desarrollo teórico relacionado con la versión estocástica del algoritmo de gradiente descendente. Como su nombre indica, se trata de un proceso estocástico. Desarrollamos las herramientas necesarias para llegar a las definiciones de esperanza condicionada y convergencia casi segura, necesarias para entender las martingalas. Empezamos con las definiciones básicas:
+Ahora vamos a introducir los conceptos necesarios para el desarrollo teórico relacionado con la versión estocástica del algoritmo de gradiente descendente. Desarrollamos las herramientas necesarias para llegar a las definiciones de esperanza condicionada y convergencia casi segura, necesarias para entender las martingalas. Para esta parte usaremos los apuntes de la asignatura de Probabilidad, los apuntes de la profesora de la UGR Patricia Román Román\footnote{\url{https://www.ugr.es/~proman/PyE/Condicionadas.pdf}} y el curso de Probabilidad del grupo CDPYE\footnote{\url{https://www.ugr.es/~cdpye/CursoProbabilidad/}}. Empezamos con recordando el concepto de espacio medible, para construir sobre él un espacio de probabilidad:
 
-\begin{definicion}[Espacio de probabilidad]\label{def:esprob}
-	Un espacio de probabilidad es una terna $(\Omega, \mathcal{A},P)$ donde:
-	
-	\begin{enumerate}
-	
-		\item $\Omega$ es un conjunto arbitrario.
-
-		\item{$\mathcal{A} \subseteq \mathcal{P}(\Omega)$ tiene estructura de $\sigma$-álgebra, es decir, verifica que 
+\begin{definicion}[Espacio medible]
+	Un espacio medible es un par $(\Omega, \mathcal{A})$, donde $\Omega$ es un conjunto arbitrario y $\mathcal{A} \subseteq \mathcal{P}(\Omega)$ tiene estructura de $\sigma$-álgebra, es decir, verifica que 
 		
 		\begin{itemize}
 			\item $\mathcal{A} \neq \emptyset \quad \text{y} \quad \Omega \in \mathcal{A}$.
@@ -147,30 +141,35 @@ Ahora vamos a introducir los conceptos necesarios para el desarrollo teórico re
 
 			\item $A_n \in \mathcal{A} \forall n \in \mathbb{N} \Rightarrow \underset{n \in \mathbb{N}}{\cup} A_n \in \mathcal{A}$ (cerrada bajo uniones numerables).
 		\end{itemize}
+\end{definicion}
+
+
+\begin{definicion}[Espacio de probabilidad]\label{def:esprob}
+	Un espacio de probabilidad es una terna $(\Omega, \mathcal{A},P)$ donde:
+	
+	\begin{enumerate}
+	
+		\item $\Omega$ es un conjunto arbitrario.
+
+		\item{$\mathcal{A} \subseteq \mathcal{P}(\Omega)$ tiene estructura de $\sigma$-álgebra.
 
 		}
 
 		\item{$P:\mathcal{A} \rightarrow [0,1]$ es una función de probabilidad, es decir,
 
 		\begin{itemize}
-			\item $P(A)\geq, \quad \forall A \in \mathcal{A}$.
+			\item $P(A)\geq 0, \quad \forall A \in \mathcal{A}$.
 
 			\item $P(\Omega)=1$.
 
-			\item Para cualquier sucesión ${A_n}_{n \in \mathbb{N}} \subseteq \mathcal{A}$ de sucesos disjuntos se tiene $P \left ( \underset{n \in \mathbb{N}}{\cup} A_n \right ) = \sum_{n \in \mathbb{N}} P(A_n)$.
+			\item Para cualquier sucesión $\left \{ A_n \right \}_{n \in \mathbb{N}} \subseteq \mathcal{A}$ de sucesos disjuntos se tiene $P \left ( \underset{n \in \mathbb{N}}{\cup} A_n \right ) = \sum_{n \in \mathbb{N}} P(A_n)$.
 		\end{itemize}
 
 		}
 	\end{enumerate}
 \end{definicion}
 
-Decimos que dos sucesos son disjuntos si solo puede ocurrir uno de los dos, es decir, $P(A \cap B)=0$. Para continuar con las definiciones necesarias, primero debemos asomarnos a la teoría de la medida para poder usar el concepto de función medible, para el que necesitamos con anterioridad el de espacio medible.
-
-\begin{definicion}[Espacio medible]
-	Un espacio medible es un par $(\Omega, \mathcal{A})$, donde $\Omega$ es un conjunto arbitrario y $\mathcal{A} \subseteq \mathcal{P}(\Omega)$ tiene estructura de $\sigma$-álgebra.
-\end{definicion}
-
-Vemos por tanto que en la definición \ref{def:esprob} tenemos un espacio medible. Esto nos servirá para definir las funciones medibles y seguidamente las variables aleatorias.
+Decimos que dos sucesos son disjuntos si solo puede ocurrir uno de los dos, es decir, $P(A \cap B)=0$. Vemos ahora las funciones medibles y seguidamente las variables aleatorias.
 
 \begin{definicion}[Función medible]
 	Una función medible (unidimensional) sobre un espacio medible $(\Omega, \mathcal{A})$ es una función $f: \Omega \rightarrow \mathbb{R}$ que verifica
@@ -179,7 +178,7 @@ Vemos por tanto que en la definición \ref{def:esprob} tenemos un espacio medibl
 		f^{-1}(B) \in \mathcal{A}, \quad \forall B \in \mathcal{B}
 	\end{equation*} 
 
-	o, equivalentemente, que $f^{-1}(\mathcal{B}) \subseteq \mathcal{A}, siendo \mathcal{B}$ la $\sigma$-álgebra de Borel en $\mathbb{R}$, es decir, la mínima $\sigma$-álgebra que contiene a todos los intervalos.
+	o, equivalentemente, que $f^{-1}(\mathcal{B}) \subseteq \mathcal{A},$ siendo $\mathcal{B}$ la $\sigma$-álgebra de Borel en $\mathbb{R}$, es decir, la mínima $\sigma$-álgebra que contiene a todos los intervalos.
 
 \end{definicion}
 
@@ -191,7 +190,7 @@ Vemos por tanto que en la definición \ref{def:esprob} tenemos un espacio medibl
 \begin{definicion}[Función de distribución de una variable aleatoria]
 	Una función $F_X:\mathbb{R} \rightarrow [0,1]$, definida por
 	\begin{equation*}
-		F_X(x)=PX \leq x) = P_X((- \infty , x]) = P( X \in (- \infty, x ]), \quad \forall x \in \mathbb{R},
+		F_X(x)=P(X \leq x) = P_X((- \infty , x]) = P( X \in (- \infty, x ]), \quad \forall x \in \mathbb{R},
 	\end{equation*}
 
 	se dice que es función de distribución de la variable aleatoria $X$.
@@ -200,7 +199,7 @@ Vemos por tanto que en la definición \ref{def:esprob} tenemos un espacio medibl
 Una variable aleatoria puede ser discreta o continua. Decimos que es discreta si existe un conjunto numerable $E_X \subseteq \mathbb{R}$, tal que $P_X(X \in E_X) = 1$. Para el objetivo que nos interesa sólo vamos a necesitar del tipo discreto, por lo que nos ceñiremos a ellas y, en caso de no especificar, nos estaremos refiriendo a una variable aleatoria discreta. Pasamos a presentar el último concepto intermedio antes de llegar a la esperanza matemática.
 
 \begin{definicion}[Función masa de probabilidad]
-	Una variable aleatoria discreta $X: (\Omega, \mathcal{A}, P) \rightarrow (\mathbb{R}, \mathcal{B}, P_X)$ tiene como función de masa de probabilidad
+	Una variable aleatoria discreta $X: (\Omega, \mathcal{A}, P) \rightarrow (\mathbb{R}, \mathcal{B}, P_X)$ tiene como función masa de probabilidad
 	
 	\begin{equation*}
 		p_X: E_X \rightarrow [0,1], \quad p_X(x) = P(X=x), \quad \forall x \in E_x.
@@ -219,16 +218,16 @@ Definimos ahora la esperanza matemática, que además de servirnos para la poste
 	\end{equation*}
 \end{definicion}
 
-Dadas dos variables aleatorias $x$ e $Y$, vamos a ver las dos propiedades más importantes de la esperanza matemática:
+Dadas dos variables aleatorias $X$ e $Y$, vamos a ver las dos propiedades más importantes de la esperanza matemática:
 
 \begin{itemize}
-	\item Linealidad: $E[aX+bY]=aE[x]+bE[Y], \quad \forall a,b \in \mathbb{R}$.
+	\item Linealidad: $E[aX+bY]=aE[X]+bE[Y], \quad \forall a,b \in \mathbb{R}$.
 
 	\item Conservación del orden: $ X \leq Y \Rightarrow E[X] \leq E[Y]$.
 
 \end{itemize}
 
-Ahora vamos a presentar las distribuciones condicionadas para, seguidamente, definir finalmente la esperanza condicionada. OBTENIDO DE https://www.ugr.es/~proman/PyE/Condicionadas.pdf
+Ahora vamos a presentar las distribuciones condicionadas para, seguidamente, definir finalmente la esperanza condicionada.
 
 \begin{definicion}[Distribución condicionada]
 	Sea $X=(X_1, \ldots, X_n)$ un vector de variables aleatorias discretas sobre el mismo espacio de probabilidad. Sea $X_i$ una componente arbitraria y $x_i \in \mathbb{R}$ tal que $P(X_i=x_i)>0$. Se define la distribución condicionada de $(X_1, \ldots, X_{i-1}, X_{i+1}, \ldots, X_n)$ a $X_i=x_i$ como la determinada por la función masa de probabilidad
@@ -250,10 +249,10 @@ Vamos a definir la esperanza condicionada de una variable a otra (caso bidimensi
 \end{equation}
 \end{definicion}
 
-Ahora definimos el concepto de casi seguridad, necesario también para el mismo desarrollo teórico. Se dice que un suceso es casi seguro cuando la probabilidad de que ocurra es uno. Por tanto dada una sucesión de variables aleatorias $\left \{ X_n \right \} _{n \in \mathbb{N}}$ definidas sobre un mismo espacio de probabilidad, y $X$ es otra variable aleatoria definida sobre el mismo espacio, se dice que dicha solución converge casi seguramente a $X$ si 
+Ahora definimos el concepto de casi seguridad, necesario también para el mismo desarrollo teórico. Se dice que un suceso es casi seguro cuando la probabilidad de que ocurra es uno. Dada una variable aleatoria $X$, y una sucesión de variables aleatorias $\left \{ X_n \right \} _{n \in \mathbb{N}}$ definidas sobre un mismo espacio de probabilidad, se dice que dicha sucesión converge casi seguramente a $X$ si 
 
 \begin{equation*}
-	P \left ( \underset{n \rightarrow + \infty}{lim} X_n =X \right ) =1
+	P \left ( \underset{n \rightarrow + \infty}{lim} X_n =X \right ) =1.
 \end{equation*}
 
 Usamos la notación $X_n \overset{c.s}{\rightarrow} X$. Como último concepto definimos proceso estocástico, que nos servirá para tratar con las versiones estocásticas del gradiente descendente. Es un proceso aleatorio que evoluciona con el tiempo. Más concretamente, un proceso estocástico es una colección de variables aleatorias $X_t$ indexadas por el tiempo. Si el tiempo es un subconjunto de los enteros no negativos $\left \{ 0,1,2, \ldots \right \}$ entonces llamaremos al proceso discreto, mientras que si es un subconjunto de $[0, \infty )$ entonces trataremos con un proceso estocástico continuo. Las variables aleatorias $X_t$ toman valores en un conjunto que llamamos espacio de estados. Este espacio de estados puede ser a su vez discreto, si es un conjunto finito o infinito numerable; o continuo, por ejemplo el conjunto de los números reales $\mathbb{R}$ o un espacio $d$-dimensional $\mathbb{R}^d$.

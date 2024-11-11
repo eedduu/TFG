@@ -1,0 +1,40 @@
+\section{Conclusiones y trabajos futuros}
+
+Al comienzo de esta parte matemática, se establecieron dos objetivos principales:
+
+\begin{itemize}
+	\item Analizar la convergencia del gradiente descendente.
+	
+	\item Explorar el uso de BP para este algoritmo de aprendizaje.
+\end{itemize}
+
+En primer lugar introdujimos los conceptos y términos necesarios con los que íbamos a trabajar, y presentamos la idea original de Cauchy de la que surge el algoritmo de aprendizaje que conocemos hoy día. Luego, establecimos tres tipos distintos según la cantidad de datos que se usen para calcular el gradiente y vimos los componentes básicos de este algoritmo. También introdujimos el concepto de subderivada y subdiferenciabilidad, que nos permite analizar de manera rigurosa el algoritmo de gradiente descendente sin necesidad de que todas las funciones que intervienen en el modelo sean diferenciables. Vimos entonces el enunciado y demostración de un teorema que nos asegura la convergencia al mínimo global del algoritmo en su versión BGD; aunque con condiciones muy estrictas como que la función de coste sea convexa.
+
+Presentamos entonces el concepto de martingala, un tipo de proceso estocástico con el que podemos modelar las versiones estocásticas del algoritmo de gradiente descendente. A través del teorema de Siegmund-Robbins, que proporciona convergencia para las casi-supermartingalas, conseguimos demostrar un teorema que nos asegura la convergencia de SGD y MBSGD hacia un minimizador global con probabilidad 1, consiguiendo un teorema mucho más práctico que el anterior. Aunque se espera que se tenga el mismo resultado a nivel local, con convergencia hacia un minimizador local en caso de que la función de coste sea fuertemente convexa a nivel local, no hemos podido realizar una demostración estricta.
+
+Por otro lado vimos qué es la diferenciación automática y qué estrategia usa para realizar cálculos de manera eficiente. Usando como ejemplo un MLP, pudimos ver cómo funciona esta técnica y distinguimos entre diferenciación hacia delante y hacia detrás. Una vez presentados estos conceptos, vimos propiamente cuál era el algoritmo de BP, cómo se usaba y por qué resultaba eficiente dicho algoritmo. Concluimos finalmente poniendo varios ejemplos prácticos de cálculos realizados con esta técnica y resaltando problemas que trae consigo.
+
+Afirmamos entonces que se han cumplido los objetivos que nos habíamos planteado, no siendo una tarea sencilla. Para cumplirla he tenido que recordar muchos conceptos explicados durante el grado, extender algunos ya conocidos y descubrir otros completamente nuevos. Muchos conceptos sobre diferenciabilidad y probabilidad tuve que recordarlos y repasarlos minuciosamente, ya que son la base para el desarrollo posterior del trabajo.
+
+Esto me ha permitido conocer los procesos estocásticos de tipo martingala, que no solo son una herramienta poderosa para el análisis del gradiente descendente sino que resultan una estrategia ampliamente usada para derivar resultados sobre convergencia o probar límites probabilísticos. De esta manera se buscan modelar ciertos procesos con estos objetos para aprovechar sus cualidades y propiedades.
+
+Los conceptos de subgradiente y subdiferenciabilidad, aunque menos ampliamente usados que el anterior, constituyen un recurso indispensable en el campo del aprendizaje profundo para el análisis de técnicas relacionadas con el gradiente descendente a nivel teórico. Gracias a este trabajo he adquirido una visión más teórica y formal del aprendizaje profundo y de cómo se lleva a cabo su entrenamiento. En un campo donde en muchas ocasiones prima el ensayo y error, adquirir esta perspectiva resulta indispensable a la hora de investigar y poder ofrecer mejoras.
+
+Como conclusión, creo que este trabajo me ha servido para poner en común el aprendizaje de ambos grados y gracias a él he adquirido además destreza y soltura para buscar, consultar y leer publicaciones matemáticas en este ámbito, lo cual es una habilidad muy importante.
+
+
+
+
+
+
+
+\subsection{Trabajos futuros} 
+
+Después de comentar los resultados obtenidos, en el futuro podrían resultar interesantes los siguientes trabajos:
+
+\begin{enumerate}
+	\item Demostrar rigurosamente que el teorema \ref{teor:convsgd}, sobre la convergencia de SGD y MBGD, se mantiene cuando la función es estrictamente convexa a nivel local, convergiendo entonces a un minimizador local.
+	
+	\item Relajar las condiciones de los teoremas de convergencia para que se acerquen más a la realidad del caso práctico.
+\end{enumerate}
+
