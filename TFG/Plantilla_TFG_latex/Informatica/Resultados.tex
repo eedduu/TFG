@@ -1,616 +1,507 @@
-\section{Resultados}
+\subsection{Experimentos}
 
-En esta sección vamos a analizar y comentar los resultados de la batería experimental que hemos propuesto. En base a ellos responderemos a las cuestiones que nos habíamos planteado al principio del trabajo. Dividiremos por tanto esta sección en cinco subsecciones, donde en la primera se analizarán de manera genérica los resultados y en las siguientes se responderá directamente a las cuestiones planteadas en la introducción. Se mostrarán solo las gráficas o los resultados pertinentes, mientras que el resto puede encontrarse en el mismo código. Al referirnos a un modelo entrenado por un algoritmo concreto, nos referiremos y usaremos el mejor modelo obtenido durante ese proceso de entrenamiento, en términos del que obtenga menor error de validación. 
+\textbf{En esta sección se presentan cuatro experimentos diseñados para evaluar sistemáticamente el rendimiento, eficiencia y aplicabilidad de las MH en comparación con los métodos de GD para el entrenamiento de redes neuronales profundas}. Los experimentos abordan aspectos complementarios que, en conjunto, proporcionan una visión integral del comportamiento de ambos enfoques en diversos escenarios.
 
-A excepción de la cuestión \textit{P3}, en el resto de comparativas valorares solamente el rendimiento del modelo en la tarea correspondiente y no los recursos computacionales necesarios para llevarla a cabo. Los resultados completos del entrenamiento pueden encontrarse en los apéndices \ref{sec:apendiceA} y \ref{sec:apendiceB}, que contienen las tablas referentes al rendimiento y el tiempo de entrenamiento, respectivamente.
+\textbf{El primer experimento analiza si existen diferencias estadísticamente significativas en el rendimiento de redes MLP entrenadas con MH según el tipo de tarea} (clasificación vs. regresión). Utilizando conjuntos de datos de complejidad equiparable y aplicando rigurosos tests estadísticos, se evalúa el rendimiento relativo de SHADE-ILS frente a AdamW en ambos tipos de tareas.
 
-\subsection{Comentarios generales}
+\textbf{El segundo experimento profundiza en los factores que más influyen en la pérdida de rendimiento en tareas de clasificación}, tanto en MLPs como en ConvNets. Mediante un análisis de dependencias parciales, se examina cómo la cantidad de ejemplos, la complejidad del conjunto de datos y el número de parámetros del modelo afectan al rendimiento predictivo de los modelos entrenados con ambos tipos de optimizadores (MH y GD).
 
-Antes de empezar a responder las preguntas que nos hicimos en \ref{sec:objinf}, tomaremos una idea general de los resultados del entrenamiento. Seleccionaremos seis gráficas que resultan representativas, res del entrenamiento de modelos con metaheurísticas y otras tres con optimizadores. La afirmación más inmediata, que confirman todos los resultados, es algo que ya sabíamos por la literatura: las metaheurísticas tienen un rendimiento inferior al de los optimizadores. Aunque hay casos, como vemos en la figura \ref{fig:resgen1}, donde su rendimiento es muy similar en cuanto al error de generalización y el valor de \textit{accuracy}, y en el que las metaheurísticas minimizan más la función de pérdida. Estos casos son siempre para conjuntos de datos pequeños con poca complejidad en la tarea y usando modelos con pocos parámetros. 
+\textbf{El tercer experimento se centra en analizar los tiempos de ejecución durante el entrenamiento con MH en comparación con el GD}. Este análisis desglosado permite comprender no solo las diferencias absolutas en tiempo, sino también los factores que más impactan en la eficiencia computacional de cada enfoque.
 
-\begin{figure}[!tbp]
-  \centering
-  \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/bcw_1layer_mh.png}}
-  \hfill
-  \subfloat{\includegraphics[width=0.48\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/bcw_1layer_gd.png}}
-  \caption{Resultados del entrenamiento sobre el conjunto de datos BCW, entrenando un modelo MLP de 1 capa a través de técnicas metaheurísticas (izquierda) y optimizadores basados en gradiente descendente (derecha).}
-\label{fig:resgen1}
-\end{figure}
+\textbf{Finalmente, el cuarto experimento evalúa el rendimiento de propuestas híbridas propias, específicamente SHADE-GD y SHADE-ILS-GD, que combinan elementos de MH y GD}. Este análisis comparativo determina si estos enfoques híbridos logran capitalizar las fortalezas de ambas técnicas y superar sus limitaciones individuales.
 
 
-\begin{figure}[!tbp]
-\label{fig:resgen2}
-  \centering
-  \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/fmnist_lenet5_mh.png}}
-  \hfill
-  \subfloat{\includegraphics[width=0.48\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/fmnist_lenet5_gd.png}}
-  \caption{Resultados del entrenamiento sobre el conjunto de datos F-MNIST, entrenando el modelo LeNet5 a través de técnicas metaheurísticas (izquierda) y optimizadores basados en gradiente descendente (derecha).}
-\end{figure}
 
 
-\begin{figure}[!tbp]
-\label{fig:resgen3}
-  \centering
-  \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/fmnist_resnet57_mh.png}}
-  \hfill
-  \subfloat{\includegraphics[width=0.48\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/fmnist_resnet57_gd.png}}
-  \caption{Resultados del entrenamiento sobre el conjunto de datos F-MNIST, entrenando el modelo ResNet57 a través de técnicas metaheurísticas (izquierda) y optimizadores basados en gradiente descendente (derecha).}
-\end{figure}
+\subsubsection{Experimento 1: Análisis de diferencias en el rendimiento de MLPs entrenados con MH según el tipo de tarea}
 
 
-Así, por ejemplo, cuando aumentamos un poco la cantidad de datos y la dificultad de la tarea vemos en la figura \ref{fig:resgen2} que el rendimiento empeora considerablemente. Aquí, el error de entrenamiento sigue minimizándose al mismo nivel que lo hacen las técnicas basadas en gradiente descendente, pero vemos que a lo largo del entrenamiento el error de generalización aumenta de manera significativa. Si además aumentamos el número de parámetros del modelo que entrenamos, como vemos en la figura \ref{fig:resgen3}, donde usamos el mismo conjunto de datos pero con un modelo aproximadamente tres veces más grandes, los resultados tienden a acercarse al de un clasificador aleatorio. En este caso, el error de generalización se mantiene estable, lo que indica que estos algoritmos de aprendizaje no consiguen mejorar nada a lo largo de todo el entrenamiento. No podemos afirmar que no mejore al modelo original, con parámetros aleatorios según la inicialización de Glorot, ya que el primer valor del entrenamiento se guarda justo después de entrenar y no antes, por lo que no se muestra en la gráfica el rendimiento del mejor modelo original de la población y podría darse el caso de que se realice una mejora únicamente en la primera iteración.
+\begin{table}[]
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|ccc|ccc|c|}
+\hline
+\multirow{2}{*}{Conjunto} & \multirow{2}{*}{Capas} & \multicolumn{3}{c|}{ADAMW}                                        & \multicolumn{3}{c|}{SHADE-ILS}                                         & \multirow{2}{*}{\textbf{Dif$_{rel}$}} \\ \cline{3-8}
+                          &                        & \multicolumn{1}{c|}{Train}  & \multicolumn{1}{c|}{Test}  & Metric & \multicolumn{1}{c|}{Train}  & \multicolumn{1}{c|}{Test}   & Metric     &                                       \\ \hline
+\multirow{4}{*}{BCW}      & 1                      & \multicolumn{1}{c|}{0.190}  & \multicolumn{1}{c|}{0.108} & 0.960  & \multicolumn{1}{c|}{0.073}  & \multicolumn{1}{c|}{0.142}  & 0.970      & \textbf{0.010}                        \\ \cline{2-9} 
+                          & 2                      & \multicolumn{1}{c|}{0.140}  & \multicolumn{1}{c|}{0.041} & 0.980  & \multicolumn{1}{c|}{0.063}  & \multicolumn{1}{c|}{0.350}  & 0.932      & \textbf{-0.049}                       \\ \cline{2-9} 
+                          & 5                      & \multicolumn{1}{c|}{0.115}  & \multicolumn{1}{c|}{0.026} & 1.000  & \multicolumn{1}{c|}{0.055}  & \multicolumn{1}{c|}{0.475}  & 0.890      & \textbf{-0.110}                       \\ \cline{2-9} 
+                          & 11                     & \multicolumn{1}{c|}{0.112}  & \multicolumn{1}{c|}{0.094} & 0.971  & \multicolumn{1}{c|}{0.098}  & \multicolumn{1}{c|}{0.491}  & 0.903      & \textbf{-0.07}                        \\ \hline
+\multirow{4}{*}{WQC}      & 1                      & \multicolumn{1}{c|}{0.970}  & \multicolumn{1}{c|}{2.172} & 0.436  & \multicolumn{1}{c|}{1.098}  & \multicolumn{1}{c|}{1.235}  & 0.201      & \textbf{-0.539}                       \\ \cline{2-9} 
+                          & 2                      & \multicolumn{1}{c|}{0.873}  & \multicolumn{1}{c|}{3.177} & 0.500  & \multicolumn{1}{c|}{1.078}  & \multicolumn{1}{c|}{1.340}  & 0.167      & \textbf{-0.666}                       \\ \cline{2-9} 
+                          & 5                      & \multicolumn{1}{c|}{0.770}  & \multicolumn{1}{c|}{3.833} & 0.606  & \multicolumn{1}{c|}{0.963}  & \multicolumn{1}{c|}{1.405}  & 0.167      & \textbf{-0.724}                       \\ \cline{2-9} 
+                          & 11                     & \multicolumn{1}{c|}{0.940}  & \multicolumn{1}{c|}{3.873} & 0.607  & \multicolumn{1}{c|}{1.137}  & \multicolumn{1}{c|}{1.509}  & 0.167      & \textbf{-0.725}                       \\ \hline
+\multirow{4}{*}{WQR}      & 1                      & \multicolumn{1}{c|}{0.475}  & \multicolumn{1}{c|}{0.972} & -0.012 & \multicolumn{1}{c|}{0.611}  & \multicolumn{1}{c|}{0.970}  & -1.988     & \textbf{-164.667}                      \\ \cline{2-9} 
+                          & 2                      & \multicolumn{1}{c|}{0.430}  & \multicolumn{1}{c|}{1.126} & 0.072  & \multicolumn{1}{c|}{0.551}  & \multicolumn{1}{c|}{0.826}  & -2.491     & \textbf{-35.597}                      \\ \cline{2-9} 
+                          & 5                      & \multicolumn{1}{c|}{0.390}  & \multicolumn{1}{c|}{1.180} & 0.236  & \multicolumn{1}{c|}{0.589}  & \multicolumn{1}{c|}{0.724}  & -983.152   & \textbf{-4166.898}                    \\ \cline{2-9} 
+                          & 11                     & \multicolumn{1}{c|}{0.377}  & \multicolumn{1}{c|}{2.162} & 0.133  & \multicolumn{1}{c|}{0.601}  & \multicolumn{1}{c|}{0.734}  & -79529.602 & \textbf{-597967.932}                  \\ \hline
+\multirow{4}{*}{BHP}      & 1                      & \multicolumn{1}{c|}{84.429} & \multicolumn{1}{c|}{6.332} & 0.790  & \multicolumn{1}{c|}{10.048} & \multicolumn{1}{c|}{7.549}  & 0.576      & \textbf{-0.271}                       \\ \cline{2-9} 
+                          & 2                      & \multicolumn{1}{c|}{55.283} & \multicolumn{1}{c|}{4.577} & 0.832  & \multicolumn{1}{c|}{9.560}  & \multicolumn{1}{c|}{4.648}  & 0.746      & \textbf{-0.103}                       \\ \cline{2-9} 
+                          & 5                      & \multicolumn{1}{c|}{94.640} & \multicolumn{1}{c|}{3.511} & 0.847  & \multicolumn{1}{c|}{13.594} & \multicolumn{1}{c|}{14.555} & -0.187     & \textbf{-1.221}                       \\ \cline{2-9} 
+                          & 11                     & \multicolumn{1}{c|}{54.540} & \multicolumn{1}{c|}{3.268} & 0.853  & \multicolumn{1}{c|}{43.183} & \multicolumn{1}{c|}{26.794} & -97.404    & \textbf{-115.190}                     \\ \hline
+\end{tabular}}
+\caption[Resultados del entrenamiento y evaluación de los modelos asociados al primer experimento]{Resultados del entrenamiento y evaluación de los modelos asociados al primer experimento. A partir de estos, intentamos averiguar, a través del test de los rangos con signo de Wilcoxon, si existe una diferencia estadísticamente significativa en el rendimiento de modelos entrenados con MH según el tipo de tarea. Los conjuntos de datos usados son BCW y WQC para clasificación y BHP y WQR para regresión. Estas tareas tienen una complejidad similar dos a dos (BCW-BHP y WQC-WQR). Los MLP, de entre 1 y 11 capas ocultas, son entrenados usando SHADE-ILS como técnica MH y ADAMW como optimizador basado en GD. Como métricas, se usa \textbf{\textit{Balanced Accuracy}} en clasificación y \emph{\textbf{R$^2$}} en regresión. La comparación, realizada de manera relativa observando el rendimiento de los modelos entrenados con MH en relación con su análogo entrenado con GD, no arroja resultados concluyentes.}
+\label{tab:exp1}
+\end{table}
 
-Cabe resaltar también, como se observa en las figuras mencionadas, que las técnicas metaheurísticas son muy efectivas minimizando el error de la función de pérdida, logrando en este aspecto mejores resultados que el gradiente descendente en algunos casos, pero muy deficientes generalizando ese error. Este último error es el que nos interesa realmente. Por lo tanto, y confirmando la literatura existente al respecto, concluimos que las metaheurísticas no son actualmente una alternativa a los algoritmos de aprendizaje basados en gradiente descendente. Más aún si tenemos en cuenta la enorme diferencia de tiempo que hay en el entrenamiento de cada uno.
+En este experimento, planteamos la hipótesis de que \textbf{los modelos MLP entrenados con MH presentan diferencias significativas en su rendimiento según el tipo de tarea} (clasificación o regresión). En particular, investigamos si estas diferencias se deben a la naturaleza de la tarea, más que a factores como la complejidad del problema o la arquitectura de la red. Esta hipótesis \textbf{se fundamenta en evidencias experimentales}, como los resultados presentados en la Tabla \ref{tab:exp1}, que sugieren un comportamiento diferenciado en el rendimiento de SHADE-ILS según el tipo de tarea, a diferencia de lo que ocurre con AdamW.
 
-Hacemos una mención especial al único caso de la experimentación en el que un modelo entrenado a través de metaheurísticas ha sido capaz de mejorar a los optimizadores clásicos: en la tarea de regresión en el conjunto de datos BHP, entrenando con SHADE-ILS-GD al modelo MLP con una capa, se logró un error de entrenamiento de 8.9, un error de generalización de 4.64 y una puntuación R$^2$ de 0.84. RMSProp es el optimizador que mejor rendimiento consigue con unos valores de 61.7, 4.67 y 0.82, respectivamente.
+En los conjuntos de datos de clasificación (BCW y WQC), se observa que AdamW tiende a obtener un mejor desempeño en términos de métrica \textit{Balanced Accuracy} en comparación con SHADE-ILS a medida que aumenta la profundidad de la red. Por ejemplo, en el conjunto WQC con 11 capas, la diferencia relativa (Dif$_{rel}$) es de -0.725, lo que indica una ventaja significativa a favor de AdamW. Por otro lado, en los conjuntos de regresión (BHP y WQR), el comportamiento es más errático y con diferencias relativas mucho más extremas. Destaca especialmente el caso de WQR con 11 capas, donde la Dif$_{rel}$ alcanza valores negativos elevados (-597967.932), lo que sugiere que SHADE-ILS tiene dificultades para optimizar redes profundas en tareas de regresión.
 
-Las diferencias que observamos en los resultados con respecto a los obtenidos en \cite{MHtrainingClase} pueden deberse a tres factores principales:
+Estos resultados nos llevan a plantear la hipótesis de que el rendimiento de los modelos entrenados con MH podría estar influenciado de manera significativa por el tipo de tarea. Mientras que para tareas de clasificación SHADE-ILS muestra una degradación de rendimiento más gradual, en tareas de regresión se observan desviaciones mucho más marcadas, especialmente con arquitecturas más complejas.
+
+
+Para realizar esta comparación, entrenaremos en cuatro conjuntos de datos tabulares: dos de clasificación (BCW y WQC) y dos de regresión (BHP y WQR), agrupados por complejidad (BCW-BHP y WQC-WQR), a través de los optimizadores MH SHADE y SHADE-ILS, y los basados en GD AdamW y RMSProp, ya que son los que arrojan mejores resultados. Utilizamos arquitecturas de MLP con 1, 2, 5 y 11 capas ocultas. 
+
+Como las métricas usadas para clasificación y regresión son distintas y no son comparables directamente, debemos establecer la comparación en términos relativos. Observamos que los modelos entrenados con GD no muestran diferencias en el rendimiento dependiendo de la tarea, y analizaremos la diferencia relativa de rendimiento entre MH y GD para cada tipo de tarea, realizando el promedio entre los dos optimizadores utilizados de cada tipo (SHADE y SHADE-ILS; AdamW y RMSProp). Si las diferencias relativas son estadísticamente significativas, es decir, si la diferencia de rendimiento entre MH y GD para cada tipo de tarea es distinta, entonces concluiremos que los modelos entrenados con MH muestran diferente rendimiento dependiendo del tipo de tarea. Definimos la fórmula
+
+
+$$Dif_{rel} = \frac{Metric_{MH}-Metric_{GD}}{|Metric_{GD}|}.$$
+
+
+A partir de esta fórmula, obtenemos dos muestras: las diferencias relativas para clasificación y las diferencias relativas para regresión. El objetivo es determinar si existe una diferencia estadísticamente significativa entre ambas. Como son muestras dependientes, deberemos utilizar bien el t-test para muestras pareadas o bien el test de Wilcoxon de los rangos con signos. La elección de uno u otro dependerá de si las muestras siguen una distribución normal o no, utilizando t-test en el caso afirmativo y Wilcoxon en el contrario.
+
+En primer lugar, verificamos la normalidad de las muestras mediante la prueba de Shapiro-Wilk, donde la hipótesis nula establece que las diferencias relativas siguen una distribución normal. Obtenemos un p-valor de 0.003, por debajo de los niveles de significacnia habituales (0.05, 0.01) lo que implica el rechazo de la hipótesis nula y confirma que las muestras no siguen una distribución normal.
+
+\begin{table}[]
+\centering
+\begin{tabular}{|c|c|c|}
+\cline{1-3}
+                                Test                                                                   & Estadístico & P-valor        \\ \hline
+\multicolumn{1}{|c|}{Shapiro-Wilk}                                 & 0.635       & \textbf{0.003}                      \\ \hline
+\multicolumn{1}{|c|}{Wilcoxon rangos con signo} & 6.000       & \textbf{0.023}                       \\ \hline
+\end{tabular}
+\caption[Resultado de los tests estadísticos llevados a cabo durante el primer experimento]{Resultado de los tests estadísticos llevados a cabo durante el primer experimento. Para medir objetivamente que no haya diferencia de rendimiento según el tipo de tarea para modelos de la familia MLP entrenados con MH, hemos medido el rendimiento relativo en comparación a un modelo análogo entrenado con GD. Aplicamos el test Shapiro-Wilk a la muestra resultante de las medidas relativas\footnote{Realmente se lo aplicamos a una única muestra, que resulta de la diferencia de las muestras de regresión y clasificación.}, con la hipótesis nula siendo que la muestra sigue una distribución normal. Al comprobar que no lo hace, y como se trata de muestras dependientes, aplicamos el test de Wilcoxon de los rangos con signos, con la hipótesis nula siendo que no hay diferencia de rendimiento entre clasificación y regresión en modelos MLP entrenados con MH. Obtenemos un p-valor que no nos da una evidencia suficiente para rechazar la hipótesis nula.}
+\label{tab:stats}
+\end{table}
+
+En consecuencia, aplicamos la prueba no paramétrica de Wilcoxon.  La hipótesis nula en este caso establece que no existen diferencias en el rendimiento relativo al GD entre las tareas de clasificación y regresión. \textbf{Obtenemos un p-valor de 0.023, que es inferior al nivel de significancia habitual de 0.05, lo que nos permite rechazar la hipótesis nula. Esto sugiere que existen diferencias significativas en el rendimiento relativo al GD entre ambas tareas.} Sin embargo, estos resultados parecen bastante sensibles a los optimizadores incluidos en el experimento, por lo que se deben tomar las conclusiones con cautela.
+
+
+
+
+
+\subsubsection{Experimento 2: Evaluación de los factores que más afectan a la pérdida de rendimiento en tareas de clasificación, tanto en MLPs como en ConvNets}
+
+La hipótesis que planteamos en este segundo experimento es que\textbf{ la pérdida de rendimiento en modelos de clasificación, ya sean entrenados con MH o con GD, está fuertemente influenciada por la cantidad de ejemplos en el conjunto de datos, la complejidad del conjunto de datos y el número de parámetros del modelo}. Específicamente, esperamos que un menor número de ejemplos y un aumento en la complejidad del conjunto de datos o en el número de parámetros del modelo conduzcan a un deterioro significativo en el rendimiento predictivo.
+
+Hemos seleccionado tres factores, comunes a cualquier tarea, que pueden influir notablemente: cantidad de ejemplos del conjunto de datos, complejidad del conjunto de datos y número de parámetros del modelo. Para esta tarea vamos a analizar los factores que acabamos de proponer a través de un análisis de dependencias parciales, con el fin de aislar la contribución de cada factor al rendimiento del modelo.
+
+El análisis de dependencias parciales es una técnica utilizada en aprendizaje automático para interpretar modelos predictivos. Permite visualizar la relación entre una o más características de entrada y la salida del modelo, manteniendo fijas otras variables para aislar su efecto. Nosotros no lo usaremos sobre el modelo en sí, sino que tomaremos como características los factores que queremos evaluar, como desarrollaremos más adelante, y al aplicarlo obtendremos información sobre la importancia de cada factor en la salida del modelo. Si la gráfica es creciente indica un impacto positivo; si es decreciente el impacto es negativo, y si es no lineal indica relaciones complejas, como que esa variable dependa de otras. Cuanto mayor sea la pendiente de la gráfica, mayor es la relación de la variable con la salida.
+
+La valoración de la métrica que usemos para medir el rendimiento será dependiente de la tarea. No es lo mismo obtener un 50\% de \textit{accuracy} en CIFAR-10G, que al haber 10 clases no tiene por que ser un mal rendimiento, que obtener ese dato en BCW donde solo hay dos clases a clasificar, lo que indicaría un rendimiento parejo al de un clasificador aleatorio. Por tanto, vamos a quitar el sesgo del número de clases, y \textbf{como métrica de rendimiento vamos a usar el \textit{accuracy} obtenido en relación al del clasificador aleatorio para esa tarea.} \textbf{Denominaremos a dicha métrica RA, con el valor de 0 simbolizando un rendimiento igual al del clasificador aleatorio}. Un valor negativo indica que el rendimiento empeora con respecto al clasificador aleatorio, y un valor positivo indica que mejora. Un valor de uno equivaldría a un \textit{accuracy} de 1. En WQC consideraremos solo 6 clases a predecir ya que es el número de clases que contienen ejemplos dentro del conjunto de datos. 
+
+$$RA = \frac{balanced\_accuracy - accuracy_{clasificador\_aleatorio}}{accuracy_{clasificador\_aleatorio}}.$$
+
+Compararemos el rendimiento usando AdamW y RMSProp como optimizadores basados en GD, ya que son los que mejor resultado consiguen en las tareas correspondientes, con SHADE y SHADE-ILS como técnicas MH. Para obtener diferentes valores de los tres factores mencionados, usaremos 5 conjuntos de datos: BCW,  WQC, MNIST, F-MNIST y CIFAR-10G. Entrenaremos los modelos LeNet5, ResNet15 y ResNet57 en tareas con imágenes y MLP capas 1,2,5,11 para tareas tabulares. 
+
+
+Para un correcto análisis vamos a asignar valores numéricos que representen a los factores que hemos mencionado. Englobamos un conjunto de datos, según el número de ejemplos, en tres valores: pocos (1), intermedio (2) y muchos (3). A MNIST, F-MNIST y CIFAR-10G les asignamos un 3 (15 mil ejemplos), a WQC un 2 (5 mil ejemplos) y a BCW un 1 (unos 500 ejemplos). 
+
+ Realizamos lo mismo con el número de parámetros del modelo, agrupando de la siguiente forma con valores entre 1 y 4:
+ 
+ \begin{enumerate}
+ 
+ \item MLP1 (2238) y MLP2 (6462).
+ 
+ \item LeNet5 (60 mil) y MLP5 (85 mil).
+ 
+ \item ResNet15 (500 mil).
+ 
+ \item ResNet57 (1.3 millones) y MLP11 (1.4 millones).
+ \end{enumerate}
+
+
+Por último lo hacemos con la complejidad del conjunto de datos, agrupando en fácil (1), media (2) y alta (3). Entendemos la complejidad del conjunto de datos, y no de la tarea, como las características inherentes a los datos que afectan a la dificultad de modelar patrones, generalizar y realizar predicciones precisas. Vamos a justificar las elecciones en base a cada conjunto de datos, en orden creciente:
 
 \begin{itemize}
 
-\item Diferencias en los hiperparámetros usados.
+\item BCW: le asignamos una complejidad fácil (1). Tiene solo 500 ejemplos y 30 características, las cuales ya están preprocesadas y son fáciles de interpretar (radio, textura, perímetro). La tarea de clasificación es binaria, haciéndola más sencilla que para varias clases. Además no hay ruido ni falta de datos significativos.
 
-\item Diferencias en la implementación de las técnicas metaheurísticas
+\item MNIST\footnote{Recordamos que todos los conjuntos de datos de imágenes han sido reducidos a 15 mil ejemplos.}: complejidad fácil (1). Las imágenes son sencillas (28 $\times$ 28) con poca variabilidad. Aunque haya 10 clases, estas tienen características claramente distintas y bien separadas, facilitando la clasificación. Además las clases están perfectamente balanceadas. Es un \textit{benchmark} estandarizado, sobre el que se obtienen resultados muy buenos con modelos muy sencillos.
 
-\item Menor cantidad de recursos computacionales dedicados al entrenamiento con las técnicas metaheurísticas.
+\item WQ: complejidad media (2). Cuenta con 5 mil ejemplos con 11 características, las cuales son variables continuas que no tienen una separación clara. Esta tarea tiene naturaleza de regresión, introduciendo variaciones sutiles en la predicción del objetivo. Está muy desbalanceado, habiendo clases donde no hay siquiera representación de los ejemplos, y otras donde solo hay unos pocos, haciendo difícil la generalización de los modelos.
+
+\item F-MNIST: complejidad media (2). Tiene una estructura similar a MNIST (tamaño $28 \times 28$, 10 clases) pero sus clases son visualmente más complejas. Tiene mucha más variabilidad dentro de cada clase como también similaridad entre clases, requiriendo refinar más el entrenamiento para este conjunto de datos.
+
+\item CIFAR-10G: complejidad alta (3). Aunque tenga la misma dimensionalidad que en los dos casos anteriores, sus clases son muy diversas entre sí con una variabilidad intra clase significativa. Son imágenes del mundo real, por lo que tienen fondo y aumenta la variabilidad. Además existe ruido y similitudes entre clases.
 
 \end{itemize}
 
-\subsection{Cuestión P1}
+Podemos ver de forma esquemática en la Tabla \ref{tab:expP1} los valores de los factores asociados a los conjuntos de datos, mientras que en las tablas Tabla \ref{tab:esc1} y Tabla \ref{tab:esc2} podemos ver las representaciones finales que usaremos para realizar el análisis de dependencias.
 
 
-Ahora sí empezaremos a responder en orden a las cuestiones planteadas. Primero veremos qué factores influyen más en el rendimiento de las técnicas metaheurísticas. Elegimos solo tareas de clasificación para que la comparación sea más sencilla. Compararemos los resultados de las tareas que se muestran en la tabla \ref{tab:expP1} en base a tres criterios: número de parámetros del modelo, complejidad de la tarea y tamaño del conjunto de datos.
+
 
 \begin{table}[]
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Conjunto} & \textbf{Modelo} & \textbf{Complejidad} & \textbf{Tamaño} & \textbf{Parámetros} & \textbf{SHADE} & \textbf{SHADE-ILS} & \textbf{RA}     \\ \hline
+BCW                        & MLP1            & 1                    & 1               & 1                   & 0.931          & 0.970              & \textbf{0.779}  \\ \hline
+BCW                        & MLP2            & 1                    & 1               & 1                   & 0.725          & 0.932              & \textbf{0.779}  \\ \hline
+BCW                        & MLP5            & 1                    & 1               & 2                   & 0.825          & 0.890              & \textbf{0.715}  \\ \hline
+BCW                        & MLP11           & 1                    & 1               & 4                   & 0.500          & 0.903              & \textbf{0.403}  \\ \hline
+WQC                        & MLP1            & 2                    & 2               & 1                   & 0.295          & 0.201              & \textbf{0.063}  \\ \hline
+WQC                        & MLP2            & 2                    & 2               & 1                   & 0.214          & 0.167              & \textbf{0.063}  \\ \hline
+WQC                        & MLP5            & 2                    & 2               & 2                   & 0.042          & 0.167              & \textbf{-0.076} \\ \hline
+WQC                        & MLP11           & 2                    & 2               & 4                   & 0.000          & 0.167              & \textbf{-0.100} \\ \hline
+MNIST                      & LeNet5          & 1                    & 2               & 2                   & 0.171          & 0.066              & \textbf{0.021}  \\ \hline
+MNIST                      & ResNet15        & 1                    & 2               & 3                   & 0.100          & 0.115              & \textbf{0.008}  \\ \hline
+MNIST                      & ResNet57        & 1                    & 2               & 4                   & 0.082          & 0.100              & \textbf{-0.010} \\ \hline
+FMNIST                     & LeNet5          & 2                    & 3               & 2                   & 0.180          & 0.366              & \textbf{0.192}  \\ \hline
+FMNIST                     & ResNet15        & 2                    & 3               & 3                   & 0.104          & 0.100              & \textbf{0.002}  \\ \hline
+FMNIST                     & ResNet57        & 2                    & 3               & 4                   & 0.100          & 0.100              & \textbf{0.000}  \\ \hline
+CIFAR                      & LeNet5          & 3                    & 3               & 2                   & 0.102          & 0.114              & \textbf{0.009}  \\ \hline
+CIFAR                      & ResNet15        & 3                    & 3               & 3                   & 0.111          & 0.103              & \textbf{0.007}  \\ \hline
+CIFAR                      & ResNet57        & 3                    & 3               & 4                   & 0.099          & 0.100              & \textbf{-0.001} \\ \hline
+\end{tabular}}
+\caption[Resultados del entrenamiento para SHADE y SHADE-ILS en tareas de clasificación, considerando la complejidad del conjunto de datos, su tamaño, y el número de parámetros del modelo]{Resultados del entrenamiento para SHADE y SHADE-ILS en tareas de clasificación, considerando la complejidad del conjunto de datos, su tamaño, y el número de parámetros del modelo. Se usa la métrica \textit{Balanced Accuracy}, mientras que la columna 'RA' representa la métrica de rendimiento promedio relativa al clasificador aleatorio. Los conjuntos de datos incluyen BCW, WQC, MNIST, F-MNIST y CIFAR-10-G, con valores numéricos asignados para caracterizar su complejidad (1: fácil, 2: media, 3: alta), tamaño (1: pocos ejemplos, 2: intermedio, 3: muchos) y cantidad de parámetros del modelo (1 a 4, donde 1 representa modelos más simples y 4 modelos más complejos), con el fin de realizar a posteriori un análisis de dependencias parciales. Un valor de RA negativo indica un rendimiento inferior al del clasificador aleatorio, mientras que valores positivos indican una mejora respecto a este.}
+\label{tab:esc1}
+\end{table}
+
+
+\begin{table}[]
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|c|c|}
+\hline
+\textbf{Conjunto de datos} & \textbf{Modelo} & \textbf{Complejidad} & \textbf{Tamaño} & \textbf{Parámetros} & \textbf{ADAMW} & \textbf{RMSPROP} & \textbf{RA}    \\ \hline
+BCW                        & MLP1            & 1                    & 1               & 1                   & 0.960          & 0.971            & \textbf{0.950} \\ \hline
+BCW                        & MLP2            & 1                    & 1               & 1                   & 0.980          & 0.990            & \textbf{0.950} \\ \hline
+BCW                        & MLP5            & 1                    & 1               & 2                   & 1.000          & 1.000              & \textbf{1.000} \\ \hline
+BCW                        & MLP11           & 1                    & 1               & 4                   & 0.971          & 0.981            & \textbf{0.952} \\ \hline
+WQC                        & MLP1            & 2                    & 2               & 1                   & 0.436          & 0.493            & \textbf{0.347} \\ \hline
+WQC                        & MLP2            & 2                    & 2               & 1                   & 0.500          & 0.394            & \textbf{0.347} \\ \hline
+WQC                        & MLP5            & 2                    & 2               & 2                   & 0.606          & 0.476            & \textbf{0.449} \\ \hline
+WQC                        & MLP11           & 2                    & 2               & 4                   & 0.607          & 0.451            & \textbf{0.435} \\ \hline
+MNIST                      & LeNet5          & 1                    & 2               & 2                   & 0.977          & 0.981            & \textbf{0.977} \\ \hline
+MNIST                      & ResNet15        & 1                    & 2               & 3                   & 0.962          & 0.967            & \textbf{0.961} \\ \hline
+MNIST                      & ResNet57        & 1                    & 2               & 4                   & 0.901          & 0.894            & \textbf{0.886} \\ \hline
+FMNIST                     & LeNet5          & 2                    & 3               & 2                   & 0.854          & 0.849            & \textbf{0.835} \\ \hline
+FMNIST                     & ResNet15        & 2                    & 3               & 3                   & 0.843          & 0.841            & \textbf{0.824} \\ \hline
+FMNIST                     & ResNet57        & 2                    & 3               & 4                   & 0.758          & 0.803            & \textbf{0.756} \\ \hline
+CIFAR                      & LeNet5          & 3                    & 3               & 2                   & 0.399          & 0.360            & \textbf{0.311} \\ \hline
+CIFAR                      & ResNet15        & 3                    & 3               & 3                   & 0.375          & 0.382            & \textbf{0.309} \\ \hline
+CIFAR                      & ResNet57        & 3                    & 3               & 4                   & 0.353          & 0.283            & \textbf{0.242} \\ \hline
+\end{tabular}}
+\caption[Resultados del entrenamiento para AdamW y RMSProp en tareas de clasificación, considerando la complejidad del conjunto de datos, su tamaño, y el número de parámetros del modelo]{Resultados del entrenamiento para AdamW y RMSProp en tareas de clasificación, considerando la complejidad del conjunto de datos, su tamaño, y el número de parámetros del modelo. Se usa la métrica \textit{Balanced Accuracy}, mientras que la columna 'RA' representa la métrica de rendimiento promedio relativa al clasificador aleatorio. Los conjuntos de datos incluyen BCW, WQC, MNIST, F-MNIST y CIFAR-10G, con valores numéricos asignados para caracterizar su complejidad (1: fácil, 2: media, 3: alta), tamaño (1: pocos ejemplos, 2: intermedio, 3: muchos) y cantidad de parámetros del modelo (1 a 4, donde 1 representa modelos más simples y 4 modelos más complejos), con el fin de realizar a posteriori un análisis de dependencias parciales. Un valor de RA negativo indica un rendimiento inferior al del clasificador aleatorio, mientras que valores positivos indican una mejora respecto a este.}
+\label{tab:esc2}
+\end{table}
+
+
+
+\begin{table}[H]
 \centering
 \begin{tabular}{|c|c|c|}
 \hline
 \textbf{Conjunto de datos} & \textbf{Complejidad} & \textbf{Cantidad de datos} \\ \hline
-\textbf{BCW}               & Fácil                & Poca                       \\ \hline
-\textbf{MNIST}             & Fácil                & Mucha                      \\ \hline
-\textbf{WQ}      & Media                & Intermedia                 \\ \hline
-\textbf{F-MNIST}           & Media                & Mucha                      \\ \hline
-\textbf{CIFAR-10-G}             & Media-alta           & Mucha                      \\ \hline
+\textbf{BCW}               & 1               & 1                       \\ \hline
+\textbf{MNIST}             & 1                & 3                      \\ \hline
+\textbf{WQ}      & 2                & 2                 \\ \hline
+\textbf{F-MNIST}           & 2                & 3                      \\ \hline
+\textbf{CIFAR-10-G}             & 3           & 3                      \\ \hline
 \end{tabular}
-\caption{Tareas a comparar para responder a la cuestión P1.}
+\caption[Valores analíticos asignados a los conjuntos de datos para el segundo experimento]{Valores atribuidos a dos de los factores a analizar en este experimento (complejidad del conjunto y cantidad de datos, falta el tamaño del modelo). El objetivo es obtener una representación numérica de los modelos cuantificando las intensidades de los factores para medir su influencia en el rendimiento a traves de un análisis de dependencias parciales. El valor de la complejidad se ha asignado atendiendo a los patrones y características intrínsecas a los datos. Para evaluar la cantidad nos fijamos en el número de ejemplos de dicho conjunto de datos. Las representaciones numéricas toman valores enteros entre 1 y 3, incluidos, siendo un 1 un valor bajo (poca cantidad de datos, baja complejidad) y un 3 alto.}
 \label{tab:expP1}
 \end{table}
 
-Analizando las tablas de los resultados de los entrenamientos separados por tarea, podemos sacar algunas nociones generales. Como esperábamos, a medida que aumentamos la complejidad de la tarea, la cantidad de ejemplos y el número de parámetros del modelo, peor es el rendimiento que tienen las técnicas metaheurísticas. Cuando la cantidad de datos es pequeña y la tarea es fácil, estas técnicas obtienen un rendimiento similar al que obtienen los optimizadores basados en gradiente descendente, aunque siempre por debajo. En muchos casos consiguen minimizar más la función de pérdida, pero luego obtienen peores resultados en el error de generalización y en \textit{accuracy}.
 
-Cuando aumentamos el número de parámetros del modelo, los resultados tienden a equipararse con el de un clasificador aleatorio\footnote{50\% en \textit{accuracy} si tenemos 2 clases, 10\% si tenemos 10.}. Esto, ocurre en BCW para el MLP de 11 capas (a excepción de SHADE-ILS), en MNIST y F-MNIST para los modelos ResNet15 y ResNet57, y en CIFAR-10-G con todos los modelos. Con esto, podemos ir esbozando una idea de cuales son los límites de estas técnicas.
 
-Mención a parte tiene el caso de WQC. En esta tarea, usamos 10 clases (1-10), pero existe una enorme desproporción entre ellas hasta el punto en el que solo seis clases tienen instancias, y una de ellas tiene solo seis ejemplos. Sin embargo el valor de \textit{accuracy} de los modelos entrenados se estanca en el 20\% aunque aumentemos mucho la complejidad del modelo, y no tiende al 10\% que correspondería a un clasificador aleatorio para 10 clases. Esto nos puede llevar a pensar que en el conjunto de entrenamiento solo hay cinco clases representadas, por lo que el modelo solo clasifica los datos entre ellas, de manera que se comporta como un clasificador aleatorio para cinco clases.
 
-En cuanto a la complejidad de la tarea, no podemos sacar conclusiones a primera vista con los resultados obtenidos. Por tanto, llevaremos a cabo un análisis más profundo para poder extraer datos concluyentes. Para cada tarea con cada modelo, vamos a establecer valores numéricos según la tabla \ref{tab:expP1} basados en:
 
-\begin{itemize}
-	\item Complejidad de la tarea: 1-Fácil, 2-Media y 3-Media-alta.
-	\item Cantidad de datos: 1-Poca, 2-Intermedia, 3-Mucha.
-	\item Parámetros del modelo: 1- MLP1, 2-MLP2, 3-MLP5 y LeNet5, 4-ResNet15, 5-MLP11 y ResNet57.
-\end{itemize}
+Llevamos a cabo el análisis de dependencias parciales usando un modelo \textit{Random Forest} y con las herramientas proporcionadas por la líbreria \verb|sklearn|, en concreto \verb|ensemble| e \verb|inspection|, que hace de éste es un proceso sencillo. Vemos los resultados obtenidos en la Figura \ref{fig:pda} para proceder a analizarlos. 
 
-Con estos valores asignados, estableceremos un espacio de puntos que representen el rendimiento de un modelo en base a las tres variantes que queremos estudiar (complejidad de la tarea, tamaño del conjunto de datos, número de parámetros del modelo), seguimos los siguientes pasos:
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=1.0\linewidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P1/pda_mh.png}
+    \label{fig:pda_mh}}
+    \hfill
+    \subfloat{ \includegraphics[width=1.0\linewidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P1/pda_gd.png}    
+    \label{fig:pda_gd}}   
+    \caption[Análisis de dependencias parciales del rendimiento relativo al clasificador aleatorio en función de la complejidad del conjunto de datos, el tamaño del conjunto de datos y el número de parámetros del modelo]{Análisis de dependencias parciales del rendimiento relativo al clasificador aleatorio (RA) en función de la complejidad del conjunto de datos, el tamaño del conjunto de datos y el número de parámetros del modelo, para modelos entrenados con AdamW y RMSProp (GD); y SHADE y SHADE-ILS (MH). La primera fila de gráficos muestra los resultados obtenidos con MH, mientras que la segunda corresponde a GD. En cada conjunto de gráficos, el primer panel representa la relación entre la complejidad de la tarea y el RA, el segundo panel muestra el efecto del tamaño del conjunto de datos sobre el RA, y el tercero analiza la influencia del número de parámetros del modelo en el RA. Una tendencia decreciente indica un impacto negativo en el rendimiento, mientras que una tendencia creciente sugiere una mejora en el desempeño del modelo. Se observa que GD es más sensible a la complejidad de la tarea, mientras que MH muestra una caída abrupta en rendimiento con conjuntos de datos más grandes.}
+    \label{fig:pda}
+\end{figure}
+
+
+
+
+\textbf{En el caso de las MH}, vemos que \textbf{las gráficas correspondientes al tamaño del modelo y la complejidad del conjunto de datos son prácticamente planas}, por lo que concluimos que \textbf{estos dos factores no afectan al rendimiento de los modelos entrenados con técnicas MH}. En contraposición, y contrariamente a la hipótesis planteada, la pendiente correspondiente a \textbf{la cantidad de ejemplos} en el conjunto de datos es muy acusada y negativa, lo que quiere decir que \textbf{este factor influye de manera inversamente proporcional al rendimiento de los modelos. Es decir, cuantos más datos de entrenamiento, peor rinde el modelo.}
+
+
+\textbf{Con respecto al GD}, tenemos que \textbf{el número de ejemplos y el tamaño del modelo afectan en mucha menor medida que la complejidad de la tarea}. Aunque estos efectos son suaves, podemos observar ciertas tendencias que corroboran lo que conocemos a nivel teórico y verifica la hipótesis planteada. Generalmente, cuantos más ejemplos de entrenamiento tengamos mejor rendimiento tendremos, ya que al tener una muestra mayor los modelos pueden aprender más patrones y más complejos. Por otro lado, sabemos que aumentar el número de parámetros en un modelo no siempre equivale a un mejor rendimiento, y si lo aumentamos sin un criterio concreto podemos caer en un sobreajuste que empeore el rendimiento. Estas ideas pueden observarse de manera leve.
+
+\textbf{Con la complejidad de la tarea sí que se observa una caída brusca de rendimiento conforme ésta crece}. De nuevo corroboramos la literatura y, además, podemos cuantificar y comparar. \textbf{En resumen, para optimizadores basados en GD el incremento de la complejidad de la tarea afecta muy negativamente al rendimiento del modelo}, mientras que el número de parámetros y el número de ejemplos afectan de manera leve, con unas interacciones que deben ser analizadas más minuciosamente. \textbf{En el caso de las MH, es el incremento del número de ejemplos el que contribuye a empeorar rápidamente el rendimiento de los modelos}, mientras que la complejidad del conjunto de datos y el número de parámetros del modelo no afectan prácticamente.
+
+
+
+
+
+
+\subsubsection{Experimento 3: Análisis de los tiempos de ejecución en el entrenamiento con MH, tanto en MLPs como en ConvNets}
+
+La hipótesis que planteamos ahora es que \textbf{el tiempo de ejecución de los algoritmos de entrenamiento varía significativamente entre las MH y el GD, siendo las primeras generalmente más costosas computacionalmente}. Específicamente, esperamos que SHADE-ILS tenga un mayor tiempo de ejecución en comparación con AdamW, debido a la naturaleza exploratoria de las metaheurísticas en el espacio de soluciones. Esperamos también que esta diferencia de tiempo tenga como base una ejecución menos optimizada, traducida en mayor tiempo de ejecución por época.
+
+Con la intención de comprender mejor los tiempos de ejecución de ambas estrategias, vamos a comparar los tiempos de los algoritmos SHADE-ILS y AdamW, ya que son dos métodos utilizados en los dos experimentos anteriores y por tanto con los que venimos tratando. Como SHADE forma parte de la ejecución del algoritmo SHADE-ILS, analizaremos también el tiempo del primero a partir del segundo. Las tareas que hemos medido, aprovechando experimentos anteriores, junto con el tiempo de ejecución (en segundos), el número de instancias del conjunto y el número de parámetros del modelo, se pueden observar en la Tabla \ref{tab:tiempos}. En base a estas dos variables mostramos gráficamente el tiempo consumido en la Figura \ref{fig:tiemposgraf}.
+
+\begin{table}[]
+\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|c|c|}
+\hline
+\textbf{Conjunto} & \textbf{Instancias} & \textbf{Modelo} & \textbf{Tamaño Modelo} & \textbf{SHADE-ILS} & \textbf{AdamW}   \\ \hline
+BCW               & 569                 & MLP1            & 2238                   & \textbf{136.436}   & \textbf{2.442}   \\ \hline
+BCW               & 569                 & MLP2            & 6462                   & \textbf{147.795}   & \textbf{2.448}   \\ \hline
+BCW               & 569                 & MLP5            & 85000                  & \textbf{251.935}   & \textbf{2.611}   \\ \hline
+BCW               & 569                 & MLP11           & 1400000                & \textbf{1791.067}  & \textbf{3.103}   \\ \hline
+BHP               & 506                 & MLP1            & 2238                   & \textbf{56.217}    & \textbf{1.041}   \\ \hline
+BHP               & 506                 & MLP2            & 6462                   & \textbf{61.645}    & \textbf{1.005}   \\ \hline
+BHP               & 506                 & MLP5            & 85000                  & \textbf{110.071}   & \textbf{1.197}   \\ \hline
+BHP               & 506                 & MLP11           & 1400000                & \textbf{833.789}   & \textbf{1.385}   \\ \hline
+WQC               & 4898                & MLP1            & 2238                   & \textbf{800.998}   & \textbf{9.691}   \\ \hline
+WQC               & 4898                & MLP2            & 6462                   & \textbf{867.628}   & \textbf{10.065}  \\ \hline
+WQC               & 4898                & MLP5            & 85000                  & \textbf{1111.359}  & \textbf{12.283}  \\ \hline
+WQC               & 4898                & MLP11           & 1400000                & \textbf{2395.200}  & \textbf{17.922}  \\ \hline
+WQR               & 4898                & MLP1            & 2238                   & \textbf{785.936}   & \textbf{9.677}   \\ \hline
+WQR               & 4898                & MLP2            & 6462                   & \textbf{856.806}   & \textbf{10.111}  \\ \hline
+WQR               & 4898                & MLP5            & 85000                  & \textbf{1123.316}  & \textbf{11.907}  \\ \hline
+WQR               & 4898                & MLP11           & 1400000                & \textbf{2054.672}  & \textbf{15.203}  \\ \hline
+MNIST             & 15000               & LeNet5          & 62000                  & \textbf{7254.432}  & \textbf{54.999}  \\ \hline
+MNIST             & 15000               & ResNet15        & 500000                 & \textbf{7991.074}  & \textbf{61.035}  \\ \hline
+MNIST             & 15000               & ResNet57        & 1400000                & \textbf{8785.166}  & \textbf{72.317}  \\ \hline
+FMNIST            & 15000               & LeNet5          & 62000                  & \textbf{6068.308}  & \textbf{56.922}  \\ \hline
+FMNIST            & 15000               & ResNet15        & 500000                 & \textbf{6735.368}  & \textbf{63.989}  \\ \hline
+FMNIST            & 15000               & ResNet57        & 1400000                & \textbf{10914.907} & \textbf{73.486}  \\ \hline
+CIFAR             & 15000               & LeNet5          & 62000                  & \textbf{7453.761}  & \textbf{107.512} \\ \hline
+CIFAR             & 15000               & ResNet15        & 500000                 & \textbf{8164.679}  & \textbf{113.781} \\ \hline
+CIFAR             & 15000               & ResNet57        & 1400000                & \textbf{8812.613}  & \textbf{123.113} \\ \hline
+\end{tabular}}
+\caption[Comparación de tiempos entre los algoritmos SHADE-ILS y AdamW]{Tabla comparativa que muestra los tiempos de ejecución (en segundos) de los algoritmos SHADE-ILS y AdamW. Se muestra el conjunto de datos con el número de ejemplos correspondiente, además del modelo que se entrena con el número de parámetros que tiene. Se observa un incremento significativo en los tiempos de ejecución de SHADE-ILS con respecto a AdamW conforme aumenta la complejidad y el tamaño de los modelos y/o de los conjuntos de datos.}
+\label{tab:tiempos}
+\end{table}
+
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=0.85\linewidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/tiempo/instancias.png}\label{fig:tiempoinst}}
+    \hfill
+    \subfloat{\includegraphics[width=0.85\linewidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/tiempo/parametros.png}\label{fig:tiempoparam}}
+    \caption[Representación gráfica del tiempo de ejecución de los algoritmos SHADE-ILS y AdamW en función del número de parámetros del modelo]{Tiempo de ejecución (en segundos) de SHADE-ILS (MH) y AdamW (GD) en el entrenamiento en función del número de instancias del conjunto de datos (arriba) y del número de parámetros del modelo (abajo). Se observa que SHADE-ILS (azul) presenta tiempos de ejecución considerablemente mayores en comparación con AdamW (naranja), especialmente a medida que aumenta el número de instancias y la cantidad de parámetros del modelo. En particular, el tiempo de ejecución de SHADE-ILS crece de manera pronunciada con ambos factores, especialmente el número de instancias del conjunto de datos.}
+    \label{fig:tiemposgraf}
+\end{figure}
+
+
+\begin{figure}
+    \centering
+    \subfloat{\includegraphics[width=0.85\linewidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/tiempo/instancias_gd.png}\label{fig:tiempoinst_gd}}
+    \hfill
+    \subfloat{\includegraphics[width=0.85\linewidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/tiempo/parametros_gd.png}\label{fig:tiempoparam_gd}}
+    \caption[Representación gráfica del tiempo de ejecución de AdamW en función del número de parámetros del modelo]{Tiempo de ejecución (en segundos) de AdamW (GD) en el entrenamiento en función del número de instancias del conjunto de datos (arriba) y del número de parámetros del modelo (abajo). Se observa que el número de instancias tiene un efecto mucho mayor que el número de parámetros del modelo.}
+    \label{fig:tiemposgraf}
+\end{figure}
+
+
+
+
+
+  
+
+Observando la Figura \ref{fig:tiempoparam}, vemos que la diferencia de tiempos entre algoritmos aumenta en menor medida que en la Figura \ref{fig:tiempoinst}. Además, en la Figura \ref{fig:tiempoparam} existe una amplitud muy grande entre la ejecución más rápida y más lenta del algoritmo SHADE-ILS, variabilidad que viene dada por las ejecuciones con distinto número de instancias, mientras que en la Figura \ref{fig:tiempoinst} los tiempos de las distintas ejecuciones son más compactos. Por tanto podemos afirmar que el número de instancias del conjunto de datos influye más en el tiempo de ejecución de las MH que el número de parámetros del modelo
+
+Vemos clara la lentitud de la opción MH en comparación con la estrategia de GD, vamos pues a analizar de dónde surge esa diferencia y si es esperable a nivel teórico ya que asignamos más ejecuciones a los algoritmos MH. Elegiremos como referencia el caso de FMNIST con el modelo ResNet57. Mientras que SHADE-ILS tarda 10914.907 segundos, AdamW consume 73.486, es decir 148 veces más. Tenemos que tener en cuenta que asignamos más recursos computacionales a la ejecución de SHADE-ILS, pero la diferencia no se corresponde con la teoría. AdamW realiza 20 evaluaciones del conjunto de entrenamiento, mientras que SHADE-ILS hace 4200, 210 veces más. Por lo tanto mejoramos el tiempo que se supone que tendría a nivel teórico.
+
+Observando las figuras \ref{fig:tiempoinst_gd} y\ref{fig:tiempoparam_gd} vemos que el número de ejemplos del conjunto de entrenamiento también tiene mayor peso en el tiempo de ejecución de AdamW, al igual que ocurría en el caso del algoritmo MH. El rango en el que se mueve el número de ejemplos (15 mil) es mucho menor del que se mueve el número de parámetros (1 millón aproximadamente), por lo que \textbf{este tiene un efecto proporcionalmente mucho mayor, del orden de 7 a 10 veces más.}
+
+
+Vamos a desglosar los tiempos del algoritmo SHADE-ILS para comprenderlo mejor. La función de error propia que hemos implementado para las MH tarda 2.107 segundos en cada evaluación del conjunto de entrenamiento. Como SHADE-ILS ejecuta alrededor de 4200 evaluaciones de las cuales 4000 son realizadas con esa función, en total tenemos que consume 8428 segundos. Las otras 200 evaluaciones se llevan a cabo por el algoritmo de búsqueda local, que consume 4.158 segundos por eje por ejecución, lo que se traduce en un total de 831.600 segundos. Como a nivel abstracto ejecutamos 20 épocas (cada época son 200 evaluaciones de SHADE y 10 de búsqueda local), guardamos un histórico con 20 modelos a los que calculamos el error de validación y \textit{accuracy}, en lo que consumimos 66.400 segundos, que hacen un total de 9326.000 segundos. 
+
+Esa diferencia de tiempo con los 10914.907 segundos totales son principalmente a las funciones de mutación y de cruce. Vamos a suponer que consumen el mismo tiempo y vamos a despreciar otras operaciones secundarias. Como SHADE ejecuta 4000 evaluaciones y tenemos 10 individuos, habrá 400 generaciones, lo que supone 8000 operaciones entre cruces y mutaciones. La diferencia entre el tiempo de la Tabla \ref{tab:tiempos} y el que hemos calculado en el párrafo anterior es de 1588.907 segundos, que si los atribuimos a las operaciones de cruce y mutación tenemos que consumen 0.199 segundos por operación. 
+
+Concluimos por tanto, que \textbf{en términos de tiempo de ejecución por época las MH no son más lentas que el GD, de hecho lo mejoran. Sin embargo necesitan de muchas más ejecuciones para conseguir resultados que puedan asemejarse, en el mejor de los casos, a los obtenidos por optimizadores basados en GD}. Tenemos además un desglose de los tiempos que consumen las funciones que integran el algoritmo SHADE-ILS. La búsqueda local es la que más tiempo consume por ejecución, seguida de la operación de evaluar el conjunto de validación y obtener el valor de \textit{accuracy}, aunque precisamente estas dos últimas operaciones son las que menos se ejecutan. 
+
+Como conclusión final del experimento, obtenemos dos afirmaciones:
 
 \begin{enumerate}
-	\item \textbf{Recolección de datos}: Para cada tarea y cada modelo, obtendremos la precisión media de todas las técnicas metaheurísticas.
-	
-	\item{ \textbf{Reescalado de \textit{accuracy}}: Transformamos los valores medios obtenidos al intervalo $[0,1]$, tomando como cota inferior el rendimiento de un clasificador aleatorio en la correspondiente tarea. La fórmula es la siguiente:
-	 \[
-	\text{\textit{Accuracy} reescalada} = \frac{\text{\textit{Accuracy} medio} - \text{\textit{Accuracy} clasificador aleatorio}}{1 - \text{\textit{Accuracy} clasificador aleatorio}}
-	\]
-	
-	Donde:
-	\begin{itemize}
-	    \item Para tareas de dos clases (BCW): $\text{\textit{Accuracy} clasificador aleatorio} = 0.5$.
-	    \item Para tareas de diez clases (WQC, MNIST, F-MNIST, CIFAR-10-G): $\text{\textit{Accuracy} clasificador aleatorio} = 0.1$.
-	\end{itemize}
-	
-	}
-	\item \textbf{Representación de puntos}: Cada modelo en su correspondiente tarea se representará como un punto en el espacio de características \verb|(complejidad_tarea, tamaño_conjunto_datos,tamaño_modelo,accuracy)|.
+
+\item El número de instancias del conjunto de datos con el que entrenamos influye más en el tiempo de entrenamiento que el número de parámetros del modelo, del orden de 7 a 10 veces más. Esto ocurre tanto para MH como para GD
+
+\item En términos de tiempo de ejecución por época, las técnicas MH requieren menos tiempo de ejecución que los optimizadores basados en GD, resultado contrario a lo planteado en la hipótesis. Sin embargo, el hecho de que se necesiten muchas más épocas (del orden de 100 o 200 veces más) en las primeras para obtener resultados que se acerquen a las segundas, hace que el tiempo total de ejecución sea mucho mayor en las MH.
+
 \end{enumerate}
 
-\begin{ejemplo}[Modelo con dos capas en BCW]
-\hspace{2cm}
 
 
-	    \begin{itemize}
-	        \item Complejidad de la tarea: 1.
-	        \item Cantidad de datos: 1.
-	        \item Complejidad del modelo: 2.
-	        \item \textit{Accuracy} medio obtenido: 0.88.
-	        \item Precisión clasificador aleatorio: 0.1.
-	        \item \textit{Accuracy} reescalado: 0.76.
-	        \item Representación: $(1,1,2,0.76)$.
-	    \end{itemize}
-\end{ejemplo}
-
-\begin{ejemplo}[ResNet57 en F-MNIST]
-	\hspace{2cm}
-	
-	
-	    \begin{itemize}
-	        
-	        \item Complejidad de la tarea: 2.
-	        \item Cantidad de datos: 3.
-	        \item Complejidad del modelo: 5.
-	        \item \textit{Accuracy} medio obtenido: 0.1.
-	        \item Precisión clasificador aleatorio: 0.1.
-	        \item \textit{Accuracy} reescalado: 0.0.
-	        \item Representación: $(2,3,5,0)$.
-	    \end{itemize}
-\end{ejemplo}
-
-%Ahora, con la intención de establecer una comparación objetiva, vamos a obtener un cuarto valor, que será la media de los valores de \textit{accuracy} de todas las técnicas metaheurísticas para cada modelo en su correspondiente tarea, pudiendo establecer así un espacio de puntos que representarán el rendimiento de un modelo en base a las tres variantes que queremos estudiar. Además vamos a transformar el rango de estas medias obtenidas en función del clasificador aleatorio. Es decir, vamos a reescalar al intervalo $[0,1]$ de manera que el 0 represente el rendimiento que obtendría un clasificador aleatorio. Es necesaria realizar esta comparación ya que en caso contrario no podríamos comparar los valores de \textit{accuracy} de obtenidos en BCW (dos clases) y CIFAR-10-G (10 clases), por ejemplo. Mostramos como se representarían dos ejemplos: el modelo MLP de dos capas en el conjunto de datos WQ viene representado por $(2,2,2,0.138)$, y el modelo LeNet5 en MNIST por $(1,3,3,0.11)$.
-
-Esta representación resulta más interpretable que los datos directos obtenidos del entrenamiento, que se pueden encontrar en el apéndice \ref{sec:apendiceA}. Mostramos por tanto los valores medios de \textit{accuracy} reescalados, de los conjuntos de datos tabulares en la tabla \ref{tab:p1tab} mientras que los de imágenes en la tabla \ref{tab:p1im}.
-
-\begin{table}[]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-\textbf{Capas} & \textbf{BCW} & \textbf{WQ} \\ \hline
-1     & 0.875        & 0.145       \\ \hline
-2     & 0.76         & 0.138       \\ \hline
-5     & 0.59         & 0.138       \\ \hline
-11    & 0.25         & 0.11        \\ \hline
-\end{tabular}
-\caption{Rendimiento medio reescalado de las técnicas metaheurísticas, medido en \textit{accuracy}, para los conjuntos de datos tabulares según el número de capas.}
-\label{tab:p1tab}
-\end{table}
-
-\begin{table}[]
-\centering
-\begin{tabular}{|c|c|c|c|}
-\hline
-\textbf{Modelo}    & \textbf{MNIST} & \textbf{F-MNIST} & \textbf{CIFAR-10-G} \\ \hline
-LeNet5   & 0.11           & 0.3375           & 0.016             \\ \hline
-ResNet15 & 0              & 0                & 0                 \\ \hline
-ResNet57 & 0              & 0                & 0                 \\ \hline
-\end{tabular}
-\caption{Rendimiento medio reescalado de las técnicas metaheurísticas, medido en \textit{accuracy}, para los conjuntos de datos de imágenes según el modelo.}
-\label{tab:p1im}
-\end{table}
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.75\linewidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P3/3d.png}
-    \caption{Representación del rendimiento medio reescalado de las técnicas metaheurísticas según la complejidad de la tarea, el tamaño del conjunto de datos y la complejidad del modelo.}
-    \label{fig:3dP1}
-\end{figure}
-
-Visualicemos los vectores que hemos descrito como puntos en un espacio tridimensional, asignando una escala de color para medir el rendimiento. Como vemos en la figura \ref{fig:3dP1}, el tamaño del conjunto de datos parece ser el factor que más influye en el rendimiento de un modelo entrenado a través de metaheurísticas. 
-
-
-
-Analizando dos a dos estos tres factores, a través de un mapa de calor, vemos en la figura \ref{fig:hmP1} que la complejidad del modelo también influye notablemente, siendo con la que más varía el rendimiento en esta representación.
-
-\begin{figure}[!tbp]
-    \centering
-    \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P3/hm1.png}} 
-    \hfill
-    \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P3/hm2.png}} 
-    \hfill
-    \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P3/hm3.png}} 
-    \caption{Mapa de calor del rendimiento de las técnicas metaheurísticas analizando dos a dos tres factores: complejidad de la tarea, tamaño del conjunto de datos y complejidad del modelo.}
-    \label{fig:hmP1}
-\end{figure}
-
-
-En último lugar, realizaremos un análisis de dependencias parciales para evaluar cómo cada una de estas tres variantes afecta al rendimiento, utilizando un modelo de regresión con \textit{Random Forest} \cite{randomforest}. Al observar los resultados en \ref{fig:P1rf} confirmamos que nuestras afirmaciones son correctas y podemos cuantificarlas.
-
-Nuestros resultados muestran que el tamaño del conjunto de datos es el factor más influyente en el rendimiento de modelos entrenados con técnicas metaheurísticas, superando significativamente la influencia de la complejidad del modelo. Aunque ésta también influye en el rendimiento, lo hace en menor medida. Por otro lado, la complejidad de la tarea parece tener un impacto mínimo.
-
-En conclusión, la cantidad de datos del conjunto es el principal factor que determina el rendimiento de la técnicas metaheurísticas, seguido por el número de parámetros del modelo, mientras que la complejidad de la tarea tiene un impacto mucho menor.
-
-\begin{figure}
-    \centering
-    \includegraphics[width=0.75\linewidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P3/dependencia_parcial.png}
-    \caption{Análisis de dependencias parciales en base al rendimiento de los modelos entrenados con técnicas metaheurísticas según la complejidad de la tarea, el tamaño del conjunto de datos y la complejidad del modelo.}
-    \label{fig:P1rf}
-\end{figure}
-
-
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-\subsection{Cuestión P2}
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\backslashbox{Algoritmo}{Capas} & 1            & 2            & 5            & 11   \\ \hline
-NAG                             & 2.5          & 2.5          & 2.6          & 3.1  \\ \hline
-RMSPROP                         & 2.4 & 2.4 & 2.6 & 3.1  \\ \hline
-ADAM                            & 2.4          & 2.4          & 2.9          & 3.0  \\ \hline
-SHADE                           & 126          & 135          & 214          & 1265 \\ \hline
-SHADE-ILS                       & 135          & 147          & 251          & 1789 \\ \hline
-SHADE-GD                        & 200          & 220          & 315          & 1779 \\ \hline
-SHADE-ILS-GD                    & 210          & 224          & 368          & 2171 \\ \hline
-\end{tabular}
-\caption{Tiempo del entrenamiento en segundos para el conjunto de datos Breast Cancer Winsconsin.}
-\label{tab:bcw_time}
-\end{table}
-
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|c|c|c|c|c|}
-\hline
-\backslashbox{Algoritmo}{Capas} & 1      & 2      & 5       & 11      \\ \hline
-NAG                             & 9.47   & 10.24  & 12.58   & 15.45   \\ \hline
-RMSPROP                         & 9.69   & 10.06  & 12.28   & 17.92   \\ \hline
-ADAM                            & 9.88   & 10.76  & 12.67   & 17.31   \\ \hline
-SHADE                           & 708.60 & 770.07 & 969.46  & 1941.44 \\ \hline
-SHADE-ILS                       & 798.46 & 864.93 & 1108.06 & 2390.91 \\ \hline
-SHADE-GD                        & 800.24 & 854.46 & 1096.99 & 2096.57 \\ \hline
-SHADE-ILS-GD                    & 799.41 & 867.99 & 1098.78 & 2247.98 \\ \hline
-\end{tabular}
-\caption{Tiempo del entrenamiento en segundos para el dataset Wine Quality (Clasificación).}
-\label{tab:wqc_time}
-\end{table}
-
-Ahora realizaremos un análisis de la complejidad computacional de las metaheurísticas en relación con el tiempo de entrenamiento. Vamos observar los tiempos de entrenamiento en los conjuntos de datos de BCW (\ref{tab:bcw_time}, WQC (\ref{tab:wqc_time} y F-MNIST (\ref{tab:fmnist_time}), que representan de menor a mayor la cantidad de datos utilizados. En la tabla \ref{tab:timesmaxmin}, se muestran las mayores y menores diferencias diferencias de tiempo para estos tres conjuntos, siendo la mayor del orden de 723 veces mayor. 
-
-Se puede observar que la menor diferencia siempre se presenta en el modelo con el menor número de parámetros, a excepción del conjunto de datos WQC, donde se da en el modelo MLP de 2 capas, que tiene un número de parámetros similar al de 1 capa. Por otro lado, la mayor diferencia se registra consistentemente en el modelo con el mayor número de parámetros. Por lo tanto, podemos concluir que el número de parámetros del modelo que entrenamos afecta negativamente al tiempo consumido por las técnicas metaheurísticas en comparación con los optimizadores basados en gradiente.
-
-
-
-\begin{table}[H]
-\centering
-\begin{tabular}{|c|c|c|c|}
-\hline
-\backslashbox{Algoritmo}{Modelo} & LeNet5  & ResNet15 & ResNet57 \\ \hline
-NAG                              & 59.74   & 61.10    & 74.48    \\ \hline
-RMSPROP                          & 56.92   & 63.98    & 73.48    \\ \hline
-ADAM                             & 56.41   & 63.56    & 73.59    \\ \hline
-SHADE                            & 6699.62 & 7233.42  & 8500.08  \\ \hline
-SHADE-ILS                        & 5999.57 & 6668.34  & 10846.33 \\ \hline
-SHADE-GD                         & 6466.79 & 7028.41  & 10474.43 \\ \hline
-SHADE-ILS-GD                     & 6641.35 & 7238.65  & 8900.86  \\ \hline
-\end{tabular}
-\caption{Tiempo del entrenamiento en segundos para el conjunto de datos F-MNIST.}
-\label{tab:fmnist_time}
-\end{table}
-
-% Please add the following required packages to your document preamble:
-% \usepackage{multirow}
-\begin{table}[]
-\resizebox{\textwidth}{!}{\begin{tabular}{|cc|c|c|c|c|}
-\hline
-\multicolumn{2}{|c|}{\textbf{Medida}}                             & \textbf{Veces mayor} & \textbf{Capas/modelo} & \textbf{Optimizador} & \textbf{Técnica MH} \\ \hline
-\multicolumn{1}{|c|}{\multirow{2}{*}{BCW}}     & Mayor diferencia & 723.67               & 11                    & ADAM                 & SHADE-ILS-GD        \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                         & Menor diferencia & 50.4                 & 1                     & NAG                  & SHADE               \\ \hline
-\multicolumn{1}{|c|}{\multirow{2}{*}{WQC}}     & Mayor diferencia & 154.77               & 11                    & NAG                  & SHADE-ILS           \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                         & Menor diferencia & 71.57                & 2                     & ADAM                 & SHADE               \\ \hline
-\multicolumn{1}{|c|}{\multirow{2}{*}{F-MNIST}} & Mayor diferencia & 147.60               & ResNet57              & RMSPROP              & SHADE-ILS           \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                         & Menor diferencia & 100.42               & LeNet5               & NAG                  & SHADE-ILS           \\ \hline
-\end{tabular}}
-\caption{Mayores y menores diferencias de tiempo, expresada en veces mayor, de los entrenamientos en los conjuntos de datos de BCW, WQC y F-MNIST, entre las técnicas metaheurísticas y optimizadores basados en gradiente descendente.}
-\label{tab:timesmaxmin}
-\end{table}
-
-Además, en esa misma tabla podemos apreciar que, a medida que aumenta el tamaño del conjunto de datos, tanto la menor como la mayor diferencia van reduciendo su separación. Esto sugiere que, si continuáramos aumentando el número de datos, estas diferencias se acercarían más entre sí. Aunque no podemos afirmar que converjan a una cierta proporción, podríamos suponer que ambas quedarían dentro de un intervalo que podríamos calcular teóricamente.
-
-
-Vamos a analizar la complejidad computacional observando primero de dónde surgen estas diferencias de tiempo. Para el manejo de las metaheurísticas, hemos implementado una función de error propia, así que compararemos el tiempo base que requiere. Es importante recalcar que dicha función está basada en la de PyTorch y utiliza la librería CUDA para acelerar los cálculos.
-
-Medimos el tiempo necesario en realizar una época con el optimizador Adam, con los modelos LeNet5 y ResNet57 en F-MNIST; y cuánto tarda en ejecutar la la función de error implementada. Es relevante tener en cuenta que, con la implementación que hemos realizado de las metaheurísticas, el error de validación y el valor de \textit{accuracy} se calculan a posteriori y, por tanto, no se incluyen en la medición del tiempo de las metaheurísticas. Observamos los resultados, ejecutados en F-MNIST, en la tabla \ref{tab:base_time}.
-
-\begin{table}[]
-\centering
-\begin{tabular}{c|c|c|c|c|}
-\cline{2-5}
-                                                                     & LeNet5 & ResNet57 & MLP 1 capa & MLP 11 capas \\ \hline
-\multicolumn{1}{|c|}{Adam}                                           & 3.9    & 4.0      & 0.49       & 0.76         \\ \hline
-\multicolumn{1}{|c|}{Función1}              & 1.54   & 1.62     & 0.16       & 0.31         \\ \hline
-\multicolumn{1}{|c|}{Función2} & 4.47   & 4.34     & 0.24       & 0.44         \\ \hline
-\end{tabular}
-\caption{Comparación de los tiempos de ejecución para una época de Adam, la función de error implementada sobre el conjunto de entrenamiento (Función1), y la función de error implementada para el conjunto de entrenamiento, de validación y el cálculo de \textit{accuracy} (Función2), para los diferentes modelos indicados y en F-MNIST.}
-\label{tab:base_time}
-\end{table}
-
-
-%%%
-La diferencia de tiempo entre el gradiente descendente y la función de error sobre el conjunto de entrenamiento es evidente, ya que se están realizando muchas menos operaciones y procesando menos datos. La discrepancia con respecto al tiempo total de la función de error propia se debe a que, al trabajar con metaheurísticas, es necesario obtener explícitamente las predicciones del modelo y las etiquetas reales de los datos, lo que implica realizar un pase hacia adelante adicional en el modelo, lo que consume ese tiempo adicional. En el caso de la evaluación con Adam, no es necesario realizar este pase, ya que, al utilizar \textit{backpropagation} y la diferenciación automática, podemos aprovechar y almacenar los datos intermedios al calcular el error para reutilizarlos posteriormente.
-
-Continuaremos con el análisis utilizando como referencia la función de error sobre el conjunto de entrenamiento únicamente, ya que los tiempos obtenidos de las ejecuciones de los algoritmos no tienen en cuenta el conjunto de validación ni es cálculo de \textit{accuracy}. Una pregunta pertinente en este punto es: sabiendo el tiempo que tarda en ejecutarse la función de error y cuántas veces se ejecuta a lo largo del entrenamiento con una técnica metaheurística, ¿cuánto debería tardar teóricamente en ejecutarse nuestro algoritmo? Teniendo en cuenta que realizamos aproximadamente 4200 evaluaciones de la función de coste, podemos realizar un sencillo cálculo que nos da como resultado 6481.22 segundos en el caso de LeNet5 y 6812.37 segundos en el caso de ResNet57. Aquí comienzan a notarse las diferencias debido al distinto número de parámetros. En el primer caso, el tiempo se ajusta bastante a la realidad; sin embargo, en el segundo, la discrepancia con respecto a los valores de la tabla \ref{tab:fmnist_time} es bastante significativa.
-
-Vamos a analizar de dónde pueden surgir estas diferencias en los tiempos. Aproximaremos los tiempos a partir del algoritmo SHADE. Es importante tener en cuenta cuáles son las operaciones que más tiempo consumen por generación; en este caso, está claro que son el cruce, la mutación y la evaluación del error, mientras que despreciamos el resto de operaciones. Por lo tanto, los 218.4 segundos de diferencia corresponden a las operaciones de cruce y mutación.
-
-Vamos a suponer que la operación de cruce y la de mutación tardan lo mismo en ejecutarse, ya que simplificará el análisis y llegaremos a los mismos resultados. En dicho algoritmo, por cada elemento de la población y en cada generación, se realiza un cruce, una mutación y una evaluación de la función de error del nuevo individuo generado. Dado que realizamos 4200 evaluaciones de la función objetivo y tenemos 10 individuos, tendremos 420 generaciones, lo que equivale a un total de 840 operaciones entre cruces y mutaciones. Por lo tanto, concluimos que cada operación requiere aproximadamente 0.26 segundos para su ejecución.
-
-Dichas funciones no hacen uso de la librería CUDA, por lo que presumiblemente aumentarán el tiempo empleado en mayor medida cuando aumente el número de parámetros del modelo, es decir, el número de datos con los que deben operar. Es importante mencionar que aquí encontramos una limitación en la estructura de datos, ya que en la implementación de las metaheurísticas estamos abandonando la estructura por capas de las redes neuronales y utilizando \textit{arrays}. Esto significa que no usar estas librerías es más bien una incapacidad y no una elección. Suponiendo, por lo tanto, que los 1688.11 segundos de diferencia entre nuestro cálculo teórico y el tiempo real consumido por SHADE al entrenar el modelo ResNet57 provienen de estas operaciones, eso equivaldría a que cada operación tarda aproximadamente 2 segundos, lo que representa unas 8 veces más que en el caso anterior.
-
-Haciendo el mismo análisis para WQC, obtenemos que las funciones de cruce y mutación consumen 0.04 segundos en el caso del MLP de 1 capa y 2.31 segundos en el caso de 11 capas. Sabiendo que la función de error depende del número de datos y del número de parámetros del modelo, mientras que las funciones de cruce y mutación dependen únicamente del número de parámetros del modelo, con los datos obtenidos podemos aproximar el orden de complejidad del algoritmo SHADE.
-
-El tiempo total consumido será de $4200 \cdot func_{error} + 840 \cdot cruce\_mut$, por lo que ya podemos calcular su complejidad algoritmíca enbase al tiempo. Primero averiguamos el orden de complejidad de las funciones de cruce y mutación, tomando los pares $(dimension\_del\_modelo, tiempo\_de\_ejecucion)$. Suponemos una complejidad $T(n)=k \cdot n^a$ y transformamos los valores a escala logarítmica.
-
-\begin{align*}
-log(d1)&=log(1306)\approx3.116\\
-log(t1)&=log(0.04)\approx -1.398\\
-log(d2)&=log(62,158)\approx4.793\\
-log(t2)&=log(0.26)\approx-0.585\\
-log(d3)&=log(1,346,826)\approx6.129\\
-log(t3)&=log(2)\approx0.301\\
-log(d4)&=log(1,403,354)\approx6.148\\
-log(t4)&=log(3.21)\approx1.165.
-\end{align*}
-
-
-Tenemos que $log(T)=log(k) + a \cdot log(d)$. A través de una regresión lineal utilizando los datos anteriores obtenemos que $a = 0.549$ y $log(k)=-7.236$, es decir $k=e^{-7.236}$. Por tanto estas funciones tienen una complejidad de $T(p) = e^{-7.236}\cdot p^{0.549}$, donde $p$ representa el número de parámetros del modelo.
-
-Realizamos el mismo proceso para la función de error, que depende del tamaño del conjunto de datos y el número de parámetros del modelo. Entonces, suponemos $T(p,d)=k \cdot p^a \cdot d^b$, y después de la regresión obtenemos $T(p,d)=e^{-7.25} \cdot p^{0.42} \cdot d^{0.12}$, donde $p$ es el número de parámetros del modelo y $d$ el tamaño del conjunto de datos. Podemos establecer entonces que el orden de complejidad del algoritmo SHADE es
-
-
-\begin{align*}
-T(p,d)&= N_{eval} \cdot e^{-7.25} \cdot p^{0.42} \cdot d^{0.12} + \frac{N_{eval}}{Tam_{pob}} \cdot e^{-7.236}\cdot p^{0.549} \\
-          &= O( p^{0.42} \cdot d^{0.12}) + O(p^{0.549}).
-\end{align*}
-
-En la práctica, el segundo término domina al tener un mayor exponente, especialmente considerando que en los entrenamientos de modelos de aprendizaje profundo actuales el número de parámetros suele ser mucho mayor que la cantidad de datos. Por lo tanto, de manera general, se tiene $T(p)=O(p^{0.549})$. Respondiendo finalmente a la cuestión, afirmamos que tanto el número de datos como el número de parámetros del modelo afectan, y acabamos de ver de qué manera, al tiempo consumido en el entrenamiento a través de metaheurísticas; además, el número de parámetros afecta en mayor medida. Otra conclusión interesante es que los factores de cruce y mutación son mucho más determinantes que la evaluación del error, aunque esto esté marcado por los motivos que hemos mencionado antes, como la imposibilidad de usar CUDA.
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-
-
-\subsection{Cuestión P3}
-
-Para observar si existe alguna diferencia en el rendimiento de las técnicas metaheurísticas al enfrentarse a la tarea de regresión o clasificación, vamos a comparar los resultados de los cuatro conjuntos de datos tabulares. Contamos con dos tareas de clasificación y dos tareas de regresión, con dificultades de la tarea y tamaño del conjunto de datos similares dos a dos, como se observa en la tabla \ref{tab:expP3}.
-
-\begin{table}[]
-\centering
-\resizebox{\textwidth}{!}{\begin{tabular}{|c|c|c|c|}
-\hline
-\textbf{Conjunto de datos} & \textbf{Tarea} & \textbf{Complejidad} & \textbf{Cantidad de datos} \\ \hline
-\textbf{BCW}               & Clasificación  & Fácil                & Poca                       \\ \hline
-\textbf{BHP}               & Regresión      & Fácil                & Poca                       \\ \hline
-\textbf{WQC}               & Clasificación  & Media                & Intermedia                 \\ \hline
-\textbf{WQR}               & Regresión      & Media                & Intermedia                 \\ \hline
-\end{tabular}}
-\caption{Tareas a comparar para la cuestión P3.}
-\label{tab:expP3}
-\end{table}
-
-% Please add the following required packages to your document preamble:
-% \usepackage{multirow}
-\begin{table}[]
-\resizebox{\textwidth}{!}{\begin{tabular}{|c|ccc|ccc|ccc|ccc|}
-\hline
-\multirow{2}{*}{\textbf{Capas}} & \multicolumn{3}{c|}{\textbf{SHADE}}                          & \multicolumn{3}{c|}{\textbf{SHADE-ILS}}                                                 & \multicolumn{3}{c|}{\textbf{SHADE-GD}}                                                  & \multicolumn{3}{c|}{\textbf{SHADE-ILS-GD}}                   \\ \cline{2-13} 
-                                & \multicolumn{1}{c|}{E}    & \multicolumn{1}{c|}{T}    & M    & \multicolumn{1}{c|}{E}             & \multicolumn{1}{c|}{T}             & M             & \multicolumn{1}{c|}{E}             & \multicolumn{1}{c|}{T}             & M             & \multicolumn{1}{c|}{E}    & \multicolumn{1}{c|}{T}    & M    \\ \hline
-\textbf{1}                      & \multicolumn{1}{c|}{0.10} & \multicolumn{1}{c|}{0.18} & 0.93 & \multicolumn{1}{c|}{\textbf{0.07}} & \multicolumn{1}{c|}{\textbf{0.14}} & \textbf{0.97} & \multicolumn{1}{c|}{0.10}          & \multicolumn{1}{c|}{0.18}          & 0.91          & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.15} & 0.94 \\ \hline
-\textbf{2}                      & \multicolumn{1}{c|}{0.21} & \multicolumn{1}{c|}{0.49} & 0.72 & \multicolumn{1}{c|}{0.06}          & \multicolumn{1}{c|}{0.35}          & 0.93          & \multicolumn{1}{c|}{\textbf{0.11}} & \multicolumn{1}{c|}{\textbf{0.22}} & \textbf{0.95} & \multicolumn{1}{c|}{0.06} & \multicolumn{1}{c|}{0.35} & 0.93 \\ \hline
-\textbf{5}                      & \multicolumn{1}{c|}{0.63} & \multicolumn{1}{c|}{0.64} & 0.82 & \multicolumn{1}{c|}{\textbf{0.05}} & \multicolumn{1}{c|}{\textbf{0.47}} & \textbf{0.89} & \multicolumn{1}{c|}{0.10}          & \multicolumn{1}{c|}{0.45}          & 0.87          & \multicolumn{1}{c|}{0.03} & \multicolumn{1}{c|}{0.61} & 0.6  \\ \hline
-\textbf{11}                     & \multicolumn{1}{c|}{0.70} & \multicolumn{1}{c|}{0.67} & 0.5  & \multicolumn{1}{c|}{\textbf{0.09}} & \multicolumn{1}{c|}{\textbf{0.49}} & \textbf{0.90} & \multicolumn{1}{c|}{0.27}          & \multicolumn{1}{c|}{0.65}          & 0.60          & \multicolumn{1}{c|}{0.11} & \multicolumn{1}{c|}{0.70} & 0.50 \\ \hline
-\end{tabular}}
-\caption{Entrenamiento de las técnicas metaheurísticas en el conjunto de datos BCW. E: Entrenamiento, T: Test, A: \textit{Accuracy}.}
-\label{tab:P3bcw}
-\end{table}
-
-% Please add the following required packages to your document preamble:
-% \usepackage{multirow}
-\begin{table}[]
-\resizebox{\textwidth}{!}{\begin{tabular}{|c|ccc|ccc|ccc|ccc|}
-\hline
-\multirow{2}{*}{\textbf{Capas}} & \multicolumn{3}{c|}{\textbf{SHADE}}                                                     & \multicolumn{3}{c|}{\textbf{SHADE-ILS}}                      & \multicolumn{3}{c|}{\textbf{SHADE-GD}}                       & \multicolumn{3}{c|}{\textbf{SHADE-ILS-GD}}                                              \\ \cline{2-13} 
-                                & \multicolumn{1}{c|}{E}             & \multicolumn{1}{c|}{T}             & A             & \multicolumn{1}{c|}{E}    & \multicolumn{1}{c|}{T}    & A    & \multicolumn{1}{c|}{E}    & \multicolumn{1}{c|}{T}    & A    & \multicolumn{1}{c|}{E}             & \multicolumn{1}{c|}{T}             & A             \\ \hline
-\textbf{1}                      & \multicolumn{1}{c|}{\textbf{2.08}} & \multicolumn{1}{c|}{\textbf{2.16}} & \textbf{0.30} & \multicolumn{1}{c|}{1.04} & \multicolumn{1}{c|}{1.05} & 0.22 & \multicolumn{1}{c|}{0.98} & \multicolumn{1}{c|}{1.11} & 0.20 & \multicolumn{1}{c|}{1.03}          & \multicolumn{1}{c|}{1.09}          & 0.20          \\ \hline
-\textbf{2}                      & \multicolumn{1}{c|}{2.12}          & \multicolumn{1}{c|}{2.55}          & 0.21          & \multicolumn{1}{c|}{1.05} & \multicolumn{1}{c|}{1.11} & 0.20 & \multicolumn{1}{c|}{0.91} & \multicolumn{1}{c|}{1.09} & 0.20 & \multicolumn{1}{c|}{\textbf{0.99}} & \multicolumn{1}{c|}{\textbf{10.4}} & \textbf{0.29} \\ \hline
-\textbf{5}                      & \multicolumn{1}{c|}{2.58}          & \multicolumn{1}{c|}{2.30}          & 0.15          & \multicolumn{1}{c|}{0.93} & \multicolumn{1}{c|}{1.07} & 0.23 & \multicolumn{1}{c|}{0.99} & \multicolumn{1}{c|}{1.00} & 0.25 & \multicolumn{1}{c|}{\textbf{0.96}} & \multicolumn{1}{c|}{\textbf{1.05}} & \textbf{0.27} \\ \hline
-\textbf{11}                     & \multicolumn{1}{c|}{2.51}          & \multicolumn{1}{c|}{2.30}          & 0.20          & \multicolumn{1}{c|}{0.96} & \multicolumn{1}{c|}{1.14} & 0.20 & \multicolumn{1}{c|}{1.01} & \multicolumn{1}{c|}{1.24} & 0.20 & \multicolumn{1}{c|}{0.48}          & \multicolumn{1}{c|}{1.37}          & 0.20          \\ \hline
-\end{tabular}}
-\caption{Entrenamiento de las técnicas metaheurísticas en el conjunto de datos WQC. E: Entrenamiento, T: Test, A: \textit{Accuracy}.}
-\label{tab:P3wqc}
-\end{table}
-
-Podemos ver los resultados del entrenamiento en las tablas \ref{tab:P3bcw} y \ref{tab:P3wqc}. Como se observa, las tareas con menor cantidad de datos y mayor facilidad logran un mejor rendimiento. Es importante prepararnos adecuadamente para realizar la comparación, ya que las funciones de pérdida y las métricas son diferentes en clasificación y regresión. Además, en las dos tareas de clasificación, el número de clases varía, lo que también afecta el rendimiento del clasificador aleatorio que utilizaremos como referencia. Por lo tanto, aplicaremos el mismo proceso que realizamos en el análisis de la cuestión \textit{P1} y pondremos dichas métricas en una escala de [0,1], donde 0 representa el rendimiento del clasificador aleatorio correspondiente.
-
-
-
-Compararemos las métricas \textit{accuracy} (con la correspondiente transformación) y R$^2$, ya que ofrecen una interpretación similar. La primera indica el rendimiento de nuestro modelo en función del rendimiento del clasificador aleatorio, mientras que la segunda se refiere a cuán bien se predicen los datos usando la media. Esto también soluciona el problema de las distintas escalas en las tareas de regresión. Ahora que contamos con un criterio objetivo para comparar, evaluaremos el rendimiento medio de cada técnica metaheurística agrupando en función de la cantidad de datos y la complejidad del modelo, que son los dos factores que más influyen en el rendimiento, tal como hemos observado. Compararemos respecto al rendimiento obtenido por las técnicas de gradiente descendente, de manera que no nos influya la complejidad de la tarea en la comparación. Como hemos mencionado, este es el factor que menos influye de los tres, y podemos suponer que si el rendimiento disminuye con unas técnicas, también lo hará con otras.
-
-\begin{figure}[!tbp]
-    \centering
-    \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P2/data_clas_mh.png}} 
-    \hfill
-    \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P2/data_clas_gd.png}} 
-    \hfill
-    \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P2/data_reg_mh.png}} 
-    \hfill
-    \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P2/data_reg_gd.png}} 
-    \caption{Mapa de calor del rendimiento de las técnicas metaheurísticas para los datasets correspondientes, realizando una media de los valores entre las distintas capas.}
-    \label{fig:P3hmdata}
-\end{figure}
-
-En la figura\ref{fig:P3hmdata} obervamos los resultados medios en base a los conjuntos de datos, mientras que en \ref{fig:P3hmlayer} los resultados están agrupados por capas. A simple vista, podríamos concluir que los resultados en regresión son peores que los de clasificación en comparación con el gradiente descendente, y que por tanto sí que existe una diferencia entre estas dos tareas en cuanto al rendimiento de las técnicas metaheurísticas. Sin embargo, para afirmar esto con certeza, llevaremos a cabo la prueba de los rangos con signo de Wilcoxon, que es una alternativa al test t-Student cuando los datos no siguen una distribución normal y las dos muestras están relacionadas, como es nuestro caso. Hemos decidido aplicar la prueba de Wilcoxon tras verificar, mediante el test de Shapiro-Wilk, que los datos no siguen una distribución normal.
-
-
-\begin{figure}[!tbp]
-    \centering
-    \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P2/layer_clas_mh.png}} 
-    \hfill
-    \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P2/layer_clas_gd.png}} 
-    \hfill
-    \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P2/layer_reg_mh.png}} 
-    \hfill
-    \subfloat{\includegraphics[width=0.5\textwidth]{Plantilla_TFG_latex//imagenes//Inf//Resultados/P2/layer_reg_gd.png}} 
-    \caption{Mapa de calor del rendimiento de las técnicas metaheurísticas para los distintos números de capas de los modelos MLP, realizando una media de los valores entre los conjuntos de datos correspondientes.}
-    \label{fig:P3hmlayer}
-\end{figure}
-
-Compararemos dos distribuciones: una será la diferencia de rendimiento de las técnicas metaheurísticas con respecto al gradiente descendente en tareas de regresión, y la otra será equivalente, pero en problemas de clasificación. Si encontramos una diferencia entre ambas distribuciones, confirmaremos que existe una variación en el rendimiento de las técnicas metaheurísticas en tareas de clasificación y regresión.
-
-
-Se podría alegar que existe un sesgo en el rendimiento de las métricas, ya que R$^2$ no tiene límite inferior; un modelo muy malo podría hacer que este valor decrezca infinitamente. Esto contrasta con la métrica que usamos en clasificación, que sí tiene un límite y se alcanza en varios casos (véase un valor de 0.5 en BCW y 0.2\footnote{Teóricamente sería un 10\% el valor que obtendría en este caso el clasificador aleatorio, pero hay un sutil detalle que cambia esto y que se comenta en la sección anterior} en WQC). Por tanto vamos a ejecutar la prueba sobre los valores de las métricas, el error de entrenamiento y el error de generalización para evitar este posible sesgo.
-
-La función de entropía cruzada tiene un valor teórico máximo, pero los modelos entrenados no se acercan a él. Este valor se alcanzaría cuando predecimos con un 0\% de probabilidad la clase correcta, lo que daría lugar a un error con valor de $-log(0) \approx + \infty$. Sin embargo, en las implementaciones de las librerías de aprendizaje automático se utiliza un valor muy pequeño para evitar evaluar la función en un punto en el que no esté definida. Suponiendo que este valor sea $10^{-8}$, que es muy común en la literatura para prevenir divisiones por cero, el valor máximo teórico de la función de entropía cruzada sería aproximadamente 18.42. Esto es muy lejano a los errores cometidos por los modelos entrenados, que son todos menores a 4. Por tanto concluimos los valores del error de generalización no están limitados y, en consecuencia, no existe dicho sesgo.
-
-
-Nuestra hipótesis nula será que no existe diferencia en el rendimiento de los modelos entrenados con técnicas metaheurísticas en comparación con su versión entrenada mediante gradiente descendente, tanto para tareas de clasificación como de regresión. La hipótesis alternativa, por otro lado, postula que sí existe una diferencia en el rendimiento. En total, formularemos tres hipótesis, correspondientes a los tres medidores mencionados anteriormente. Estableceremos un nivel de significación de 0.05, que es un valor comúnmente aceptado en estudios estadísticos.
-
-Los resultados del test se muestran en la tabla \ref{tab:test}. Dado que estos resultados se encuentran por debajo del nivel de significación establecido, podemos afirmar con firmeza que existe una diferencia en el rendimiento de las técnicas metaheurísticas en tareas de clasificación y regresión.
-
-\begin{table}[]
-\centering
-\begin{tabular}{|c|c|c|}
-\hline
-\textbf{Medida}      & \textbf{Estadístico} & \textbf{P-valor} \\ \hline
-Error entrenamiento  & 80.0                 & 0.045            \\ \hline
-Error generalización & 14.0                 & 0.00001          \\ \hline
-Métrica              & 25.0                 & 0.0001           \\ \hline
-\end{tabular}
-\caption{Valores del test de Wilcoxon para las hipótesis propuestas.}
-\label{tab:test}
-\end{table}
-
-
-
-
-% Please add the following required packages to your document preamble:
-% \usepackage{multirow}
-\begin{table}[]
-\resizebox{\textwidth}{!}{\begin{tabular}{|cc|c|c|c|c|}
-\hline
-\multicolumn{2}{|c|}{\textbf{Medida}}                             & \textbf{Veces mayor} & \textbf{Capas/modelo} & \textbf{Optimizador} & \textbf{Técnica MH} \\ \hline
-\multicolumn{1}{|c|}{\multirow{2}{*}{BCW}}     & Mayor diferencia & 723.67               & 11                    & ADAM                 & SHADE-ILS-GD        \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                         & Menor diferencia & 50.4                 & 1                     & NAG                  & SHADE               \\ \hline
-\multicolumn{1}{|c|}{\multirow{2}{*}{WQC}}     & Mayor diferencia & 154.77               & 11                    & NAG                  & SHADE-ILS           \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                         & Menor diferencia & 71.57                & 2                     & ADAM                 & SHADE               \\ \hline
-\multicolumn{1}{|c|}{\multirow{2}{*}{F-MNIST}} & Mayor diferencia & 147.60               & ResNet57              & RMSPROP              & SHADE-ILS           \\ \cline{2-6} 
-\multicolumn{1}{|c|}{}                         & Menor diferencia & 100.42               & LeNet5               & NAG                  & SHADE-ILS           \\ \hline
-\end{tabular}}
-\caption{Mayores y menores diferencias de tiempo, expresada en veces mayor, de los entrenamientos en los conjuntos de datos de BCW, WQC y F-MNIST, entre las técnicas metaheurísticas y optimizadores basados en gradiente descendente.}
-\label{tab:timesmaxmin}
-\end{table}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
-\subsection{Cuestión P4}
+\subsubsection{Experimento 4: Análisis comparativo de las propuestas propias} \label{sec:res_propias}
+
+
 
 % Please add the following required packages to your document preamble:
 % \usepackage{multirow}
-\begin{table}[]
+\begin{table}[tbp]
 \centering
 \resizebox{\textwidth}{!}{\begin{tabular}{|c|c|ccc|ccc|}
 \hline
-\multirow{2}{*}{\textbf{Dataset}} & \multirow{2}{*}{\textbf{Capas}} & \multicolumn{3}{c|}{\textbf{SHADE}}                                                             & \multicolumn{3}{c|}{\textbf{SHADE-GD}}                                                                       \\ \cline{3-8} 
-                                  &                                 & \multicolumn{1}{c|}{E}             & \multicolumn{1}{c|}{T}             & M                     & \multicolumn{1}{c|}{E}               & \multicolumn{1}{c|}{T}               & M                              \\ \hline
-\multirow{4}{*}{BCW}              & 1                               & \multicolumn{1}{c|}{\textbf{0.11}} & \multicolumn{1}{c|}{\textbf{0.18}} & \textbf{0.93}         & \multicolumn{1}{c|}{0.10}            & \multicolumn{1}{c|}{0.18}            & 0.91                           \\ \cline{2-8} 
-                                  & 2                               & \multicolumn{1}{c|}{0.21}          & \multicolumn{1}{c|}{0.49}          & 0.72                  & \multicolumn{1}{c|}{\textbf{0.11}}   & \multicolumn{1}{c|}{\textbf{0.22}}   & \textbf{0.95}                  \\ \cline{2-8} 
-                                  & 5                               & \multicolumn{1}{c|}{0.63}          & \multicolumn{1}{c|}{0.64}          & 0.82                  & \multicolumn{1}{c|}{\textbf{0.10}}   & \multicolumn{1}{c|}{\textbf{0.45}}   & \textbf{0.87}                  \\ \cline{2-8} 
-                                  & 11                              & \multicolumn{1}{c|}{0.70}          & \multicolumn{1}{c|}{0.69}          & 0.50                  & \multicolumn{1}{c|}{\textbf{0.27}}   & \multicolumn{1}{c|}{\textbf{0.65}}   & \textbf{0.60}                  \\ \hline
-\multirow{4}{*}{WQC}              & 1                               & \multicolumn{1}{c|}{\textbf{2.08}} & \multicolumn{1}{c|}{\textbf{2.16}} & \textbf{0.30}         & \multicolumn{1}{c|}{0.98}            & \multicolumn{1}{c|}{1.11}            & 0.20                           \\ \cline{2-8} 
-                                  & 2                               & \multicolumn{1}{c|}{2.12}          & \multicolumn{1}{c|}{2.55}          & 0.21                  & \multicolumn{1}{c|}{\textbf{0.91}}   & \multicolumn{1}{c|}{\textbf{1.09}}   & \textbf{0.20}                  \\ \cline{2-8} 
-                                  & 5                               & \multicolumn{1}{c|}{2.58}          & \multicolumn{1}{c|}{2.30}          & 0.15                  & \multicolumn{1}{c|}{\textbf{0.99}}   & \multicolumn{1}{c|}{\textbf{1.00}}   & \textbf{0.25}                  \\ \cline{2-8} 
-                                  & 11                              & \multicolumn{1}{c|}{2.51}          & \multicolumn{1}{c|}{2.30}          & 0.20                  & \multicolumn{1}{c|}{\textbf{1.01}}   & \multicolumn{1}{c|}{\textbf{1.24}}   & \textbf{0.20}                  \\ \hline
-\multirow{4}{*}{BHP}              & 1                               & \multicolumn{1}{c|}{430.90}        & \multicolumn{1}{c|}{452.36}        & $-1.92 \times 10^{4}$ & \multicolumn{1}{c|}{\textbf{13.97}}  & \multicolumn{1}{c|}{\textbf{33.09}}  & \textbf{0.65}                  \\ \cline{2-8} 
-                                  & 2                               & \multicolumn{1}{c|}{430.97}        & \multicolumn{1}{c|}{428.22}        & $-9.60 \times 10^{2}$ & \multicolumn{1}{c|}{\textbf{384.43}} & \multicolumn{1}{c|}{\textbf{128.80}} & \textbf{-4.6}                  \\ \cline{2-8} 
-                                  & 5                               & \multicolumn{1}{c|}{429.71}        & \multicolumn{1}{c|}{435.00}        & $-7.32 \times 10^{3}$ & \multicolumn{1}{c|}{\textbf{396.34}} & \multicolumn{1}{c|}{\textbf{324.05}} & \textbf{-0.93}                 \\ \cline{2-8} 
-                                  & 11                              & \multicolumn{1}{c|}{469.78}        & \multicolumn{1}{c|}{454.78}        & $-5.38 \times 10^{6}$ & \multicolumn{1}{c|}{\textbf{463.33}} & \multicolumn{1}{c|}{\textbf{453.89}} & \textbf{$-1.29 \times 10^{5}$} \\ \hline
-\multirow{4}{*}{WQR}              & 1                               & \multicolumn{1}{c|}{35.40}         & \multicolumn{1}{c|}{32.56}         & $-2.65 \times 10^{3}$ & \multicolumn{1}{c|}{\textbf{5.14}}   & \multicolumn{1}{c|}{\textbf{0.45}}   & \textbf{-4.02}                 \\ \cline{2-8} 
-                                  & 2                               & \multicolumn{1}{c|}{34.56}         & \multicolumn{1}{c|}{31.16}         & $-1.38 \times 10^{3}$ & \multicolumn{1}{c|}{\textbf{0.40}}   & \multicolumn{1}{c|}{\textbf{0.53}}   & \textbf{-2.94}                 \\ \cline{2-8} 
-                                  & 5                               & \multicolumn{1}{c|}{34.75}         & \multicolumn{1}{c|}{32.20}         & $-1.14 \times 10^{5}$ & \multicolumn{1}{c|}{\textbf{6.07}}   & \multicolumn{1}{c|}{\textbf{0.87}}   & \textbf{-0.13}                 \\ \cline{2-8} 
-                                  & 11                              & \multicolumn{1}{c|}{35.30}         & \multicolumn{1}{c|}{32.60}         & $-2.01 \times 10^{8}$ & \multicolumn{1}{c|}{\textbf{35.93}}  & \multicolumn{1}{c|}{\textbf{35.46}}  & \textbf{$-9.43 \times 10^{5}$} \\ \hline
+\multirow{2}{*}{\textbf{Conjunto}} & \multirow{2}{*}{\textbf{Modelo}} & \multicolumn{3}{c|}{\textbf{SHADE}}                                                         & \multicolumn{3}{c|}{\textbf{SHADE-GD}}                                                                            \\ \cline{3-8} 
+                                   &                                  & \multicolumn{1}{c|}{Train}          & \multicolumn{1}{c|}{Test}    & Métrica                & \multicolumn{1}{c|}{Train}            & \multicolumn{1}{c|}{Test}             & Métrica                           \\ \hline
+\multirow{4}{*}{BCW}               & 1                                & \multicolumn{1}{c|}{0.112}          & \multicolumn{1}{c|}{0.187}   & \textbf{0.931}         & \multicolumn{1}{c|}{\textbf{0.108}}   & \multicolumn{1}{c|}{\textbf{0.181}}   & 0.915                             \\ \cline{2-8} 
+                                   & 2                                & \multicolumn{1}{c|}{0.215}          & \multicolumn{1}{c|}{0.493}   & 0.725                  & \multicolumn{1}{c|}{\textbf{0.118}}   & \multicolumn{1}{c|}{\textbf{0.222}}   & \textbf{0.953}                    \\ \cline{2-8} 
+                                   & 5                                & \multicolumn{1}{c|}{0.636}          & \multicolumn{1}{c|}{0.646}   & 0.825                  & \multicolumn{1}{c|}{\textbf{0.106}}   & \multicolumn{1}{c|}{\textbf{0.452}}   & \textbf{0.879}                    \\ \cline{2-8} 
+                                   & 11                               & \multicolumn{1}{c|}{0.701}          & \multicolumn{1}{c|}{0.693}   & 0.500                  & \multicolumn{1}{c|}{\textbf{0.279}}   & \multicolumn{1}{c|}{\textbf{0.660}}   & \textbf{0.600}                    \\ \hline
+\multirow{4}{*}{WQC}               & 1                                & \multicolumn{1}{c|}{2.100}          & \multicolumn{1}{c|}{2.475}   & \textbf{0.295}         & \multicolumn{1}{c|}{\textbf{1.082}}   & \multicolumn{1}{c|}{\textbf{1.304}}   & 0.171                             \\ \cline{2-8} 
+                                   & 2                                & \multicolumn{1}{c|}{2.668}          & \multicolumn{1}{c|}{2.315}   & \textbf{0.214}         & \multicolumn{1}{c|}{\textbf{1.025}}   & \multicolumn{1}{c|}{\textbf{1.486}}   & 0.192                             \\ \cline{2-8} 
+                                   & 5                                & \multicolumn{1}{c|}{2.303}          & \multicolumn{1}{c|}{2.304}   & 0.042                  & \multicolumn{1}{c|}{\textbf{0.953}}   & \multicolumn{1}{c|}{\textbf{1.495}}   & \textbf{0.203}                    \\ \cline{2-8} 
+                                   & 11                               & \multicolumn{1}{c|}{2.662}          & \multicolumn{1}{c|}{2.302}   & 0.000                  & \multicolumn{1}{c|}{\textbf{1.104}}   & \multicolumn{1}{c|}{\textbf{3.982}}   & \textbf{0.211}                    \\ \hline
+\multirow{4}{*}{BHP}               & 1                                & \multicolumn{1}{c|}{430.906}        & \multicolumn{1}{c|}{452.366} & $-1.922 \times 10^{4}$ & \multicolumn{1}{c|}{\textbf{13.977}}  & \multicolumn{1}{c|}{\textbf{33.099}}  & \textbf{0.650}                    \\ \cline{2-8} 
+                                   & 2                                & \multicolumn{1}{c|}{430.970}        & \multicolumn{1}{c|}{428.226} & $-9.607 \times 10^{2}$ & \multicolumn{1}{c|}{\textbf{384.431}} & \multicolumn{1}{c|}{\textbf{128.808}} & \textbf{-4.610}                   \\ \cline{2-8} 
+                                   & 5                                & \multicolumn{1}{c|}{429.719}        & \multicolumn{1}{c|}{435.000} & $-7.318 \times 10^{3}$ & \multicolumn{1}{c|}{\textbf{396.344}} & \multicolumn{1}{c|}{\textbf{324.056}} & \textbf{-0.932}                   \\ \cline{2-8} 
+                                   & 11                               & \multicolumn{1}{c|}{469.788}        & \multicolumn{1}{c|}{454.786} & $-5.381 \times 10^{6}$ & \multicolumn{1}{c|}{\textbf{463.336}} & \multicolumn{1}{c|}{\textbf{453.891}} & \textbf{-1.294 $\times$ 10$^{5}$} \\ \hline
+\multirow{4}{*}{WQR}               & 1                                & \multicolumn{1}{c|}{34.645}         & \multicolumn{1}{c|}{34.336}  & $-4.150 \times 10^{2}$ & \multicolumn{1}{c|}{\textbf{0.622}}   & \multicolumn{1}{c|}{\textbf{0.712}}   & \textbf{-2.624}                   \\ \cline{2-8} 
+                                   & 2                                & \multicolumn{1}{c|}{35.425}         & \multicolumn{1}{c|}{30.956}  & $-2.020 \times 10^{3}$ & \multicolumn{1}{c|}{\textbf{0.562}}   & \multicolumn{1}{c|}{\textbf{1.548}}   & \textbf{-0.442}                   \\ \cline{2-8} 
+                                   & 5                                & \multicolumn{1}{c|}{34.767}         & \multicolumn{1}{c|}{32.230}  & $-2.135 \times 10^{5}$ & \multicolumn{1}{c|}{\textbf{0.568}}   & \multicolumn{1}{c|}{\textbf{0.934}}   & \textbf{-3.447}                   \\ \cline{2-8} 
+                                   & 11                               & \multicolumn{1}{c|}{\textbf{35.867}}         & \multicolumn{1}{c|}{32.176}  & $-1.951 \times 10^{6}$ & \multicolumn{1}{c|}{35.937}  & \multicolumn{1}{c|}{\textbf{32.039}}  & \textbf{-2.312 $\times$ 10$^{5}$} \\ \hline
+\multirow{3}{*}{MNIST}             & LeNet5                           & \multicolumn{1}{c|}{2.424}          & \multicolumn{1}{c|}{2.277}   & 0.171                  & \multicolumn{1}{c|}{\textbf{0.110}}   & \multicolumn{1}{c|}{\textbf{1.930}}   & \textbf{0.529}                    \\ \cline{2-8} 
+                                   & ResNet15                         & \multicolumn{1}{c|}{2.811}          & \multicolumn{1}{c|}{2.302}   & 0.100                  & \multicolumn{1}{c|}{\textbf{0.408}}   & \multicolumn{1}{c|}{2.301}            & 0.100                             \\ \cline{2-8} 
+                                   & ResNet57                         & \multicolumn{1}{c|}{3.639}          & \multicolumn{1}{c|}{2.302}   & 0.082                  & \multicolumn{1}{c|}{\textbf{2.730}}   & \multicolumn{1}{c|}{2.302}            & \textbf{0.120}                    \\ \hline
+\multirow{3}{*}{F-MNIST}           & LeNet5                           & \multicolumn{1}{c|}{1.498}          & \multicolumn{1}{c|}{2.291}   & 0.180                  & \multicolumn{1}{c|}{\textbf{0.705}}   & \multicolumn{1}{c|}{\textbf{2.140}}   & \textbf{0.360}                    \\ \cline{2-8} 
+                                   & ResNet15                         & \multicolumn{1}{c|}{\textbf{2.668}} & \multicolumn{1}{c|}{2.303}   & 0.104                  & \multicolumn{1}{c|}{3.547}            & \multicolumn{1}{c|}{2.302}            & 0.100                             \\ \cline{2-8} 
+                                   & ResNet57                         & \multicolumn{1}{c|}{2.525}          & \multicolumn{1}{c|}{2.303}   & 0.100                  & \multicolumn{1}{c|}{\textbf{1.389}}   & \multicolumn{1}{c|}{2.303}            & 0.100                             \\ \hline
+\multirow{3}{*}{CIFAR-10G}        & LeNet5                           & \multicolumn{1}{c|}{2.548}          & \multicolumn{1}{c|}{2.300}   & 0.102                  & \multicolumn{1}{c|}{\textbf{1.483}}   & \multicolumn{1}{c|}{\textbf{2.275}}   & \textbf{0.142}                    \\ \cline{2-8} 
+                                   & ResNet15                         & \multicolumn{1}{c|}{\textbf{2.536}} & \multicolumn{1}{c|}{2.303}   & \textbf{0.111}         & \multicolumn{1}{c|}{2.798}            & \multicolumn{1}{c|}{2.303}            & 0.096                             \\ \cline{2-8} 
+                                   & ResNet57                         & \multicolumn{1}{c|}{2.723}          & \multicolumn{1}{c|}{2.303}   & 0.099                  & \multicolumn{1}{c|}{\textbf{2.701}}   & \multicolumn{1}{c|}{2.303}            & 0.093                             \\ \hline
 \end{tabular}}
-\caption{Comparación de los resultados del entrenamiento en las técnicas SHADE y SHADE-GD para los conjuntos de datos tabulares. E: Entrenamiento, T:Test, M: Métrica.}
+\caption[Comparación del desempeño de SHADE y SHADE-GD en el entrenamiento de modelos de aprendizaje profundo sobre conjuntos de datos tabulares e imágenes]{Comparación del desempeño de SHADE y SHADE-GD en el entrenamiento de modelos de aprendizaje profundo sobre conjuntos de datos tabulares e imágenes. Se presentan los errores de entrenamiento (\textit{Train}) y evaluación (\textit{Test}), junto con la métrica de desempeño utilizada en cada caso (\textbf{\textit{Balanced Accuracy}} para BCW y WQC, \textbf{\emph{R$^2$}}  para BHP y WQR, y \textbf{\textit{accuracy}} para MNIST, Fashion-MNIST y CIFAR-10 en escala de grises). Para datos tabulares, se emplean modelos MLP con distintas profundidades, mientras que para imágenes se evalúan modelos de la familia ConvNet (LeNet5, ResNet15 y ResNet57)  (columna Modelo). Los valores resaltados indican el mejor desempeño en cada caso. En las filas sin valores resaltados, ambos métodos presentan un rendimiento equivalente. Consideramos que el modelo con mejor rendimiento es el que tiene mejor valor en su métrica. Se observa que SHADE-GD generalmente supera a SHADE, especialmente en modelos más profundos y en conjuntos de datos tabulares, donde SHADE tiende a deteriorarse.}
 \label{tab:shadevsshadegd}
 \end{table}
 
 
-% Please add the following required packages to your document preamble:
-% \usepackage{multirow}
-\begin{table}[]
-\centering
-\begin{tabular}{|c|c|ccc|ccc|}
-\hline
-\multirow{2}{*}{\textbf{Dataset}} & \multirow{2}{*}{\textbf{Modelo}} & \multicolumn{3}{c|}{\textbf{SHADE}}                                                     & \multicolumn{3}{c|}{\textbf{SHADE-GD}}                                                   \\ \cline{3-8} 
-                                  &                                 & \multicolumn{1}{c|}{E}             & \multicolumn{1}{c|}{T}             & M             & \multicolumn{1}{c|}{E}             & \multicolumn{1}{c|}{T}             & M              \\ \hline
-\multirow{3}{*}{MNIST}            & LeNet5                          & \multicolumn{1}{c|}{2.42}          & \multicolumn{1}{c|}{2.27}          & 0.17          & \multicolumn{1}{c|}{\textbf{0.10}} & \multicolumn{1}{c|}{\textbf{1.92}} & \textbf{0.529} \\ \cline{2-8} 
-                                  & ResNet15                        & \multicolumn{1}{c|}{2.81}          & \multicolumn{1}{c|}{2.30}          & 0.10          & \multicolumn{1}{c|}{0.40}          & \multicolumn{1}{c|}{2.30}          & 0.10           \\ \cline{2-8} 
-                                  & ResNet57                        & \multicolumn{1}{c|}{3.63}          & \multicolumn{1}{c|}{2.30}          & 0.08          & \multicolumn{1}{c|}{\textbf{2.73}} & \multicolumn{1}{c|}{\textbf{2.30}} & \textbf{0.12}  \\ \hline
-\multirow{3}{*}{F-MNIST}          & LeNet5                          & \multicolumn{1}{c|}{1.49}          & \multicolumn{1}{c|}{2.29}          & 0.17          & \multicolumn{1}{c|}{\textbf{0.70}} & \multicolumn{1}{c|}{\textbf{2.13}} & \textbf{0.36}  \\ \cline{2-8} 
-                                  & ResNet15                        & \multicolumn{1}{c|}{2.66}          & \multicolumn{1}{c|}{2.30}          & 0.10          & \multicolumn{1}{c|}{3.54}          & \multicolumn{1}{c|}{2.30}          & 0.10           \\ \cline{2-8} 
-                                  & ResNet57                        & \multicolumn{1}{c|}{2.52}          & \multicolumn{1}{c|}{2.30}          & 0.10          & \multicolumn{1}{c|}{1.38}          & \multicolumn{1}{c|}{2.30}          & 0.10           \\ \hline
-\multirow{3}{*}{CIFAR-10-G}            & LeNet5                          & \multicolumn{1}{c|}{2.54}          & \multicolumn{1}{c|}{2.30}          & 0.10          & \multicolumn{1}{c|}{\textbf{1.48}} & \multicolumn{1}{c|}{\textbf{2.27}} & \textbf{0.14}  \\ \cline{2-8} 
-                                  & ResNet15                        & \multicolumn{1}{c|}{\textbf{2.53}} & \multicolumn{1}{c|}{\textbf{2.30}} & \textbf{0.11} & \multicolumn{1}{c|}{2.79}          & \multicolumn{1}{c|}{2.30}          & 0.09           \\ \cline{2-8} 
-                                  & ResNet57                        & \multicolumn{1}{c|}{2.72}          & \multicolumn{1}{c|}{2.30}          & 0.09          & \multicolumn{1}{c|}{2.70}          & \multicolumn{1}{c|}{2.30}          & 0.09           \\ \hline
-\end{tabular}
-\caption{Comparación de los resultados del entrenamiento en las técnicas SHADE y SHADE-GD para los conjuntos de datos de imágenes. E: Entrenamiento, T:Test, M: Métrica.}
-\label{tab:shadevsshadegd_im}
-\end{table}
+
+
+
+
+\vspace{0.4cm}
+\paragraph{SHADE y SHADE-GD\\}  
+
+
+\mbox{}
+\vspace{0.1cm}
+
+Comentamos los resultados obtenidos del entrenamiento y que se muestran en la Tabla \ref{tab:shadevsshadegd}. SHADE-GD supera a SHADE en la mayoría de los escenarios, logrando menores errores en entrenamiento y prueba. La incorporación del descenso de gradiente mejora la optimización de los pesos, reduciendo el sobreajuste y favoreciendo la generalización. En contraste, SHADE muestra inconsistencias a medida que aumenta la complejidad del modelo, con errores significativamente mayores en entornos de alta dimensionalidad.
+
+SHADE sufre mayor deterioro en la generalización, especialmente en modelos profundos y conjuntos de datos grandes como MNIST y CIFAR-10G, donde sus métricas de desempeño son muy bajas. SHADE-GD, en cambio, reduce la pérdida en entrenamiento sin aumentar drásticamente la pérdida en prueba, evitando estancamientos en soluciones subóptimas.
+
+SHADE muestra un deterioro progresivo en arquitecturas con mayor número de parámetros, con un rendimiento deficiente en modelos MLP con 5 y 11 capas ocultas, así como en redes convolucionales complejas como ResNet15 y ResNet57. SHADE-GD mantiene un desempeño más estable y presenta mejoras en redes convolucionales, aunque persisten dificultades en modelos profundos.
+
+\textbf{En clasificación, SHADE-GD obtiene mejores métricas, especialmente en modelos simples} como LeNet5, aunque sigue sin igualar métodos basados en gradientes en modelos más complejos. En regresión, SHADE muestra valores extremadamente negativos en $R^2$, mientras que SHADE-GD logra métricas más aceptables, destacando su ventaja en la minimización del error.
+
+SHADE-GD sigue sin ser competitivo en redes profundas aplicadas a conjuntos de datos complejos como CIFAR-10G, posiblemente debido a una exploración inicial ineficiente en SHADE. Además, SHADE tiende a estancarse en soluciones subóptimas cuando la dimensionalidad del espacio de búsqueda es alta, resultando en métricas de evaluación deficientes.
+
+\textbf{Como conclusión, SHADE-GD supera a SHADE en la mayoría de los casos, mostrando menor error y mejor desempeño, aunque aún enfrenta limitaciones en redes profundas y conjuntos de datos grandes}. Se requieren estrategias adicionales de optimización para mejorar su eficacia en escenarios más complejos.
+
+
 
 
 % Please add the following required packages to your document preamble:
 % \usepackage{multirow}
-\begin{table}[]
+\begin{table}[tbp]
 \resizebox{\textwidth}{!}{\begin{tabular}{|c|c|ccc|ccc|}
 \hline
-\multirow{2}{*}{\textbf{Dataset}} & \multirow{2}{*}{\textbf{Capas}} & \multicolumn{3}{c|}{\textbf{SHADE-ILS}}                                                         & \multicolumn{3}{c|}{\textbf{SHADE-ILS-GD}}                                                        \\ \cline{3-8} 
-                                  &                                 & \multicolumn{1}{c|}{E}             & \multicolumn{1}{c|}{T}             & M                     & \multicolumn{1}{c|}{E}              & \multicolumn{1}{c|}{T}              & M                     \\ \hline
-\multirow{4}{*}{BCW}              & 1                               & \multicolumn{1}{c|}{\textbf{0.07}} & \multicolumn{1}{c|}{\textbf{0.14}} & \textbf{0.97}         & \multicolumn{1}{c|}{0.06}           & \multicolumn{1}{c|}{0.15}           & 0.94                  \\ \cline{2-8} 
-                                  & 2                               & \multicolumn{1}{c|}{0.06}          & \multicolumn{1}{c|}{0.35}          & 0.93                  & \multicolumn{1}{c|}{0.06}           & \multicolumn{1}{c|}{0.35}           & 0.93                  \\ \cline{2-8} 
-                                  & 5                               & \multicolumn{1}{c|}{\textbf{0.05}} & \multicolumn{1}{c|}{\textbf{0.47}} & \textbf{0.89}         & \multicolumn{1}{c|}{0.03}           & \multicolumn{1}{c|}{0.61}           & 0.6                   \\ \cline{2-8} 
-                                  & 11                              & \multicolumn{1}{c|}{\textbf{0.09}} & \multicolumn{1}{c|}{\textbf{0.49}} & \textbf{0.9}          & \multicolumn{1}{c|}{0.11}           & \multicolumn{1}{c|}{0.70}           & 0.50                  \\ \hline
-\multirow{4}{*}{WQC}              & 1                               & \multicolumn{1}{c|}{\textbf{1.04}} & \multicolumn{1}{c|}{\textbf{1.05}} & \textbf{0.22}         & \multicolumn{1}{c|}{1.03}           & \multicolumn{1}{c|}{1.09}           & 0.20                  \\ \cline{2-8} 
-                                  & 2                               & \multicolumn{1}{c|}{1.05}          & \multicolumn{1}{c|}{1.11}          & 0.20                  & \multicolumn{1}{c|}{\textbf{0.99}}  & \multicolumn{1}{c|}{\textbf{1.04}}  & \textbf{0.29}         \\ \cline{2-8} 
-                                  & 5                               & \multicolumn{1}{c|}{0.93}          & \multicolumn{1}{c|}{1.07}          & 0.23                  & \multicolumn{1}{c|}{\textbf{0.96}}  & \multicolumn{1}{c|}{\textbf{1.05}}  & \textbf{0.27}         \\ \cline{2-8} 
-                                  & 11                              & \multicolumn{1}{c|}{0.96}          & \multicolumn{1}{c|}{1.14}          & 0.20                  & \multicolumn{1}{c|}{0.48}           & \multicolumn{1}{c|}{1.37}           & 0.20                  \\ \hline
-\multirow{4}{*}{BHP}              & 1                               & \multicolumn{1}{c|}{10.04}         & \multicolumn{1}{c|}{7.54}          & 0.57                  & \multicolumn{1}{c|}{\textbf{8.90}}  & \multicolumn{1}{c|}{\textbf{4.64}}  & \textbf{0.84}         \\ \cline{2-8} 
-                                  & 2                               & \multicolumn{1}{c|}{9.56}          & \multicolumn{1}{c|}{4.64}          & 0.74                  & \multicolumn{1}{c|}{9.56}           & \multicolumn{1}{c|}{4.64}           & 0.74                  \\ \cline{2-8} 
-                                  & 5                               & \multicolumn{1}{c|}{13.59}         & \multicolumn{1}{c|}{14.55}         & -0.18                 & \multicolumn{1}{c|}{\textbf{11.68}} & \multicolumn{1}{c|}{\textbf{14.36}} & \textbf{-0.07}        \\ \cline{2-8} 
-                                  & 11                              & \multicolumn{1}{c|}{43.18}         & \multicolumn{1}{c|}{26.79}         & -97.40                & \multicolumn{1}{c|}{43.18}          & \multicolumn{1}{c|}{26.79}          & -97.40                \\ \hline
-\multirow{4}{*}{WQR}              & 1                               & \multicolumn{1}{c|}{0.49}          & \multicolumn{1}{c|}{0.53}          & -6.11                 & \multicolumn{1}{c|}{0.49}           & \multicolumn{1}{c|}{0.53}           & -6.11                 \\ \cline{2-8} 
-                                  & 2                               & \multicolumn{1}{c|}{0.47}          & \multicolumn{1}{c|}{0.53}          & -18.37                & \multicolumn{1}{c|}{0.47}           & \multicolumn{1}{c|}{0.53}           & -18.37                \\ \cline{2-8} 
-                                  & 5                               & \multicolumn{1}{c|}{0.47}          & \multicolumn{1}{c|}{0.63}          & -3256                 & \multicolumn{1}{c|}{0.47}           & \multicolumn{1}{c|}{0.63}           & -3256                 \\ \cline{2-8} 
-                                  & 11                              & \multicolumn{1}{c|}{0.48}          & \multicolumn{1}{c|}{0.63}          & $-2.30 \times 10^{6}$ & \multicolumn{1}{c|}{0.48}           & \multicolumn{1}{c|}{0.63}           & $-2.30 \times 10^{6}$ \\ \hline
+\multirow{2}{*}{\textbf{Conjunto}} & \multirow{2}{*}{\textbf{Modelo}} & \multicolumn{3}{c|}{\textbf{SHADE-ILS}}                                                            & \multicolumn{3}{c|}{\textbf{SHADE-ILS-GD}}                                                                    \\ \cline{3-8} 
+                                   &                                  & \multicolumn{1}{c|}{Train}          & \multicolumn{1}{c|}{Test}           & Métrica                & \multicolumn{1}{c|}{Train}           & \multicolumn{1}{c|}{Test}            & Métrica                         \\ \hline
+\multirow{4}{*}{BCW}               & 1                                & \multicolumn{1}{c|}{0.073}          & \multicolumn{1}{c|}{\textbf{0.142}} & \textbf{0.970}         & \multicolumn{1}{c|}{\textbf{0.062}}  & \multicolumn{1}{c|}{0.159}           & 0.941                           \\ \cline{2-8} 
+                                   & 2                                & \multicolumn{1}{c|}{0.063}          & \multicolumn{1}{c|}{0.350}          & 0.932                  & \multicolumn{1}{c|}{0.063}           & \multicolumn{1}{c|}{0.350}           & 0.932                           \\ \cline{2-8} 
+                                   & 5                                & \multicolumn{1}{c|}{0.055}          & \multicolumn{1}{c|}{\textbf{0.475}} & \textbf{0.891}         & \multicolumn{1}{c|}{\textbf{0.031}}  & \multicolumn{1}{c|}{0.616}           & 0.600                           \\ \cline{2-8} 
+                                   & 11                               & \multicolumn{1}{c|}{\textbf{0.099}} & \multicolumn{1}{c|}{\textbf{0.491}} & \textbf{0.903}         & \multicolumn{1}{c|}{0.112}           & \multicolumn{1}{c|}{0.704}           & 0.500                           \\ \hline
+\multirow{4}{*}{WQC}               & 1                                & \multicolumn{1}{c|}{1.098}          & \multicolumn{1}{c|}{1.235}          & 0.201                  & \multicolumn{1}{c|}{\textbf{1.068}}  & \multicolumn{1}{c|}{\textbf{1.224}}  & \textbf{0.226}                  \\ \cline{2-8} 
+                                   & 2                                & \multicolumn{1}{c|}{1.078}          & \multicolumn{1}{c|}{1.340}          & 0.167                  & \multicolumn{1}{c|}{\textbf{1.065}}  & \multicolumn{1}{c|}{\textbf{1.400}}  & \textbf{0.306}                  \\ \cline{2-8} 
+                                   & 5                                & \multicolumn{1}{c|}{0.963}          & \multicolumn{1}{c|}{1.405}          & 0.167                  & \multicolumn{1}{c|}{\textbf{0.951}}  & \multicolumn{1}{c|}{\textbf{1.328}}  & 0.166                           \\ \cline{2-8} 
+                                   & 11                               & \multicolumn{1}{c|}{1.138}          & \multicolumn{1}{c|}{1.509}          & 0.167                  & \multicolumn{1}{c|}{\textbf{1.099}}  & \multicolumn{1}{c|}{\textbf{1.496}}  & 0.167                           \\ \hline
+\multirow{4}{*}{BHP}               & 1                                & \multicolumn{1}{c|}{10.048}         & \multicolumn{1}{c|}{7.549}          & 0.576                  & \multicolumn{1}{c|}{\textbf{8.928}}  & \multicolumn{1}{c|}{\textbf{3.895}}  & \textbf{0.849}                  \\ \cline{2-8} 
+                                   & 2                                & \multicolumn{1}{c|}{9.561}          & \multicolumn{1}{c|}{4.649}          & 0.747                  & \multicolumn{1}{c|}{9.561}           & \multicolumn{1}{c|}{4.649}           & 0.747                           \\ \cline{2-8} 
+                                   & 5                                & \multicolumn{1}{c|}{13.594}         & \multicolumn{1}{c|}{14.556}         & -0.187                 & \multicolumn{1}{c|}{\textbf{11.689}} & \multicolumn{1}{c|}{\textbf{14.368}} & \textbf{-0.078}                 \\ \cline{2-8} 
+                                   & 11                               & \multicolumn{1}{c|}{43.184}         & \multicolumn{1}{c|}{26.794}         & -97.405                & \multicolumn{1}{c|}{43.184}          & \multicolumn{1}{c|}{26.794}          & -97.405                         \\ \hline
+\multirow{4}{*}{WQR}               & 1                                & \multicolumn{1}{c|}{0.611}          & \multicolumn{1}{c|}{0.970}          & -1.987                 & \multicolumn{1}{c|}{\textbf{0.599}}  & \multicolumn{1}{c|}{\textbf{0.912}}  & \textbf{-1.898}                 \\ \cline{2-8} 
+                                   & 2                                & \multicolumn{1}{c|}{0.579}          & \multicolumn{1}{c|}{0.826}          & -2.491                 & \multicolumn{1}{c|}{\textbf{0.521}}  & \multicolumn{1}{c|}{\textbf{0.620}}  & \textbf{-4.105}                 \\ \cline{2-8} 
+                                   & 5                                & \multicolumn{1}{c|}{0.589}          & \multicolumn{1}{c|}{\textbf{0.724}} & -9.832 $\times$ 10$^2$ & \multicolumn{1}{c|}{\textbf{0.579}}  & \multicolumn{1}{c|}{0.747}           & \textbf{-2.347 $\times$ 10$^2$} \\ \cline{2-8} 
+                                   & 11                               & \multicolumn{1}{c|}{0.601}          & \multicolumn{1}{c|}{\textbf{0.734}} & -7.953 $\times$ 10$^4$ & \multicolumn{1}{c|}{0.601}           & \multicolumn{1}{c|}{0.774}           & -7.953 $\times$ 10$^{4}$        \\ \hline
+\multirow{3}{*}{MNIST}             & LeNet5                           & \multicolumn{1}{c|}{2.530}          & \multicolumn{1}{c|}{2.300}          & 0.066                  & \multicolumn{1}{c|}{2.530}           & \multicolumn{1}{c|}{2.300}           & 0.066                           \\ \cline{2-8} 
+                                   & ResNet15                         & \multicolumn{1}{c|}{0.001}          & \multicolumn{1}{c|}{2.294}          & \textbf{0.115}         & \multicolumn{1}{c|}{0.001}           & \multicolumn{1}{c|}{2.292}           & 0.100                           \\ \cline{2-8} 
+                                   & ResNet57                         & \multicolumn{1}{c|}{2.308}          & \multicolumn{1}{c|}{2.303}          & 0.100                  & \multicolumn{1}{c|}{\textbf{0.001}}  & \multicolumn{1}{c|}{2.303}           & 0.100                           \\ \hline
+\multirow{3}{*}{F-MNIST}           & LeNet5                           & \multicolumn{1}{c|}{0.403}          & \multicolumn{1}{c|}{1.807}          & 0.366                  & \multicolumn{1}{c|}{\textbf{0.327}}  & \multicolumn{1}{c|}{\textbf{1.646}}  & \textbf{0.462}                  \\ \cline{2-8} 
+                                   & ResNet15                         & \multicolumn{1}{c|}{3.547}          & \multicolumn{1}{c|}{2.302}          & \textbf{0.100}         & \multicolumn{1}{c|}{\textbf{0.349}}  & \multicolumn{1}{c|}{2.302}           & 0.063                           \\ \cline{2-8} 
+                                   & ResNet57                         & \multicolumn{1}{c|}{2.673}          & \multicolumn{1}{c|}{2.303}          & 0.100                  & \multicolumn{1}{c|}{\textbf{1.208}}  & \multicolumn{1}{c|}{2.303}           & 0.100                           \\ \hline
+\multirow{3}{*}{CIFAR-10G}        & LeNet5                           & \multicolumn{1}{c|}{2.568}          & \multicolumn{1}{c|}{2.301}          & 0.114                  & \multicolumn{1}{c|}{2.568}           & \multicolumn{1}{c|}{2.301}           & 0.114                           \\ \cline{2-8} 
+                                   & ResNet15                         & \multicolumn{1}{c|}{\textbf{1.697}} & \multicolumn{1}{c|}{2.303}          & \textbf{0.103}         & \multicolumn{1}{c|}{3.504}           & \multicolumn{1}{c|}{2.303}           & 0.093                           \\ \cline{2-8} 
+                                   & ResNet57                         & \multicolumn{1}{c|}{2.579}          & \multicolumn{1}{c|}{2.303}          & \textbf{0.100}         & \multicolumn{1}{c|}{\textbf{2.415}}  & \multicolumn{1}{c|}{2.303}           & 0.096                           \\ \hline
 \end{tabular}}
-\caption{Comparación de los resultados del entrenamiento en las técnicas SHADE-ILS y SHADE-ILS-GD para los conjuntos de datos tabulares.  E: Entrenamiento, T:Test, M: Métrica.}
+\caption[Comparación del desempeño de SHADE-ILS y SHADE-ILS-GD en el entrenamiento de modelos de aprendizaje profundo sobre conjuntos de datos tabulares e imágenes]{Comparación del desempeño de SHADE-ILS y SHADE-ILS-GD en el entrenamiento de modelos de aprendizaje profundo sobre conjuntos de datos tabulares e imágenes. Se presentan los errores de entrenamiento (\textit{Train}) y evaluación (\textit{Test}), junto con la métrica de desempeño utilizada en cada caso (\textit{Balanced Accuracy} para BCW y WQC, $R^2$  para BHP y WQR, y \textit{accuracy} para MNIST, Fashion-MNIST y CIFAR-10 en escala de grises). Para datos tabulares, se emplean modelos MLP con distintas profundidades, mientras que para imágenes se evalúan modelos de la familia ConvNet (LeNet5, ResNet15 y ResNet57)  (columna Modelo). Los valores resaltados indican el mejor desempeño en cada caso. En las filas sin valores resaltados, ambos métodos presentan un rendimiento equivalente. Consideramos que el modelo con mejor rendimiento es el que tiene mejor valor en su métrica. No hay una diferencia clara entre ambos optimizadores, aunque se observa que SHADE-ILS en su versión original consigue más robustez, siendo más estable en la mayoría de tareas.}
 \label{tab:ilsvsilsgd}
 \end{table}
 
+\vspace{0.4cm}
+\paragraph{SHADE-ILS y SHADE-ILS-GD\\} 
+
+\mbox{}
+\vspace{0.1cm}
 
 
+Comentamos los resultados obtenidos del entrenamiento y que se muestran en la Tabla \ref{tab:ilsvsilsgd}. El rendimiento de SHADE-ILS y SHADE-ILS-GD varía según la complejidad del problema y la arquitectura de la red utilizada. Aunque SHADE-ILS-GD puede reducir el error en algunos casos, no siempre mejora la capacidad de generalización del modelo. En redes profundas y conjuntos de datos de mayortamaño,\textbf{ la combinación con GD no siempre aporta ventajas significativas sobre SHADE-ILS}.
+
+\textbf{SHADE-ILS muestra mayor estabilidad en modelos profundos}, donde la introducción de GD en SHADE-ILS-GD a menudo induce fluctuaciones en la convergencia. En particular, en la tarea de clasificación sobre un conjunto de datos con alta dimensionalidad, SHADE-ILS-GD presentó variaciones bruscas en el valor de la métrica entre iteraciones, mientras que SHADE-ILS mantuvo una convergencia más uniforme. En tareas de regresión tabular, SHADE-ILS-GD mostró mejoras esporádicas en el coeficiente $R^2$, pero también una mayor propensión al sobreajuste cuando se aumentó la cantidad de capas en la red.
+
+\textbf{En problemas de regresión, SHADE-ILS-GD mejora la generalización en redes poco profundas}, como en el caso de un modelo de tres capas donde redujo el error de evaluación en un 7\% (Tabla \ref{tab:ilsvsilsgd}). Sin embargo, \textbf{en redes más complejas, esta ventaja desaparece}, e incluso el modelo entrenado con SHADE-ILS mantiene un desempeño más estable en el conjunto de entrenamiento. En clasificación, SHADE-ILS-GD no muestra mejoras consistentes y, en algunos casos, como en MNIST, obtuvo un valor de \textit{accuracy} 3\% inferior a la de SHADE-ILS. En modelos convolucionales aplicados a conjuntos de datos de imágenes, SHADE-ILS-GD rara vez aporta mejoras y, en ocasiones, introduce sobreajuste, como se evidenció en una prueba donde el error de entrenamiento disminuyó sin que la métrica en el conjunto de prueba mejorara.
+
+\textbf{Como conclusión, SHADE-ILS es una opción más eficiente y estable en redes profundas, mientras que SHADE-ILS-GD puede aportar mejoras en regresión con arquitecturas simples}. Sin embargo, el refinamiento con GD no garantiza una mejor generalización y puede inducir sobreajuste o aumentar significativamente el tiempo de cómputo sin beneficios claros. En datos tabulares, SHADE-ILS-GD presenta mejoras ocasionales, pero en imágenes y redes profundas, SHADE-ILS sigue siendo la alternativa más confiable. Estos resultados sugieren que la incorporación de GD en SHADE-ILS debe evaluarse caso por caso, ya que sus beneficios no son universales y dependen del tipo de tarea y arquitectura utilizada.
 
 
 
 % Please add the following required packages to your document preamble:
 % \usepackage{multirow}
-\begin{table}[]
+\begin{table}[tbp]
 \resizebox{\textwidth}{!}{\begin{tabular}{|c|c|ccc|ccc|}
 \hline
-\multirow{2}{*}{\textbf{Dataset}} & \multirow{2}{*}{\textbf{Capas}} & \multicolumn{3}{c|}{\textbf{SHADE-ILS}}                       & \multicolumn{3}{c|}{\textbf{SHADE-ILS-GD}}                                              \\ \cline{3-8} 
-                                  &                                 & \multicolumn{1}{c|}{E}     & \multicolumn{1}{c|}{T}    & M    & \multicolumn{1}{c|}{E}             & \multicolumn{1}{c|}{T}             & M             \\ \hline
-\multirow{3}{*}{MNIST}            & LeNet5                          & \multicolumn{1}{c|}{2.53}  & \multicolumn{1}{c|}{2.30} & 0.06 & \multicolumn{1}{c|}{2.53}          & \multicolumn{1}{c|}{2.30}          & 0.06          \\ \cline{2-8} 
-                                  & ResNet15                        & \multicolumn{1}{c|}{0.001} & \multicolumn{1}{c|}{2.29} & 0.11 & \multicolumn{1}{c|}{0.0007}        & \multicolumn{1}{c|}{2.29}          & 0.10          \\ \cline{2-8} 
-                                  & ResNet57                        & \multicolumn{1}{c|}{2.30}  & \multicolumn{1}{c|}{2.30} & 0.10 & \multicolumn{1}{c|}{0.0001}        & \multicolumn{1}{c|}{2.30}          & 0.10          \\ \hline
-\multirow{3}{*}{F-MNIST}          & LeNet5                          & \multicolumn{1}{c|}{0.40}  & \multicolumn{1}{c|}{1.80} & 0.36 & \multicolumn{1}{c|}{0.32} & \multicolumn{1}{c|}{1.64} & 0.34 \\ \cline{2-8} 
-                                  & ResNet15                        & \multicolumn{1}{c|}{3.54}  & \multicolumn{1}{c|}{2.30} & 0.10 & \multicolumn{1}{c|}{0.34}          & \multicolumn{1}{c|}{2.30}          & 0.06          \\ \cline{2-8} 
-                                  & ResNet57                        & \multicolumn{1}{c|}{2.67}  & \multicolumn{1}{c|}{2.30} & 0.10 & \multicolumn{1}{c|}{1.20}          & \multicolumn{1}{c|}{2.30}          & 0.10          \\ \hline
-\multirow{3}{*}{CIFAR-10-G}            & LeNet5                          & \multicolumn{1}{c|}{2.56}  & \multicolumn{1}{c|}{2.30} & 0.11 & \multicolumn{1}{c|}{2.56}          & \multicolumn{1}{c|}{2.30}          & 0.11          \\ \cline{2-8} 
-                                  & ResNet15                        & \multicolumn{1}{c|}{1.69}  & \multicolumn{1}{c|}{2.30} & 0.10 & \multicolumn{1}{c|}{3.5}           & \multicolumn{1}{c|}{2.30}          & 0.09          \\ \cline{2-8} 
-                                  & ResNet57                        & \multicolumn{1}{c|}{2.57}  & \multicolumn{1}{c|}{2.30} & 0.10 & \multicolumn{1}{c|}{2.41}          & \multicolumn{1}{c|}{2.30}          & 0.09          \\ \hline
+\multirow{2}{*}{\textbf{Conjunto}} & \multirow{2}{*}{\textbf{Modelo}} & \multicolumn{3}{c|}{\textbf{SHADE-GD}}                                                               & \multicolumn{3}{c|}{\textbf{SHADE-ILS-GD}}                                                                      \\ \cline{3-8} 
+                                   &                                  & \multicolumn{1}{c|}{Train}          & \multicolumn{1}{c|}{Test}           & Métrica                  & \multicolumn{1}{c|}{Train}           & \multicolumn{1}{c|}{Test}            & Métrica                           \\ \hline
+\multirow{4}{*}{BCW}               & 1                                & \multicolumn{1}{c|}{0.108}          & \multicolumn{1}{c|}{0.181}          & 0.915                    & \multicolumn{1}{c|}{\textbf{0.062}}  & \multicolumn{1}{c|}{\textbf{0.159}}  & \textbf{0.941}                    \\ \cline{2-8} 
+                                   & 2                                & \multicolumn{1}{c|}{0.118}          & \multicolumn{1}{c|}{\textbf{0.222}} & \textbf{0.953}           & \multicolumn{1}{c|}{\textbf{0.063}}  & \multicolumn{1}{c|}{0.350}           & 0.932                             \\ \cline{2-8} 
+                                   & 5                                & \multicolumn{1}{c|}{0.106}          & \multicolumn{1}{c|}{\textbf{0.452}} & \textbf{0.879}           & \multicolumn{1}{c|}{\textbf{0.031}}  & \multicolumn{1}{c|}{0.616}           & 0.600                             \\ \cline{2-8} 
+                                   & 11                               & \multicolumn{1}{c|}{0.279}          & \multicolumn{1}{c|}{\textbf{0.660}} & \textbf{0.600}           & \multicolumn{1}{c|}{\textbf{0.112}}  & \multicolumn{1}{c|}{0.704}           & 0.500                             \\ \hline
+\multirow{4}{*}{WQC}               & 1                                & \multicolumn{1}{c|}{1.082}          & \multicolumn{1}{c|}{1.304}          & 0.171                    & \multicolumn{1}{c|}{\textbf{1.068}}  & \multicolumn{1}{c|}{\textbf{1.224}}  & \textbf{0.226}                    \\ \cline{2-8} 
+                                   & 2                                & \multicolumn{1}{c|}{\textbf{1.025}} & \multicolumn{1}{c|}{1.486}          & 0.192                    & \multicolumn{1}{c|}{1.065}           & \multicolumn{1}{c|}{\textbf{1.400}}  & \textbf{0.306}                    \\ \cline{2-8} 
+                                   & 5                                & \multicolumn{1}{c|}{0.953}          & \multicolumn{1}{c|}{1.495}          & \textbf{0.203}           & \multicolumn{1}{c|}{0.951}           & \multicolumn{1}{c|}{\textbf{1.328}}  & 0.166                             \\ \cline{2-8} 
+                                   & 11                               & \multicolumn{1}{c|}{1.104}          & \multicolumn{1}{c|}{3.982}          & \textbf{0.211}           & \multicolumn{1}{c|}{\textbf{1.099}}  & \multicolumn{1}{c|}{\textbf{1.496}}  & 0.167                             \\ \hline
+\multirow{4}{*}{BHP}               & 1                                & \multicolumn{1}{c|}{13.977}         & \multicolumn{1}{c|}{33.099}         & 0.650                    & \multicolumn{1}{c|}{\textbf{8.928}}  & \multicolumn{1}{c|}{\textbf{3.895}}  & \textbf{0.849}                    \\ \cline{2-8} 
+                                   & 2                                & \multicolumn{1}{c|}{384.431}        & \multicolumn{1}{c|}{128.808}        & -4.610                   & \multicolumn{1}{c|}{\textbf{9.561}}  & \multicolumn{1}{c|}{\textbf{4.649}}  & \textbf{0.747}                    \\ \cline{2-8} 
+                                   & 5                                & \multicolumn{1}{c|}{396.344}        & \multicolumn{1}{c|}{324.056}        & -0.932                   & \multicolumn{1}{c|}{\textbf{11.689}} & \multicolumn{1}{c|}{\textbf{14.368}} & \textbf{-0.078}                   \\ \cline{2-8} 
+                                   & 11                               & \multicolumn{1}{c|}{463.336}        & \multicolumn{1}{c|}{453.891}        & -1.294 $\times$ 10$^{5}$ & \multicolumn{1}{c|}{\textbf{43.184}} & \multicolumn{1}{c|}{\textbf{26.794}} & \textbf{-97.405}                  \\ \hline
+\multirow{4}{*}{WQR}               & 1                                & \multicolumn{1}{c|}{0.622}          & \multicolumn{1}{c|}{\textbf{0.712}} & -2.624                   & \multicolumn{1}{c|}{\textbf{0.599}}  & \multicolumn{1}{c|}{0.912}           & \textbf{-1.898}                   \\ \cline{2-8} 
+                                   & 2                                & \multicolumn{1}{c|}{0.562}          & \multicolumn{1}{c|}{1.548}          & \textbf{-0.442}          & \multicolumn{1}{c|}{\textbf{0.521}}  & \multicolumn{1}{c|}{\textbf{0.620}}  & -4.105                            \\ \cline{2-8} 
+                                   & 5                                & \multicolumn{1}{c|}{\textbf{0.568}} & \multicolumn{1}{c|}{0.934}          & \textbf{-3.447}          & \multicolumn{1}{c|}{0.579}           & \multicolumn{1}{c|}{\textbf{0.747}}  & -2.347 $\times$ 10$^2$            \\ \cline{2-8} 
+                                   & 11                               & \multicolumn{1}{c|}{35.937}         & \multicolumn{1}{c|}{32.039}         & -2.312 $\times$ 10$^{5}$ & \multicolumn{1}{c|}{\textbf{0.601}}  & \multicolumn{1}{c|}{\textbf{0.774}}  & \textbf{-7.953 $\times$ 10$^{4}$} \\ \hline
+\multirow{3}{*}{MNIST}             & LeNet5                           & \multicolumn{1}{c|}{\textbf{0.110}} & \multicolumn{1}{c|}{\textbf{1.930}} & \textbf{0.529}           & \multicolumn{1}{c|}{2.530}           & \multicolumn{1}{c|}{2.300}           & 0.066                             \\ \cline{2-8} 
+                                   & ResNet15                         & \multicolumn{1}{c|}{0.408}          & \multicolumn{1}{c|}{\textbf{2.301}} & 0.100                    & \multicolumn{1}{c|}{\textbf{0.001}}  & \multicolumn{1}{c|}{2.292}           & 0.100                             \\ \cline{2-8} 
+                                   & ResNet57                         & \multicolumn{1}{c|}{2.730}          & \multicolumn{1}{c|}{2.302}          & \textbf{0.120}           & \multicolumn{1}{c|}{\textbf{0.001}}  & \multicolumn{1}{c|}{2.303}           & 0.100                             \\ \hline
+\multirow{3}{*}{F-MNIST}           & LeNet5                           & \multicolumn{1}{c|}{0.705}          & \multicolumn{1}{c|}{2.140}          & 0.360                    & \multicolumn{1}{c|}{\textbf{0.327}}  & \multicolumn{1}{c|}{\textbf{1.646}}  & \textbf{0.462}                    \\ \cline{2-8} 
+                                   & ResNet15                         & \multicolumn{1}{c|}{3.547}          & \multicolumn{1}{c|}{2.302}          & \textbf{0.100}           & \multicolumn{1}{c|}{\textbf{0.349}}  & \multicolumn{1}{c|}{2.302}           & 0.063                             \\ \cline{2-8} 
+                                   & ResNet57                         & \multicolumn{1}{c|}{1.389}          & \multicolumn{1}{c|}{2.303}          & 0.100                    & \multicolumn{1}{c|}{\textbf{1.208}}  & \multicolumn{1}{c|}{2.303}           & 0.100                             \\ \hline
+\multirow{3}{*}{CIFAR-10G}        & LeNet5                           & \multicolumn{1}{c|}{\textbf{1.483}} & \multicolumn{1}{c|}{\textbf{2.275}} & \textbf{0.142}           & \multicolumn{1}{c|}{2.568}           & \multicolumn{1}{c|}{2.301}           & 0.114                             \\ \cline{2-8} 
+                                   & ResNet15                         & \multicolumn{1}{c|}{\textbf{2.798}} & \multicolumn{1}{c|}{2.303}          & 0.096                    & \multicolumn{1}{c|}{3.504}           & \multicolumn{1}{c|}{2.303}           & 0.093                             \\ \cline{2-8} 
+                                   & ResNet57                         & \multicolumn{1}{c|}{2.701}          & \multicolumn{1}{c|}{2.303}          & 0.093                    & \multicolumn{1}{c|}{\textbf{2.415}}  & \multicolumn{1}{c|}{2.303}           & 0.096                             \\ \hline
 \end{tabular}}
-\caption{Comparación de los resultados del entrenamiento en las técnicas SHADE-ILS y SHADE-ILS-GD para los conjuntos de datos de imágenes. E: Entrenamiento, T:Test, M: Métrica.}
-\label{tab:ilsvsilsgd_im}
+\caption[Comparación del desempeño de SHADE-GD y SHADE-ILS-GD en el entrenamiento de modelos de aprendizaje profundo sobre conjuntos de datos tabulares e imágenes]{Comparación del desempeño de SHADE-ILS y SHADE-ILS-GD en el entrenamiento de modelos de aprendizaje profundo sobre conjuntos de datos tabulares e imágenes. Se presentan los errores de entrenamiento (\textit{Train}) y evaluación (\textit{Test}), junto con la métrica de desempeño utilizada en cada caso (\textit{Balanced Accuracy} para BCW y WQC, $R^2$  para BHP y WQR, y \textit{accuracy} para MNIST, Fashion-MNIST y CIFAR-10 en escala de grises). Para datos tabulares, se emplean modelos MLP con distintas profundidades, mientras que para imágenes se evalúan modelos de la familia ConvNet (LeNet5, ResNet15 y ResNet57)  (columna Modelo). Los valores resaltados indican el mejor desempeño en cada caso. En las filas sin valores resaltados, ambos métodos presentan un rendimiento equivalente. Consideramos que el modelo con mejor rendimiento es el que tiene mejor valor en su métrica. Aunque no hay una diferencia clara entre los dos optimizadores, existe un patrón reconocible, en el que se evidencia que SHADE-GD tiende a generalizar mejor mientras que SHADE-ILS-GD minimiza más la función de pérdida.}
+\label{tab:shadegdvsilsgd}
 \end{table}
 
+\vspace{0.4cm}
+\paragraph{SHADE-GD y SHADE-ILS-GD\\} 
 
-Para responder a la última cuestión, hemos elaborado cuatro tablas donde comparamos las técnicas metaheurísticas originales con las hibridaciones propuestas, que se realiza con el optimizador de gradiente descendente que ha demostrado ser el más efectivo para cada tarea. A excepción de la situación mencionada al principio de esta sección, ninguna de las técnicas propuestas logra superar a los optimizadores de gradiente descendente. Ahora, procederemos a comparar las versiones originales con las hibridaciones. En las tablas, se resalta en negrita la técnica que obtiene los mejores resultados, y no se destaca ninguna en caso de empate.
+\mbox{}
+\vspace{0.1cm}
 
-Al observar la tabla \ref{tab:shadevsshadegd}, se hace evidente que la diferencia entre SHADE y SHADE-GD para las tareas tabulares es abrumadora. SHADE-GD logra mejores resultados en todas las tareas, excepto en dos. En términos generales, nuestra propuesta minimiza más la función de pérdida, generaliza mejor y presenta mejores resultados en las métricas.
+\textbf{En términos generales, SHADE-ILS-GD muestra un mejor rendimiento en los conjuntos de datos más complejos o con mayor variabilidad}. En particular, destaca en el conjunto BHP, donde logra mejoras sustanciales en las métricas de evaluación. Por ejemplo, en el modelo MLP1, el error en el conjunto de prueba se reduce drásticamente de 33.099 con SHADE-GD a 3.895 con SHADE-ILS-GD, lo que se traduce en un incremento significativo en la métrica de evaluación (de 0.650 a 0.849). Este patrón se repite en otros modelos de BHP, donde SHADE-GD presenta errores elevados mientras que SHADE-ILS-GD los mantiene controlados, incluso revirtiendo resultados negativos.
 
-En las tareas de regresión, SHADE-GD evita que la métrica $R^2$ se dispare, salvo en dos casos, y en esos casos lo hace en menor medida que la versión original. En estas tareas, los resultados se diferencian de manera positiva. Aunque, para el conjunto de datos WQC, el valor de \textit{accuracy} tiende a igualarse al de un clasificador aleatorio, la reducción en el error de generalización con respecto a SHADE sugiere que SHADE-GD aprende mejor los patrones presentes en los datos. Aunque puede clasificar incorrectamente, atribuye una mayor probabilidad a la clase correcta en comparación con la técnica original.
+En los conjuntos de datos de clasificación como BCW y WQC, el comportamiento de ambos algoritmos es más equilibrado, con ventajas alternadas en función del modelo específico. Por ejemplo, en BCW, SHADE-ILS-GD logra mejores resultados en los primeros modelos (e.g., modelo 1 con una métrica de 0.941 frente a 0.915), pero en modelos más complejos como MLP5 y el MLP11, su rendimiento disminuye notablemente en comparación con SHADE-GD. Por otro lado, en WQC, SHADE-ILS-GD tiene una ligera ventaja en la mayoría de los casos, con métricas más altas y errores de prueba más bajos en tres de los cuatro modelos.
 
-El resultado para los conjuntos de datos de imágenes, que se muestra en la tabla \ref{tab:shadevsshadegd_im}, es más ajustado, pero sigue siendo favorable a nuestra propuesta. Aunque se continúa minimizando más la función de pérdida, el rendimiento de generalización no es tan bueno. Sin embargo, en el caso de MNIST, utilizando el modelo LeNet5, se obtiene un valor de \textit{accuracy} de 0.52, que destaca sobre el resto de las metaheurísticas. Por lo tanto, concluimos que nuestra propuesta mejora significativamente al algoritmo original.
+En los conjuntos de imágenes como MNIST, F-MNIST y CIFAR-10G, SHADE-GD tiende a ofrecer un rendimiento más consistente en los modelos más simples, especialmente con arquitecturas como LeNet5. Por ejemplo, en MNIST con LeNet5, SHADE-GD alcanza una mejor métrica (0.529 frente a 0.066 de SHADE-ILS-GD) con menores errores en el conjunto de prueba. Sin embargo, en arquitecturas más profundas como ResNet57, ambos algoritmos muestran dificultades para lograr un desempeño óptimo, con métricas cercanas a 0.100 en múltiples instancias.
 
+\textbf{Un patrón recurrente es que SHADE-ILS-GD presenta un mejor ajuste en el conjunto de entrenamiento}, lo que indica una mayor capacidad de minimizar el error durante la optimización. No obstante, \textbf{esta ventaja no siempre se traduce en un mejor rendimiento en el conjunto de prueba, sugiriendo una posible tendencia al sobreajuste} en ciertos modelos y conjuntos de datos. Por el contrario, \textbf{SHADE-GD ofrece una generalización más estable en tareas de clasificación simples}, aunque con dificultades evidentes en casos más complejos como BHP y ciertos modelos en WQR.
 
-Para la comparación entre SHADE-ILS y SHADE-ILS-GD nos fijamos en la tabla  de tareas tabulares y en la tabla  de clasificación de imágenes, que muestran un empate técnico entre los dos algoritmos, ganando cada uno en cuatro tareas y empatando en el resto. De manera general tienen un rendimiento muy parecido en todas las tareas con la excepción de que nuestra propuesta minimiza más la función de pérdida, aunque al tener luego el mismo error de generalización, concluimos que generaliza peor. Esto, sumado a que se requiere más tiempo para su ejecución que para SHADE-ILS, nos hacen decantarnos por el algoritmo original.
-
-Para la comparación entre SHADE-ILS y SHADE-ILS-GD, nos basamos en la tabla \ref{tab:ilsvsilsgd} para tareas tabulares y en la tabla \ref{tab:ilsvsilsgd_im} para la clasificación de imágenes. Ambas tablas muestran un empate técnico entre los dos algoritmos, con cada uno ganando en cuatro tareas y empatando en las restantes. En general, su rendimiento es muy similar en todas las tareas, a excepción de que nuestra propuesta minimiza más la función de pérdida. Sin embargo, dado que ambos presentan el mismo error de generalización, concluimos que SHADE-ILS-GD generaliza peor. Esto, junto con el hecho de que su ejecución requiere más tiempo que la de SHADE-ILS, nos lleva a inclinarnos por el algoritmo original.
-
+\textbf{En resumen, SHADE-ILS-GD destaca por su capacidad de optimización en problemas complejos, particularmente en tareas de regresión con alto error, mientras que SHADE-GD ofrece un rendimiento más equilibrado y generalizable en tareas de clasificación}. La elección entre ambos algoritmos depende en gran medida de la naturaleza del problema: SHADE-ILS-GD es más eficiente para reducir errores en entrenamientos difíciles, mientras que SHADE-GD es más fiable para obtener resultados consistentes en problemas de menor complejidad. En definitiva,\textbf{ es un resultado parejo, aunque consideramos ganador a SHADE-GD} ya que generaliza mejor y consigue mejor métrica en 11 tareas frente a las 10 en las que lo hace SHADE-ILS-GD.
