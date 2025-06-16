@@ -237,6 +237,27 @@ class LeNet5(nn.Module):
     x = self.fc3(x)
     return x
 
+
+#To set seeds
+
+def set_seed():
+    # Set seed for fastai
+    fastai.torch_core.set_seed(42)
+
+    from fastai.tabular.all import set_seed
+    set_seed(42)
+    random.seed(42)
+
+
+    # Set seed for torch
+    torch.manual_seed(42)
+    if torch.cuda.is_available():
+      torch.cuda.manual_seed_all(42)
+
+    # Set seed for numpy
+    np.random.seed(42)
+
+
 from sklearn.metrics import f1_score, balanced_accuracy_score, r2_score
 
 # Define a function to compute the F1 score
@@ -292,19 +313,53 @@ class AdjustedR2Score(Metric):
             return 0.0
 
 # Function to reduce dataset while maintaining class balance
-def reduce_dataset(dataset, target_size):
+def reduce_dataset(dataset, target_size, split_ratio=0, balance=False):
     targets = np.array(dataset.targets)
     classes, class_counts = np.unique(targets, return_counts=True)
-    samples_per_class = target_size // len(classes)
+    
 
-    reduced_indices = []
-    for cls in classes:
-        cls_indices = np.where(targets == cls)[0]
-        sampled_indices = np.random.choice(cls_indices, samples_per_class, replace=False)
-        reduced_indices.extend(sampled_indices)
+    if balance:
+        # Calculate sizes for two subsets
+        subset_1_size = int(split_ratio*target_size)
+        samples_per_class = subset_1_size // len(classes)
 
-    reduced_dataset = torch.utils.data.Subset(dataset, reduced_indices)
-    return reduced_dataset
+        # Create the first subset with class balance
+        reduced_indices_1 = []
+        for cls in classes:
+            cls_indices = np.where(targets == cls)[0]
+            sampled_indices = np.random.choice(cls_indices, samples_per_class, replace=False)
+            reduced_indices_1.extend(sampled_indices)
+            
+        
+        subset_2_size = int(target_size - subset_1_size)
+        samples_per_class = subset_2_size // len(classes)
+
+        # Create the second subset with class balance, ensuring no overlap
+        reduced_indices_2 = []
+        remaining_indices = np.setdiff1d(np.arange(len(targets)), reduced_indices_1)
+
+        for cls in classes:
+            cls_indices = remaining_indices[np.where(targets[remaining_indices] == cls)[0]]
+            sampled_indices = np.random.choice(cls_indices, samples_per_class, replace=False)
+            reduced_indices_2.extend(sampled_indices)
+
+        # Create the two subsets
+        reduced_dataset_1 = torch.utils.data.Subset(dataset, reduced_indices_1)
+        reduced_dataset_2 = torch.utils.data.Subset(dataset, reduced_indices_2)
+        
+        return reduced_dataset_1, reduced_dataset_2
+
+    else:
+        # Regular reduction without splitting
+        samples_per_class = target_size // len(classes)
+        reduced_indices = []
+        for cls in classes:
+            cls_indices = np.where(targets == cls)[0]
+            sampled_indices = np.random.choice(cls_indices, samples_per_class, replace=False)
+            reduced_indices.extend(sampled_indices)
+
+        reduced_dataset = torch.utils.data.Subset(dataset, reduced_indices)
+        return reduced_dataset
 
 # Verify class balance
 def verify_class_balance(dataset):
@@ -329,62 +384,128 @@ def init_weights_glorot(m):
 
 import matplotlib.pyplot as plt
 
-def plot_learners_training(learners, names = [], title='Accuracy, Training and Validation Loss', metric=['accuracy'], lim=1):
+def plot_learners_training(learners, names=[], title='Accuracy, Training and Validation Loss', metric=['accuracy'], lim=1):
     """
     Plots the training and validation loss curves for an array of fastai learners.
 
     Parameters:
     - learners: list of fastai Learner objects
-    - metric: 'loss' to plot loss curves (default), or 'metric' to plot a specific metric
+    - metric: list of metrics to plot along with loss curves (default is ['accuracy'])
     """
-    plt.figure(figsize=(15, 9))
+    plt.figure(figsize=(12, 6))
     colors = ['blue', 'green', 'red', 'purple', 'orange']
     max_epochs = max(len(learn.recorder.values) for learn in learners)
+    
+    fig, ax1 = plt.subplots(figsize=(12, 6))
+    ax2 = ax1.twinx()
+    ax1.set_xlabel('Épocas')
+    ax1.set_ylabel('Error')
+    metr = 'Accuracy' if metric[0]=='accuracy' else 'Accuracy Balanceada' if metric[0]=='BalAcc' else 'R2'
+    ax2.set_ylabel(metr)
     for idx, learn in enumerate(learners):
         color = colors[idx % len(colors)]  # Cycle through colors
         train_losses = []
         val_losses = []
         metrics = [[] for _ in range(len(metric))]
+        
         for epoch in range(len(learn.recorder.values)):
-          train_losses.append(learn.recorder.values[epoch][0])
-          val_losses.append(learn.recorder.values[epoch][1])
-          for met in range(len(metric)):
-            metrics[met].append(learn.recorder.values[epoch][2+met])
-          label_suffix = ''
+            train_losses.append(learn.recorder.values[epoch][0])
+            val_losses.append(learn.recorder.values[epoch][1])
+            for met in range(len(metric)):
+                metrics[met].append(learn.recorder.values[epoch][2 + met])
+                
         label_prefix = f' - {names[idx]}' if len(names) > 0 else f'Learner {idx + 1}'
+        
         # Plot training loss
-        plt.plot(train_losses, label=label_prefix + ' - Training Loss', color=color)
+        ax1.plot(train_losses, label=label_prefix + ' - Entrenamiento', color=color)
         # Plot validation loss
-        plt.plot(val_losses, label=label_prefix + ' - Validation Loss', linestyle='--', color=color)
+        ax1.plot(val_losses, label=label_prefix + ' - Validación', linestyle='--', color=color)
 
         # Plot metrics
-        lines=['-.', ':']
-        for idx, met in enumerate(metric):
-          plt.plot(metrics[idx], label=label_prefix + f' - {met}', linestyle=lines[idx], color=color)
-    plt.xlabel('Epochs')
-    plt.ylabel('Loss')
-    plt.title(title)
-    plt.legend()
-    plt.grid(True)
-    plt.xlim(0, max_epochs-1)
-    plt.ylim(0,lim)
+        lines = ['-.', ':']
+        for m_idx, met in enumerate(metric):
+            ax2.plot(metrics[m_idx], label=label_prefix + f' - {metr}', linestyle=lines[m_idx % len(lines)], color=color)
+
+    fig.suptitle(title)
+    #fig.tight_layout()
+    lines, labels = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax1.legend(lines + lines2, labels + labels2, loc='upper left', bbox_to_anchor=(1.1, 1), borderaxespad=0.5)
+    ax1.grid(True)
+    ax1.set_xlim(0, max_epochs - 1)
+    ax1.set_ylim(0, lim)
+    ax2.set_ylim(0, 1)  # Assuming metrics range from 0 to 1
 
     # Adjust the plot area to make room for the legend
-    plt.subplots_adjust(right=0.75)
+    fig.subplots_adjust(right=0.75)
 
-    # Move legend outside of the plot
-    plt.legend(loc='upper left', bbox_to_anchor=(1, 1))
     plt.show()
+    
 
-def plot_mh_mlp_training(train_losses, val_losses, accuracies,  layers, names=[], title='Training Metrics', metric = ['Accuracy'], lim=1,f1score=None):
+def plot_mh_mlp_training(train_losses, val_losses, accuracies, layers, names=[], title='Training Metrics', metric = ['Accuracy'], lim=1, f1score=None):
     """
     Plots the training and validation loss curves along with accuracy for an array of models.
 
     Parameters:
     - train_losses: list of lists, where each sublist contains the training loss per epoch for a model
     - val_losses: list of lists, where each sublist contains the validation loss per epoch for a model
-    - train_accuracies: list of lists, where each sublist contains the training accuracy per epoch for a model
-    - val_accuracies: list of lists, where each sublist contains the validation accuracy per epoch for a model
+    - accuracies: list of lists, where each sublist contains the accuracy per epoch for a model
+    - names: list of names for the models (default is an empty list)
+    - title: title of the plot (default is 'Training Metrics')
+    """
+    plt.figure(figsize=(12, 6))
+    max_epochs = max(len(train_losses[layer]) for layer in layers)
+    colors = ['blue', 'green', 'red', 'purple', 'orange']
+
+    fig, ax1 = plt.subplots(figsize=(12, 6))
+
+    ax2 = ax1.twinx()
+    ax1.set_xlabel('Épocas')
+    ax1.set_ylabel('Error')
+    metr = 'Accuracy' if metric=='accuracy' else 'Accuracy Balanceada' if metric=='BalAcc' else 'R2'
+    ax2.set_ylabel(metr)
+
+    for idx, layer in enumerate(layers):
+        color = colors[idx % len(colors)]  # Cycle through colors
+        label_prefix = f' - {names[idx]}' if len(names) > 0 else f'Model {idx + 1}'
+
+        # Plot training loss
+        ax1.plot(train_losses[layer], label=label_prefix + ' - Entrenamiento', color=color)
+
+        # Plot validation loss
+        ax1.plot(val_losses[layer], label=label_prefix + ' - Validación', linestyle='--', color=color)
+
+        # Plot accuracy
+        ax2.plot(accuracies[layer], label=label_prefix + f' - {metr}', linestyle='-.', color=color)
+
+        # Plot F1 Scores if provided
+        if f1score:
+            ax2.plot(f1score[layer], label=label_prefix + ' - F1 Score', linestyle=':', color=color)
+
+    fig.suptitle(title)
+    #fig.tight_layout()
+    lines, labels = ax1.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax1.legend(lines + lines2, labels + labels2, loc='upper left', bbox_to_anchor=(1.1, 1), borderaxespad=0.5)
+    ax1.grid(True)
+    ax1.set_xlim(0, max_epochs - 1)
+    ax1.set_ylim(0, lim)
+    ax2.set_ylim(0, 1)  # Assuming accuracy ranges from 0 to 1
+
+    # Adjust the plot area to make room for the legend
+    fig.subplots_adjust(right=0.75)
+
+    plt.show()
+    
+#Guardo por si acaso.
+def plot_mh_mlp_training2(train_losses, val_losses, accuracies,  layers, names=[], title='Training Metrics', metric = ['Accuracy'], lim=1,f1score=None):
+    """
+    Plots the training and validation loss curves along with accuracy for an array of models.
+
+    Parameters:
+    - train_losses: list of lists, where each sublist contains the training loss per epoch for a model
+    - val_losses: list of lists, where each sublist contains the validation loss per epoch for a model
+    - accuracies: list of lists, where each sublist contains the accuracy per epoch for a model
     - names: list of names for the models (default is an empty list)
     - title: title of the plot (default is 'Training Metrics')
     """
@@ -400,13 +521,13 @@ def plot_mh_mlp_training(train_losses, val_losses, accuracies,  layers, names=[]
 
 
         # Plot training loss
-        plt.plot(train_losses[layer], label=label_prefix + ' - Training Loss', color=color)
+        plt.plot(train_losses[layer], label=label_prefix + ' - Entrenamiento', color=color)
 
         # Plot validation loss
-        plt.plot(val_losses[layer], label=label_prefix + ' - Validation Loss', linestyle='--', color=color)
+        plt.plot(val_losses[layer], label=label_prefix + ' - Validación', linestyle='--', color=color)
 
         # Plot balanced accuracy
-        plt.plot(accuracies[layer], label=label_prefix + ' - Balanced Accuracy', linestyle='-.', color=color)
+        plt.plot(accuracies[layer], label=label_prefix + ' - Accuracy', linestyle='-.', color=color)
 
         # Plot F1 Scores
        #plt.plot(f1score[layer], label=label_prefix + ' - F1 Score', linestyle=':', color=color)
@@ -840,53 +961,38 @@ def SHADE_ILS(population, fit, max_evals, max_shade, dls, learner, model,  max_l
   current_best_fitness = min(fitness)
   current_best_index = fitness.index(current_best_fitness)
   current_best = population[current_best_index]
+  worst= population[np.argmax(fitness)]
+  initial_sol = (current_best+worst)/2
 
   historic_fitness.append(current_best_fitness)
   historic_best_solution.append(current_best)
+  best_fitness=current_best_fitness
+  best_solution=current_best
 
-  temp_current_best, _, e1, e2 = LBFGS_SCIPY_full(current_best, model, dls, max=max_ls, task=task)
+  temp_current_best, _, e1, e2 = LBFGS_SCIPY_full(initial_sol, model, dls, max=max_ls, task=task)
   evals += e1
   temp_current_best_fitness=err_param(temp_current_best, model, dls, task=task)
 
-  improq.append((current_best_fitness-temp_current_best_fitness)/current_best_fitness)
+  
 
-  if temp_current_best_fitness < current_best_fitness:
-    current_best_fitness = temp_current_best_fitness
-    current_best = temp_current_best
+  population[np.argmax(fitness)] = temp_current_best
+  fitness[np.argmax(fitness)] = temp_current_best_fitness
+  
 
-
-  population[current_best_index] = current_best
-  fitness[current_best_index] = current_best_fitness
-
-  best_solution=current_best
-  best_fitness=current_best_fitness
-  historic_fitness.append(best_fitness)
-  historic_best_solution.append(best_solution)
 
   while evals < max_evals:
-    print("eo")
     population, fitness, prevm_cr, prevm_f, k , _, _= SHADE_ej(population, fitness, population_size, max_evals_SHADE, size_ind, dls,  prevm_cr=prevm_cr, prevm_f=prevm_f, k=k, model=model, task=task)
     evals += max_evals_SHADE
-    temp_current_best_fitness= min(fitness)
-
-    improq.append((current_best_fitness-temp_current_best_fitness)/current_best_fitness)
-
-    if temp_current_best_fitness < current_best_fitness:
-      current_best_fitness = temp_current_best_fitness
-      current_best_index = list(fitness).index(current_best_fitness)
-      current_best = population[current_best_index]
-
-
-
-    print(improq)
-    if np.all(np.array(improq)<0.05):
-      must_restart=True
 
     #Choose the LS method to apply this iteration based on improvement
 
-    temp_current_best, _, e1, e2 = LBFGS_SCIPY_full(current_best, model, dls, max=max_ls, task=task)
+    index = np.argmin(fitness)
+    
+    temp_current_best, _, e1, e2 = LBFGS_SCIPY_full(population[index], model, dls, max=max_ls, task=task)
     evals += e1
     temp_current_best_fitness=err_param(temp_current_best, model, dls, task=task)
+    population[index]=temp_current_best
+    fitness[index]=temp_current_best_fitness
 
     improq.append((current_best_fitness-temp_current_best_fitness)/current_best_fitness)
 
@@ -899,8 +1005,6 @@ def SHADE_ILS(population, fit, max_evals, max_shade, dls, learner, model,  max_l
     if np.all(np.array(improq)<0.05):
       must_restart=True
 
-    population[current_best_index] = current_best
-    fitness[current_best_index] = current_best_fitness
 
     #Update the probability to apply LS in next iterations
 
@@ -914,7 +1018,7 @@ def SHADE_ILS(population, fit, max_evals, max_shade, dls, learner, model,  max_l
     if must_restart:
       random_index = np.random.choice(population_size)
       sol = population[random_index]
-      sol += np.random.normal(0, 0.5, len(sol))
+      sol += np.random.normal(0, 0.1, len(sol))
       k=0
       prevm_cr=0
       prevm_f=0
@@ -950,7 +1054,7 @@ def SHADE_GD(population, fit, max_evals, max_shade, dls, learner, model, task='c
 
   historic_fitness=[]
   historic_best_solution=[]
-
+  lr=0.001
   population_size = len(population)
   evals = population_size
   max_evals = max_evals
@@ -986,28 +1090,13 @@ def SHADE_GD(population, fit, max_evals, max_shade, dls, learner, model, task='c
 
   while evals < max_evals:
     gen+=1
-    print("eo")
     population, fitness, prevm_cr, prevm_f, k, _, _ = SHADE_ej(population, fitness, population_size, max_evals_SHADE, size_ind, dls,  prevm_cr=prevm_cr, prevm_f=prevm_f, k=k, model=model, task=task)
     evals += max_evals_SHADE
-    temp_current_best_fitness= min(fitness)
-
-    improq.append((current_best_fitness-temp_current_best_fitness)/current_best_fitness)
-
-    if temp_current_best_fitness < current_best_fitness:
-      current_best_fitness = temp_current_best_fitness
-      current_best_index = list(fitness).index(current_best_fitness)
-      current_best = population[current_best_index]
-
-
-
-    print(improq)
-    if np.all(np.array(improq)<0.05):
-      must_restart=True
-
+    
     #Choose the LS method to apply this iteration based on improvement
 
 
-    if gen%5==0:
+    if gen%2==0:
       ind = np.random.randint(0, population_size)
       set_params_to_model(population[ind], LEARN.model)
       try:
@@ -1021,16 +1110,18 @@ def SHADE_GD(population, fit, max_evals, max_shade, dls, learner, model, task='c
       population[ind]=get_params_from_model(LEARN.model)
       fit=LEARN.recorder.values[-1][0]
       fitness[ind]=fit
-      temp_current_best_fitness=fit
-      temp_current_best=population[ind]
       evals+=1
+    
+    
+    temp_current_best_fitness=min(fitness)
+    temp_current_best=population[np.argmin(fitness)]
+    
 
 
-      improq.append((current_best_fitness-temp_current_best_fitness)/current_best_fitness)
+    improq.append((current_best_fitness-temp_current_best_fitness)/current_best_fitness)
 
-      #if temp_current_best_fitness < current_best_fitness:
-      current_best_fitness = temp_current_best_fitness
-      current_best = temp_current_best
+    current_best=temp_current_best
+    current_best_fitness=temp_current_best_fitness
 
 
     print(improq)
@@ -1039,7 +1130,6 @@ def SHADE_GD(population, fit, max_evals, max_shade, dls, learner, model, task='c
 
 
 
-    #Update the probability to apply LS in next iterations
 
     if current_best_fitness < best_fitness:
       best_fitness = np.copy(current_best_fitness)
@@ -1051,7 +1141,7 @@ def SHADE_GD(population, fit, max_evals, max_shade, dls, learner, model, task='c
     if must_restart:
       random_index = np.random.choice(population_size)
       sol = population[random_index]
-      sol += np.random.normal(0, 0.3, len(sol))
+      sol += np.random.normal(0, 0.1, len(sol))
 
       k=0
       prevm_cr=0
@@ -1115,6 +1205,9 @@ def SHADE_ILS_GD(population, fit, max_evals, max_shade, dls, learner, model, max
   current_best_fitness = min(fitness)
   current_best_index = fitness.index(current_best_fitness)
   current_best = population[current_best_index]
+  worst = population[np.argmax(fitness)]
+  initial_sol=(current_best + worst)/2
+
 
   population[current_best_index] = current_best
   fitness[current_best_index] = current_best_fitness
@@ -1124,69 +1217,31 @@ def SHADE_ILS_GD(population, fit, max_evals, max_shade, dls, learner, model, max
   historic_fitness.append(best_fitness)
   historic_best_solution.append(best_solution)
 
-  temp_current_best, _, e1, e2 = LBFGS_SCIPY_full(current_best, model, dls, max=max_ls, task=task)
+  temp_current_best, _, e1, e2 = LBFGS_SCIPY_full(initial_sol, model, dls, max=max_ls, task=task)
   evals += e1
   temp_current_best_fitness=err_param(temp_current_best, model, dls,task=task)
 
-  improq.append((current_best_fitness-temp_current_best_fitness)/current_best_fitness)
-
-  if temp_current_best_fitness < current_best_fitness:
-    current_best_fitness = temp_current_best_fitness
-    current_best = temp_current_best
+  
+  population[np.argmax(fitness)] = temp_current_best
+  fitness[np.argmax(fitness)] = temp_current_best_fitness
 
 
-  print(improq)
-  if np.all(np.array(improq)<0.05):
-    must_restart=True
-
-  population[current_best_index] = current_best
-  fitness[current_best_index] = current_best_fitness
-
-
-  historic_fitness.append(current_best_fitness)
-  historic_best_solution.append(current_best)
-
+  
   while evals < max_evals:
     gen+=1
-    print("eo")
     population, fitness, prevm_cr, prevm_f, k, _, _ = SHADE_ej(population, fitness, population_size, max_evals_SHADE, size_ind, dls,  prevm_cr=prevm_cr, prevm_f=prevm_f, k=k, model=model, task=task)
     evals += max_evals_SHADE
-    temp_current_best_fitness= min(fitness)
-
-    improq.append((current_best_fitness-temp_current_best_fitness)/current_best_fitness)
-
-    if temp_current_best_fitness < current_best_fitness:
-      current_best_fitness = temp_current_best_fitness
-      current_best_index = list(fitness).index(current_best_fitness)
-      current_best = population[current_best_index]
-
-
-
-    print(improq)
-    if np.all(np.array(improq)<0.05):
-      must_restart=True
-
-
+    
+    index = np.argmin(fitness)
+    current_best=population[index]
     temp_current_best, _, e1, e2 = LBFGS_SCIPY_full(current_best, model, dls, max=max_ls, task=task)
     evals += e1
     temp_current_best_fitness=err_param(temp_current_best, model, dls, task=task)
+    
+    population[index]=temp_current_best
+    fitness[index]=temp_current_best_fitness
 
-    improq.append((current_best_fitness-temp_current_best_fitness)/current_best_fitness)
-
-    #if temp_current_best_fitness < current_best_fitness:
-    current_best_fitness = temp_current_best_fitness
-    current_best = temp_current_best
-
-
-    print(improq)
-    if np.all(np.array(improq)<0.05):
-      must_restart=True
-
-    population[current_best_index] = current_best
-    fitness[current_best_index] = current_best_fitness
-
-
-    if gen%5==0:
+    if gen%2==0:
       ind = np.random.randint(0, population_size)
       set_params_to_model(population[ind], LEARN.model)
 
@@ -1201,16 +1256,22 @@ def SHADE_ILS_GD(population, fit, max_evals, max_shade, dls, learner, model, max
       population[ind]=get_params_from_model(LEARN.model)
       fit=LEARN.recorder.values[-1][0]
       fitness[ind]=fit
-      temp_current_best_fitness=fit
-      temp_current_best=population[ind]
       evals+=1
-
-
+    
+    index=np.argmin(fitness)
+    temp_current_best_fitness=fitness[index]
+    temp_current_best=population[index]
+    
     improq.append((current_best_fitness-temp_current_best_fitness)/current_best_fitness)
+    if temp_current_best_fitness < current_best_fitness:
+      current_best_fitness = temp_current_best_fitness
+      current_best = temp_current_best
 
-    #if temp_current_best_fitness < current_best_fitness:
-    current_best_fitness = temp_current_best_fitness
-    current_best = temp_current_best
+    
+
+    current_best=temp_current_best
+    current_best_fitness=temp_current_best_fitness
+    
 
 
     print(improq)
@@ -1231,7 +1292,7 @@ def SHADE_ILS_GD(population, fit, max_evals, max_shade, dls, learner, model, max
     if must_restart:
       random_index = np.random.choice(population_size)
       sol = population[random_index]
-      sol += np.random.normal(0, 0.3, len(sol))
+      sol += np.random.normal(0, 0.1, len(sol))
 
       k=0
       prevm_cr=0
